@@ -2,6 +2,7 @@
 
 /* Customization */
 #define TARGET_TEMP 63
+#define MAX_OUTPUT_THRESHOLD 5
 
 /* Well Thermistor */
 #define B_CONST_25_50 4250
@@ -15,9 +16,10 @@ const int PIN_HEATER_PWM = 15;
 const int THERMISTOR_ANALOG_IN = A0;
 
 /* PID constants */
-#define KP (0.04)
-#define KI (80)
-#define KD (0.01)
+//#define KP (0.1)
+#define KP (0.11)
+#define KI (0.5)
+#define KD (2.0)
 
 #define KELVIN 273.15
 
@@ -50,6 +52,7 @@ double averageTemp () {
   return tempSum / TEMP_BUFF_SIZE;
 }
 
+double prev = 0;
 void setup() {
   Serial.begin(9600);
   pinMode(PIN_HEATER_PWM, OUTPUT);
@@ -59,25 +62,31 @@ void setup() {
     tempBuff[i] = input;
   }
   setpoint = TARGET_TEMP;
-  pid.SetMode(AUTOMATIC);
-  pid.SetOutputLimits(0, 1);
+  pid.SetMode(MANUAL);
+  pid.SetOutputLimits(-0.5, 0.5);
   pid.SetSampleTime(INTERVAL_MSEC);
 }
 
+double prevTemp = 0;
 void loop() {
   tempBuff[tempBuffIndex] = readTemp();
   tempBuffIndex = (tempBuffIndex + 1) % TEMP_BUFF_SIZE;
-  //Serial.print("Temp="); Serial.print(temp);
   double temp = averageTemp();
-  input = temp;
-  pid.Compute();
-  double pwmOutput = output * 1024;
-  if (pwmOutput > 1023) {
-    pwmOutput = 1023;
+  if (temp < TARGET_TEMP - MAX_OUTPUT_THRESHOLD) {
+    // Max drive
+    analogWrite(PIN_HEATER_PWM, 1023);
+    pid.SetMode(MANUAL);
+  } else {
+    // PID drive
+    input = temp;
+    pid.SetMode(AUTOMATIC);
+    pid.Compute();
+    double pwmOutput = (output + 0.5) * 408/*1024*/;
+    analogWrite(PIN_HEATER_PWM, (int)pwmOutput);
   }
-  analogWrite(PIN_HEATER_PWM, (int)pwmOutput);
   Serial.println(temp);
   delay(INTERVAL_MSEC);
+  prevTemp = temp;
 }
 
 double readTemp () {
