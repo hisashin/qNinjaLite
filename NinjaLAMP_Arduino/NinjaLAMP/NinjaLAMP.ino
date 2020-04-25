@@ -18,6 +18,12 @@ struct ThermistorRange ranges[3] = {
   { 85.0, 4334, 0.0, },
 };
 
+#define THERMISTOR_LOW_SIDE 1
+#define THERMISTOR_HIGH_SIDE 2
+
+#define WELL_THERMISTOR_PLACE THERMISTOR_LOW_SIDE
+#define AIR_THERMISTOR_PLACE THERMISTOR_HIGH_SIDE
+
 #define R_0_WELL 100.0 // R0
 #define R_0_AIR 100.0 // R0
 
@@ -33,15 +39,11 @@ struct ThermistorRange ranges[3] = {
 
 #define USE_EXTERNAL_ADC
 
-#ifndef USE_EXTERNAL_ADC
-#define USE_ARDUINO_ADC
-#endif
-
 /* Pinouts */
 const int WELL_HEATER_PWM = 15;
 
 /* Define analog input pins to use Arduino's AIN pins */
-#ifdef USE_ARDUINO_ADC
+#ifndef USE_EXTERNAL_ADC
 const int WELL_THERMISTOR_AIN = A0;
 const int AIR_THERMISTOR_AIN = A1;
 #endif
@@ -50,6 +52,7 @@ const int AIR_THERMISTOR_AIN = A1;
 #define WELL_KP (0.11)
 #define WELL_KI (0.5)
 #define WELL_KD (2.0)
+
 #define KELVIN 273.15
 
 double setpoint, input, output;
@@ -173,13 +176,22 @@ double bConstantForVoltage (double voltageRatio) {
 double readWellTemp () {
   double wellVoltage = readWellThermistorVoltageRatio();
   // TODO: define normal/reverse voltages
-  double voltageRatio = wellVoltage; //1.0 - readWellTemp;
+#if WELL_THERMISTOR_PLACE==THERMISTOR_LOW_SIDE
+  double voltageRatio = wellVoltage;
+#else
+  double voltageRatio = 1.0 - readWellTemp;
+#endif
   float bConstant = bConstantForVoltage(voltageRatio);
   return voltageToTemp(voltageRatio, R_WELL, bConstant, R_0_WELL);
 }
 
 double readAirTemp () {
-  double voltageRatio = 1.0 - readAirThermistorVoltageRatio();
+  double airVoltage = readAirThermistorVoltageRatio();
+#if AIR_THERMISTOR_PLACE==THERMISTOR_LOW_SIDE
+  double voltageRatio = airVoltage;
+#else
+  double voltageRatio = 1.0 - airVoltage;
+#endif
   float bConstant = bConstantForVoltage(voltageRatio);
   return voltageToTemp(voltageRatio, R_AIR, bConstant, R_0_AIR);
 }

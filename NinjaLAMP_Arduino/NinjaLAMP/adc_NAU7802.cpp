@@ -3,7 +3,6 @@
 #include "board_conf.h"
 #include <Arduino.h>
 #include <Wire.h>
-#include "pcr_includes.h"
 #ifdef USE_ADC_NAU7802
 /* Skip init sequence and return dummy values. This mode is for testing board without */
 // #define ADC_DUMMY_MODE 
