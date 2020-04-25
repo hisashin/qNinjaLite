@@ -12,19 +12,24 @@
 #define THERMISTOR_BASE_TEMP 25.0
 
 /* Pinouts */
-const int PIN_HEATER_PWM = 15;
-const int THERMISTOR_ANALOG_IN = A0;
+const int WELL_HEATER_PWM = 15;
+const int WELL_THERMISTOR_AIN = A0;
+const int AIR_THERMISTOR_AIN = A1;
 
 /* PID constants */
-#define KP (0.11)
-#define KI (0.5)
-#define KD (2.0)
+#define WELL_KP (0.11)
+#define WELL_KI (0.5)
+#define WELL_KD (2.0)
+
+#define AIR_KP (0.11)
+#define AIR_KI (0.5)
+#define AIR_KD (2.0)
 
 #define KELVIN 273.15
 
 double setpoint, input, output;
 // https://playground.arduino.cc/Code/PIDLibraryConstructor/
-PID pid(&input, &output, &setpoint, KP, KI, KD, DIRECT);
+PID pid(&input, &output, &setpoint, WELL_KP, WELL_KI, WELL_KD, DIRECT);
 
 #define INTERVAL_MSEC 250
 #define TEMP_BUFF_SIZE 5
@@ -54,7 +59,7 @@ double averageTemp () {
 double prev = 0;
 void setup() {
   Serial.begin(9600);
-  pinMode(PIN_HEATER_PWM, OUTPUT);
+  pinMode(WELL_HEATER_PWM, OUTPUT);
   SWITCHING_VOLTAGE_50 = tempToVoltageRatio(50, R_WELL, B_CONST_25_50, R_0_WELL);
   input = readTemp();
   for (int i=0; i<TEMP_BUFF_SIZE; i++) {
@@ -73,7 +78,7 @@ void loop() {
   double temp = averageTemp();
   if (temp < TARGET_TEMP - MAX_OUTPUT_THRESHOLD) {
     // Max drive
-    analogWrite(PIN_HEATER_PWM, 1023);
+    analogWrite(WELL_HEATER_PWM, 1023);
     pid.SetMode(MANUAL);
   } else {
     // PID drive
@@ -81,7 +86,7 @@ void loop() {
     pid.SetMode(AUTOMATIC);
     pid.Compute();
     double pwmOutput = (output + 0.5) * 408/*1024*/;
-    analogWrite(PIN_HEATER_PWM, (int)pwmOutput);
+    analogWrite(WELL_HEATER_PWM, (int)pwmOutput);
   }
   Serial.println(temp);
   delay(INTERVAL_MSEC);
@@ -90,7 +95,7 @@ void loop() {
 
 double readTemp () {
 
-  double voltageRatio = 1.0 - analogRead(THERMISTOR_ANALOG_IN) / 1024.0;
+  double voltageRatio = 1.0 - analogRead(WELL_THERMISTOR_AIN) / 1024.0;
   float bConstant;
   if (voltageRatio > SWITCHING_VOLTAGE_50)
     bConstant = B_CONST_25_50;
