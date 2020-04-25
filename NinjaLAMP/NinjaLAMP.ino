@@ -1,4 +1,5 @@
 #include <PID_v1.h>
+#include "adc_NAU7802.h"
 
 /* Customization */
 #define TARGET_TEMP 63
@@ -7,25 +8,40 @@
 /* Well Thermistor */
 #define B_CONST_25_50 4250
 #define B_CONST_25_85 4311
+#define B_CONST_25_100 4334
 #define R_0_WELL 100.0 // R0
+#define R_0_AIR 100.0 // R0
+
+/*
+ * 
+#define R_LOW_TEMP 30.0 // Well low mode
+#define R_HIGH_TEMP 10 // Well high mode (30x3)
+#define R_HEATER 4.99 // Heater
+ */
+ /*
 #define R_WELL 47 // Counter resistor
+#define R_AIR 47 // Counter resistor
+*/
+
+#define R_WELL 30 // Counter resistor
+#define R_AIR 4.99 // Counter resistor
+
 #define THERMISTOR_BASE_TEMP 25.0
 
-//#define USE_EXTERNAL_ADC
+#define USE_EXTERNAL_ADC
 
 #ifndef USE_EXTERNAL_ADC
 #define USE_ARDUINO_ADC
-#endif
-
-#ifdef USE_EXTERNAL_ADC
 #endif
 
 /* Pinouts */
 const int WELL_HEATER_PWM = 15;
 
 /* Define analog input pins to use Arduino's AIN pins */
+#ifdef USE_ARDUINO_ADC
 const int WELL_THERMISTOR_AIN = A0;
 const int AIR_THERMISTOR_AIN = A1;
+#endif
 
 /* PID constants */
 #define WELL_KP (0.11)
@@ -39,7 +55,6 @@ PID pid(&input, &output, &setpoint, WELL_KP, WELL_KI, WELL_KD, DIRECT);
 
 #define INTERVAL_MSEC 250
 #define TEMP_BUFF_SIZE 5
-
 double tempBuff[TEMP_BUFF_SIZE];
 int tempBuffIndex = 0;
 static double SWITCHING_VOLTAGE_50 = 0;
@@ -122,7 +137,7 @@ double readWellThermistorVoltageRatio () {
 double readAirThermistorVoltageRatio () {
 #ifdef USE_EXTERNAL_ADC
   float voltageRatio;
-  HardwareStatus result = getAirADCValue(&voltageRatio);
+  HardwareStatus result = getLidADCValue(&voltageRatio);
   return voltageRatio;
 #else
   return analogRead(AIR_THERMISTOR_AIN) / 1024.0;
@@ -131,7 +146,8 @@ double readAirThermistorVoltageRatio () {
 }
 
 double readWellTemp () {
-  double voltageRatio = 1.0 - readWellThermistorVoltageRatio();
+  double wellVoltage = readWellThermistorVoltageRatio();
+  double voltageRatio = wellVoltage; //1.0 - readWellTemp;
   float bConstant;
   if (voltageRatio > SWITCHING_VOLTAGE_50)
     bConstant = B_CONST_25_50;
@@ -147,5 +163,5 @@ double readAirTemp () {
     bConstant = B_CONST_25_50;
   else
     bConstant = B_CONST_25_85;
-  return voltageToTemp(voltageRatio, R_WELL, bConstant, R_0_WELL);
+  return voltageToTemp(voltageRatio, R_AIR, bConstant, R_0_AIR);
 }

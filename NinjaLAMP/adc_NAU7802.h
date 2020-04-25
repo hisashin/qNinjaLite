@@ -1,3 +1,6 @@
+#ifndef ___ADC_NAU7802___
+#define ___ADC_NAU7802___
+#include "adc.h"
 // Slave Address (Fixed)
 #define NAU7802_DEVICE_ADDRESS  0x2A
 
@@ -28,3 +31,5 @@
 #define NAU7802_RATE_40SPS 0b0010
 #define NAU7802_RATE_20SPS 0b0001
 #define NAU7802_RATE_10SPS 0b0000 //default
+
+#endif /* ___ADC_NAU7802___ */

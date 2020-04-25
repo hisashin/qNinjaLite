@@ -1,10 +1,9 @@
 #include "adc.h"
-// #include "board_conf.h"
+#include "adc_NAU7802.h"
+#include "board_conf.h"
 #include <Arduino.h>
 #include <Wire.h>
-//#include "pcr_includes.h"
-#include "adc_NAU7802.h"
-
+#include "pcr_includes.h"
 #ifdef USE_ADC_NAU7802
 /* Skip init sequence and return dummy values. This mode is for testing board without */
 // #define ADC_DUMMY_MODE 
@@ -13,7 +12,6 @@ HardwareStatus switchADCConfig (uint8_t channel, uint8_t SPS0, uint8_t SPS1, uin
 /* Implementation of NAU7802 A/D Converter */
 char i2c_err;
 // Basic communication
-
 static char wellADCWriteRegValue(uint8_t reg_address, uint8_t b) {
   Wire.beginTransmission(NAU7802_DEVICE_ADDRESS); // transmit to device #0x2A
   Wire.write(reg_address);// sends 1 byte
@@ -88,7 +86,6 @@ bool waitForFlag (uint8_t regAddress, int flagIndex, bool flagValue, long timeou
     bool flagResult = (read_out[0] & (0x01 << flagIndex))!=0;
     elapsed = (millis()-startMillis);
     if (elapsed < 0) {
-      PCR_ADC_DEBUG_LINE("ELAPSED TIME IS NEGATIVE!");
       startMillis = millis(); // Reset
     }
     if (flagResult == flagValue) {
@@ -104,13 +101,11 @@ bool waitForFlag (uint8_t regAddress, int flagIndex, bool flagValue, long timeou
   // Timeout
   Serial.print("TIMEOUT! resetting.");
   initADC();
-  PCR_ADC_DEBUG_LINE(elapsed);
   delay(200);
   return false;
 }
 
 uint8_t initADC () {
-  PCR_ADC_DEBUG_LINE("initADC");
   if (isAdcInitialized) {
     return 0;
   }
@@ -130,9 +125,9 @@ uint8_t initADC () {
   setRegisterBit(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_PUD);
   // Wait for power up ready flag
   if (waitForFlag(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_PUR, true, 1000)) {
-    PCR_ADC_DEBUG_LINE("initADC SUCCESS");
+    Serial.println("initADC SUCCESS");
   } else {
-    PCR_ADC_DEBUG_LINE("initADC FAIL");
+    Serial.println("initADC FAIL");
     
   }
   // Power up analog
@@ -148,11 +143,10 @@ uint8_t initADC () {
   setRegisterBit(NAU7802_REG_ADDR_CTRL2, NAU7802_BIT_CS);
   
   Serial.print("CTRL2=");
-  PCR_ADC_DEBUG_LINE(wellADCReadRegValue(NAU7802_REG_ADDR_CTRL2));
   if (wellADCReadRegValue(NAU7802_REG_ADDR_REVISION)==0x0F) {
-    PCR_ADC_DEBUG_LINE("Rev code OK");
+    Serial.println("Rev code OK");
   } else {
-    PCR_ADC_DEBUG_LINE("Rev code WRONG");
+    Serial.println("Rev code WRONG");
   }
   return NO_ERR;
 }
@@ -203,8 +197,6 @@ float getADCValue () {
   i2c_err = wellADCReadRegValues(NAU7802_REG_ADDR_ADCO_B2, &read_out[0], 3);
   read_out[0] -= 0x80; // signed->unsigned
   adc_val = (read_out[0] << 16) | (read_out[1] << 8) | read_out[2];
-  PCR_ADC_DEBUG("ADC=");
-  PCR_ADC_DEBUG_LINE(String(adc_val,HEX));
   float ratio =  (float) adc_val / (1.0 * 0x1000000);
   return ratio;
 }
@@ -225,7 +217,6 @@ HardwareStatus getWellADCValue (float *val) {
   // Wait (if needed) Read -> save timestamp -> Switch Channel & Set SPS
   *val = getADCValue();
   HardwareStatus result = switchADCConfig(1, 0, 1, 0); //2ch, 40SPS
-  delay(100);
   return result;
 }
 
