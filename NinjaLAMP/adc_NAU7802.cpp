@@ -196,8 +196,6 @@ HardwareStatus switchADCConfig (uint8_t channel, uint8_t SPS0, uint8_t SPS1, uin
   if (waitForFlag(NAU7802_REG_ADDR_CTRL2, 2, false, 500)==false) { return HARD_ERROR_ADC; }
   setRegisterBit(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_CS);
   return HARD_NO_ERROR;
-  /*
-  */
 }
 float getADCValue () {
   uint32_t adc_val = 0xFFFFFF;
