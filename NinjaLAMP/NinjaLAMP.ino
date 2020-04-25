@@ -16,7 +16,6 @@ const int PIN_HEATER_PWM = 15;
 const int THERMISTOR_ANALOG_IN = A0;
 
 /* PID constants */
-//#define KP (0.1)
 #define KP (0.11)
 #define KI (0.5)
 #define KD (2.0)
