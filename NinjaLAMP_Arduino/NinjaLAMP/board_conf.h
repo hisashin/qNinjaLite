@@ -27,7 +27,6 @@
 #define PIN_LCD_RS 6
 #define PIN_LCD_ENABLE 7
 #define PIN_LCD_D4 8
-//#define PIN_LCD_D5 A5
 #define PIN_LCD_D5 5 // TMP
 #define PIN_LCD_D6 16
 #define PIN_LCD_D7 17

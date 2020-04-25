@@ -6,21 +6,24 @@
 #define MAX_OUTPUT_THRESHOLD 5
 
 /* Well Thermistor */
-#define B_CONST_25_50 4250
-#define B_CONST_25_85 4311
-#define B_CONST_25_100 4334
+struct ThermistorRange {
+  double tempLowerLimit;
+  int bConst;
+  double voltageLimit;
+};
+const int THERMISTOR_RANGE_COUNT = 3;
+struct ThermistorRange ranges[3] = {
+  { 0.0, 4250, 0.0, },
+  { 50.0, 4311, 0.0, },
+  { 85.0, 4334, 0.0, },
+};
+
 #define R_0_WELL 100.0 // R0
 #define R_0_AIR 100.0 // R0
 
-/*
- * 
-#define R_LOW_TEMP 30.0 // Well low mode
-#define R_HIGH_TEMP 10 // Well high mode (30x3)
-#define R_HEATER 4.99 // Heater
- */
  /*
-#define R_WELL 47 // Counter resistor
-#define R_AIR 47 // Counter resistor
+#define R_WELL 47 // Counter resistor (breadboard test)
+#define R_AIR 47 // Counter resistor (breadboard test)
 */
 
 #define R_WELL 30 // Counter resistor
@@ -76,12 +79,23 @@ double averageTemp () {
   }
   return tempSum / TEMP_BUFF_SIZE;
 }
-
+  
 double prev = 0;
 void setup() {
   Serial.begin(9600);
+  for (int i=1; i<THERMISTOR_RANGE_COUNT; i++) {
+    ThermistorRange *range = &ranges[i];
+    
+    double vLimit = tempToVoltageRatio(range->tempLowerLimit, R_WELL, range->bConst, R_0_WELL);
+    range->voltageLimit = vLimit;
+    Serial.print("i="); Serial.print(i);
+    Serial.print(", tempLowerLimit="); Serial.print(range->tempLowerLimit);
+    Serial.print(", bConst="); Serial.print(range->bConst);
+    Serial.print(", voltageLimit="); Serial.println(range->voltageLimit);
+    delay(1000);
+  }
+  delay(20000);
   pinMode(WELL_HEATER_PWM, OUTPUT);
-  SWITCHING_VOLTAGE_50 = tempToVoltageRatio(50, R_WELL, B_CONST_25_50, R_0_WELL);
   input = readWellTemp();
   for (int i=0; i<TEMP_BUFF_SIZE; i++) {
     tempBuff[i] = input;
@@ -145,23 +159,27 @@ double readAirThermistorVoltageRatio () {
   
 }
 
+double bConstantForVoltage (double voltageRatio) {
+  float bConstant = ranges[0].bConst;
+  for (int i=1; i<THERMISTOR_RANGE_COUNT; i++) {
+    ThermistorRange *range = &ranges[i];
+    if (voltageRatio < range->voltageLimit) {
+      bConstant = range->bConst;
+    }
+  }
+  return bConstant;
+}
+
 double readWellTemp () {
   double wellVoltage = readWellThermistorVoltageRatio();
+  // TODO: define normal/reverse voltages
   double voltageRatio = wellVoltage; //1.0 - readWellTemp;
-  float bConstant;
-  if (voltageRatio > SWITCHING_VOLTAGE_50)
-    bConstant = B_CONST_25_50;
-  else
-    bConstant = B_CONST_25_85;
+  float bConstant = bConstantForVoltage(voltageRatio);
   return voltageToTemp(voltageRatio, R_WELL, bConstant, R_0_WELL);
 }
 
 double readAirTemp () {
   double voltageRatio = 1.0 - readAirThermistorVoltageRatio();
-  float bConstant;
-  if (voltageRatio > SWITCHING_VOLTAGE_50)
-    bConstant = B_CONST_25_50;
-  else
-    bConstant = B_CONST_25_85;
+  float bConstant = bConstantForVoltage(voltageRatio);
   return voltageToTemp(voltageRatio, R_AIR, bConstant, R_0_AIR);
 }
