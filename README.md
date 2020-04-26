@@ -1,3 +1,6 @@
+![lite_outside](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Lite/images/outside.jpg, "lite_outside")
+![lite_inside](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Lite/images/inside.jpg, "lite_outside")
+
 GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine.
 
 Reference : [Rapid colorimetric detection of COVID-19 coronavirus using a reverse tran-scriptional loop-mediated isothermal amplification (RT-LAMP) diagnostic plat-form: iLACO](https://www.medrxiv.org/content/10.1101/2020.02.20.20025874v1)
