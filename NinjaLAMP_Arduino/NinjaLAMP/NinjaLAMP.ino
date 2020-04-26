@@ -11,15 +11,15 @@ struct ThermistorRange {
   int bConst;
   double voltageLimit;
 };
+#define THERMISTOR_LOW_SIDE 1
+#define THERMISTOR_HIGH_SIDE 2
+
 const int THERMISTOR_RANGE_COUNT = 3;
 struct ThermistorRange ranges[3] = {
   { 0.0, 4250, 0.0, },
   { 50.0, 4311, 0.0, },
   { 85.0, 4334, 0.0, },
 };
-
-#define THERMISTOR_LOW_SIDE 1
-#define THERMISTOR_HIGH_SIDE 2
 
 #define WELL_THERMISTOR_PLACE THERMISTOR_LOW_SIDE
 #define AIR_THERMISTOR_PLACE THERMISTOR_HIGH_SIDE
