@@ -1,5 +1,5 @@
-![lite_outside](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Lite/images/outside.jpg, "lite_outside")
-![lite_inside](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Lite/images/inside.jpg, "lite_outside")
+![lite_outside](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Lite/images/outside.jpg "lite_outside")
+![lite_inside](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Lite/images/inside.jpg "lite_inside")
 
 GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine.
 
