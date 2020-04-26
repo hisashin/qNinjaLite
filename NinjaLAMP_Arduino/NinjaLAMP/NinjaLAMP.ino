@@ -1,11 +1,10 @@
 #include <PID_v1.h>
 #include "adc_NAU7802.h"
 
-/* Customization */
+/* Temperature COnfig */
 #define TARGET_TEMP 63
 #define MAX_OUTPUT_THRESHOLD 5
 
-/* Well Thermistor */
 struct ThermistorRange {
   double tempLowerLimit;
   int bConst;
@@ -14,28 +13,32 @@ struct ThermistorRange {
 #define THERMISTOR_LOW_SIDE 1
 #define THERMISTOR_HIGH_SIDE 2
 
-const int THERMISTOR_RANGE_COUNT = 3;
-struct ThermistorRange ranges[3] = {
+/* Well */
+const int wellThermistorRangeCount = 3;
+struct ThermistorRange wellThermistorRanges[3] = {
   { 0.0, 4250, 0.0, },
   { 50.0, 4311, 0.0, },
   { 85.0, 4334, 0.0, },
 };
+const int WELL_THERMISTOR_PLACE = THERMISTOR_LOW_SIDE;
+#define WELL_R_0 100.0 // R0
+#define WELL_THERMISTOR_BASE_TEMP 25.0
+#define WELL_R 30 // Counter resistor
+// #define WELL_R 47 // Counter resistor (breadboard test)
 
-#define WELL_THERMISTOR_PLACE THERMISTOR_LOW_SIDE
-#define AIR_THERMISTOR_PLACE THERMISTOR_HIGH_SIDE
+/* Air */
+const int airThermistorRangeCount = 3;
+struct ThermistorRange airThermistorRanges[3] = {
+  { 0.0, 4250, 0.0, },
+  { 50.0, 4311, 0.0, },
+  { 85.0, 4334, 0.0, },
+};
+const int AIR_THERMISTOR_PLACE = THERMISTOR_HIGH_SIDE;
+#define AIR_R_0 100.0 // R0
+#define AIR_THERMISTOR_BASE_TEMP 25.0
+#define AIR_R 4.99 // Counter resistor
+// #define AIR_R 47 // Counter resistor (breadboard test)
 
-#define R_0_WELL 100.0 // R0
-#define R_0_AIR 100.0 // R0
-
- /*
-#define R_WELL 47 // Counter resistor (breadboard test)
-#define R_AIR 47 // Counter resistor (breadboard test)
-*/
-
-#define R_WELL 30 // Counter resistor
-#define R_AIR 4.99 // Counter resistor
-
-#define THERMISTOR_BASE_TEMP 25.0
 
 #define USE_EXTERNAL_ADC
 
@@ -64,15 +67,15 @@ PID pid(&input, &output, &setpoint, WELL_KP, WELL_KI, WELL_KD, DIRECT);
 double tempBuff[TEMP_BUFF_SIZE];
 int tempBuffIndex = 0;
 static double SWITCHING_VOLTAGE_50 = 0;
-static float INVERSE_BASE_TEMP = 1.0 / (THERMISTOR_BASE_TEMP + KELVIN);
+// static float INVERSE_BASE_TEMP = 1.0 / (THERMISTOR_BASE_TEMP + KELVIN);
 
-double voltageToTemp (double voltageRatio, float resistance, float b_constant, float r0) {
+double voltageToTemp (double voltageRatio, float resistance, float b_constant, float r0, double baseTemp) {
   double thermistorR = resistance * voltageRatio / (1.0 - voltageRatio);
-  return (1 / ((log(thermistorR / r0) / b_constant) + INVERSE_BASE_TEMP))  - KELVIN;
+  return (1 / ((log(thermistorR / r0) / b_constant) + (1.0 / (baseTemp + KELVIN))))  - KELVIN;
 }
 
-double tempToVoltageRatio (double tempCelsius, double resistance, double bConst, double r0) {
-  double thermistorR = r0 * exp(bConst * (1 / (tempCelsius + KELVIN) - 1 / (THERMISTOR_BASE_TEMP + KELVIN)));
+double tempToVoltageRatio (double tempCelsius, double resistance, double bConst, double r0, double baseTemp) {
+  double thermistorR = r0 * exp(bConst * (1 / (tempCelsius + KELVIN) - 1 / (baseTemp + KELVIN)));
   return thermistorR / (thermistorR + resistance);
 }
 double averageTemp () {
@@ -86,18 +89,16 @@ double averageTemp () {
 double prev = 0;
 void setup() {
   Serial.begin(9600);
-  for (int i=1; i<THERMISTOR_RANGE_COUNT; i++) {
-    ThermistorRange *range = &ranges[i];
-    
-    double vLimit = tempToVoltageRatio(range->tempLowerLimit, R_WELL, range->bConst, R_0_WELL);
+  for (int i=1; i<wellThermistorRangeCount; i++) {
+    ThermistorRange *range = &wellThermistorRanges[i];
+    double vLimit = tempToVoltageRatio(range->tempLowerLimit, WELL_R, range->bConst, WELL_R_0, WELL_THERMISTOR_BASE_TEMP);
     range->voltageLimit = vLimit;
-    Serial.print("i="); Serial.print(i);
-    Serial.print(", tempLowerLimit="); Serial.print(range->tempLowerLimit);
-    Serial.print(", bConst="); Serial.print(range->bConst);
-    Serial.print(", voltageLimit="); Serial.println(range->voltageLimit);
-    delay(1000);
   }
-  delay(20000);
+  for (int i=1; i<airThermistorRangeCount; i++) {
+    ThermistorRange *range = &airThermistorRanges[i];
+    double vLimit = tempToVoltageRatio(range->tempLowerLimit, WELL_R, range->bConst, WELL_R_0, AIR_THERMISTOR_BASE_TEMP);
+    range->voltageLimit = vLimit;
+  }
   pinMode(WELL_HEATER_PWM, OUTPUT);
   input = readWellTemp();
   for (int i=0; i<TEMP_BUFF_SIZE; i++) {
@@ -162,9 +163,9 @@ double readAirThermistorVoltageRatio () {
   
 }
 
-double bConstantForVoltage (double voltageRatio) {
+double bConstantForVoltage (int rangeCount, ThermistorRange *ranges, double voltageRatio) {
   float bConstant = ranges[0].bConst;
-  for (int i=1; i<THERMISTOR_RANGE_COUNT; i++) {
+  for (int i=1; i<rangeCount; i++) {
     ThermistorRange *range = &ranges[i];
     if (voltageRatio < range->voltageLimit) {
       bConstant = range->bConst;
@@ -179,10 +180,10 @@ double readWellTemp () {
 #if WELL_THERMISTOR_PLACE==THERMISTOR_LOW_SIDE
   double voltageRatio = wellVoltage;
 #else
-  double voltageRatio = 1.0 - readWellTemp;
+  double voltageRatio = 1.0 - wellVoltage;
 #endif
-  float bConstant = bConstantForVoltage(voltageRatio);
-  return voltageToTemp(voltageRatio, R_WELL, bConstant, R_0_WELL);
+  float bConstant = bConstantForVoltage(wellThermistorRangeCount, wellThermistorRanges, voltageRatio);
+  return voltageToTemp(voltageRatio, WELL_R, bConstant, WELL_R_0, WELL_THERMISTOR_BASE_TEMP);
 }
 
 double readAirTemp () {
@@ -192,6 +193,6 @@ double readAirTemp () {
 #else
   double voltageRatio = 1.0 - airVoltage;
 #endif
-  float bConstant = bConstantForVoltage(voltageRatio);
-  return voltageToTemp(voltageRatio, R_AIR, bConstant, R_0_AIR);
+  float bConstant = bConstantForVoltage(airThermistorRangeCount, airThermistorRanges, voltageRatio);
+  return voltageToTemp(voltageRatio, AIR_R, bConstant, AIR_R_0, AIR_THERMISTOR_BASE_TEMP);
 }
