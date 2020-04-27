@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 
+#define TARGET_TEMP 63
 
 struct ThermistorRange {
   double tempLowerLimit;
@@ -17,7 +18,7 @@ class NinjaLAMPCore {
     void setup();
     void loop();
     // Called by interfaces
-    void start();
+    void start(double temp);
     void stop();
   private:
     bool started;

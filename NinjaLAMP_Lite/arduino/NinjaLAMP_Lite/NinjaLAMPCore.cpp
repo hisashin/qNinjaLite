@@ -4,7 +4,6 @@
 #include "adc_NAU7802.h"
 
 /* Temperature COnfig */
-#define TARGET_TEMP 63
 #define MAX_OUTPUT_THRESHOLD 5
 
 #define THERMISTOR_LOW_SIDE 1
@@ -116,6 +115,7 @@ double averageTemp () {
 }
   
 double prev = 0;
+double targetTemp = TARGET_TEMP;
 double calcVoltageLimits (int rangeCount, ThermistorRange *ranges, double resistance, double r0, double baseTemp) {
   for (int i=1; i<rangeCount; i++) {
     ThermistorRange *range = &ranges[i];
@@ -124,6 +124,13 @@ double calcVoltageLimits (int rangeCount, ThermistorRange *ranges, double resist
   }
 }
 
+void setupPID () {
+  setpoint = targetTemp;
+  pid.SetMode(MANUAL);
+  pid.SetOutputLimits(-0.5, 0.5);
+  pid.SetSampleTime(INTERVAL_MSEC);
+  
+}
 void setupCore () {
   calcVoltageLimits(wellThermistorRangeCount, wellThermistorRanges, wellR, WELL_R_0, WELL_THERMISTOR_BASE_TEMP);
   calcVoltageLimits(airThermistorRangeCount, airThermistorRanges, AIR_R, AIR_R_0, AIR_THERMISTOR_BASE_TEMP);
@@ -140,10 +147,7 @@ void setupCore () {
 #ifdef WELL_R_SWITCHING
   switchWellR(input);
 #endif
-  setpoint = TARGET_TEMP;
-  pid.SetMode(MANUAL);
-  pid.SetOutputLimits(-0.5, 0.5);
-  pid.SetSampleTime(INTERVAL_MSEC);
+  setupPID();
   delay(INTERVAL_MSEC/2);
 }
 
@@ -157,7 +161,7 @@ void loopCore () {
 #endif
   tempBuffIndex = (tempBuffIndex + 1) % TEMP_BUFF_SIZE;
   double temp = averageTemp();
-  if (temp < TARGET_TEMP - MAX_OUTPUT_THRESHOLD) {
+  if (temp < targetTemp - MAX_OUTPUT_THRESHOLD) {
     // Max drive
     analogWrite(WELL_HEATER_PWM, 1023);
     pid.SetMode(MANUAL);
@@ -251,7 +255,9 @@ void NinjaLAMPCore::loop () {
     delay(100);
   }
 }
-void NinjaLAMPCore::start () {
+void NinjaLAMPCore::start (double temp) {
+  targetTemp = temp;
+  setupPID();
   started = true;
 }
 void NinjaLAMPCore::stop () {

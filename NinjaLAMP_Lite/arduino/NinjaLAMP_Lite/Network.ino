@@ -50,25 +50,6 @@ void wifi_send(char *response, char *funcName) {
 void requestHandlerTop() {
     server.send(200, "text/plain", "NinjaLAMP is alive!");
 }
-/* Handle request to "/command" */
-void requestHandlerCommand() {
-  /*
-    wifi->ResetCommand();
-    wifi->SendCommand();
-    char buff[256];
-    for (uint8_t i = 0; i < server.args(); i++) {
-        String sKey = server.argName(i);
-        String sValue = server.arg(i);
-        char *key = (char *) malloc(sKey.length() + 1);
-        char *value = (char *) malloc(sValue.length() + 1);
-        sKey.toCharArray(key, sKey.length() + 1);
-        sValue.toCharArray(value, sValue.length() + 1);
-        wifi->AddCommandParam(key, value, buff); //TODO
-        free(key);
-        free(value);
-    }
-    */
-}
 
 void sendAcceptedMessage (bool isAccepted, char * commandName) {
   if (isAccepted) {
@@ -86,7 +67,17 @@ void requestHandlerStop() {
 /* Handle request to "/pause" */
 void requestHandlerStart() {
   Serial.println("Start");
-  core.start();
+  double targetTemp = TARGET_TEMP;
+  for (uint8_t i = 0; i < server.args(); i++) {
+      String sKey = server.argName(i);
+      String sValue = server.arg(i);
+      if (sKey.equals("temp")) {
+        targetTemp = sValue.toFloat();
+      }
+  }
+  Serial.print("TargetTemp=");
+  Serial.println(targetTemp);
+  core.start(targetTemp);
   sendAcceptedMessage(true,"start");
 }
 /* Handle request to "/status" */
