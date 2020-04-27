@@ -11,7 +11,6 @@ bool isApMode = false;
 void setup() {
   Serial.begin(9600);
   Serial.println("NinjaLAMP");
-  /*
   EEPROM.begin(1024);
   pinMode(PIN_WIFI_MODE, INPUT);
   delay(100);
@@ -23,26 +22,13 @@ void setup() {
   } else {
     Serial.println("Core mode");
     startWiFiHTTPServerMode();
-    setupCore();
   }
-  */
   core.setup();
 }
 
 void loop() {
-  /*
   if (isWiFiConnected()) {
       loopWiFiHTTPServer();
   }
-  */
-  
   core.loop();
-  // loopWiFiHTTPServer();
-  /*
-  if (isApMode) {
-    
-  } else {
-    loopCore();
-  }
-  */
 }

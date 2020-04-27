@@ -13,9 +13,14 @@ struct ThermistorRange {
 class NinjaLAMPCore {
   public:
     NinjaLAMPCore();
+    // Called from Arduino's setup & loop functions
     void setup();
     void loop();
+    // Called by interfaces
+    void start();
+    void stop();
   private:
+    bool started;
 };
 
 #endif _NINJALAMP_CORE_H_

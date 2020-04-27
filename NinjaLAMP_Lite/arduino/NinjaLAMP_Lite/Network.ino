@@ -79,11 +79,15 @@ void sendAcceptedMessage (bool isAccepted, char * commandName) {
 }
 /* Handle request to "/pause" */
 void requestHandlerStop() {
-  sendAcceptedMessage(true,"pause");
+  Serial.println("Stop");
+  core.stop();
+  sendAcceptedMessage(true,"stop");
 }
 /* Handle request to "/pause" */
 void requestHandlerStart() {
-  sendAcceptedMessage(true,"resume");
+  Serial.println("Start");
+  core.start();
+  sendAcceptedMessage(true,"start");
 }
 /* Handle request to "/status" */
 int statusCount = 0;

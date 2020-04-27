@@ -245,5 +245,16 @@ void NinjaLAMPCore::setup () {
   
 }
 void NinjaLAMPCore::loop () {
-  loopCore();
+  if (started) {
+    loopCore();
+  } else {
+    delay(100);
+  }
+}
+void NinjaLAMPCore::start () {
+  started = true;
+}
+void NinjaLAMPCore::stop () {
+  started = false;
+  analogWrite(WELL_HEATER_PWM, 0);
 }
