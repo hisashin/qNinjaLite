@@ -227,7 +227,6 @@ HTTPUpdateResult ESP8266HTTPUpdateCustom::handleUpdate(HTTPClient& http, const S
 
     switch(code) {
     case HTTP_CODE_OK:  ///< OK (Start Update)
-        DEBUG_HTTP_UPDATE("[Maripo] HTTP_CODE_OK\n");
         if(len > 0) {
             bool startUpdate = true;
             if(spiffs) {
@@ -247,10 +246,8 @@ HTTPUpdateResult ESP8266HTTPUpdateCustom::handleUpdate(HTTPClient& http, const S
                 _lastError = HTTP_UE_TOO_LESS_SPACE;
                 ret = HTTP_UPDATE_FAILED;
             } else {
-                DEBUG_HTTP_UPDATE("[Maripo] HTTP_CODE_OK 9.0\n");
 
                 WiFiClient * tcp = http.getStreamPtr(); //CRASH!!!
-                DEBUG_HTTP_UPDATE("[Maripo] HTTP_CODE_OK 9.1\n");
 
                 WiFiUDP::stopAll();
                 WiFiClient::stopAllExcept(tcp);
