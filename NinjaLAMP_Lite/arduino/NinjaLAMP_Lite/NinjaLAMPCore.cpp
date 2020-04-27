@@ -1,3 +1,5 @@
+#include "Arduino.h"
+#include "NinjaLAMPCore.h"
 #include <PID_v1.h>
 #include "adc_NAU7802.h"
 
@@ -15,7 +17,13 @@ struct ThermistorRange wellThermistorRanges[3] = {
   { 50.0, 4311, 0.0, },
   { 85.0, 4334, 0.0, },
 };
-const int WELL_THERMISTOR_PLACE = THERMISTOR_LOW_SIDE;
+
+
+double calcVoltageLimits (int rangeCount, ThermistorRange *ranges, double resistance, double r0, double baseTemp);
+double readWellTemp ();
+double readAirTemp ();
+
+#define WELL_THERMISTOR_PLACE THERMISTOR_LOW_SIDE
 #define WELL_R_0 100.0 // R0
 #define WELL_THERMISTOR_BASE_TEMP 25.0
 // #define WELL_R 47 // Counter resistor (breadboard test)
@@ -27,7 +35,7 @@ const int WELL_THERMISTOR_PLACE = THERMISTOR_LOW_SIDE;
 #define WELL_R_HIGH 10 // Counter resistor (High mode)
 #define WELL_R_SWITCHING_TEMP 54
 #else
-#define WELL_R 30 // Counter resistor
+#define WELL_R 47 // Counter resistor
 #endif
 
 #ifdef WELL_R_SWITCHING
@@ -42,6 +50,7 @@ void switchWellR (double temp) {
     digitalWrite(PIN_WELL_HIGH_TEMP, LOW);
   }
   if (wellR != prevValue) {
+    Serial.println("R SWITCH");
     calcVoltageLimits(wellThermistorRangeCount, wellThermistorRanges, wellR, WELL_R_0, WELL_THERMISTOR_BASE_TEMP);
   }
 }
@@ -56,7 +65,7 @@ struct ThermistorRange airThermistorRanges[3] = {
   { 50.0, 4311, 0.0, },
   { 85.0, 4334, 0.0, },
 };
-const int AIR_THERMISTOR_PLACE = THERMISTOR_HIGH_SIDE;
+#define AIR_THERMISTOR_PLACE THERMISTOR_HIGH_SIDE
 #define AIR_R_0 100.0 // R0
 #define AIR_THERMISTOR_BASE_TEMP 25.0
 #define AIR_R 4.99 // Counter resistor
@@ -82,6 +91,7 @@ const int AIR_THERMISTOR_AIN = A1;
 double setpoint, input, output;
 // https://playground.arduino.cc/Code/PIDLibraryConstructor/
 PID pid(&input, &output, &setpoint, WELL_KP, WELL_KI, WELL_KD, DIRECT);
+
 
 #define INTERVAL_MSEC 250
 #define TEMP_BUFF_SIZE 5
@@ -120,6 +130,7 @@ void setupCore () {
   pinMode(WELL_HEATER_PWM, OUTPUT);
 #ifdef WELL_R_SWITCHING
   pinMode(PIN_WELL_HIGH_TEMP, OUTPUT);
+  digitalWrite(PIN_WELL_HIGH_TEMP, LOW);
 #endif
   input = readWellTemp();
   for (int i=0; i<TEMP_BUFF_SIZE; i++) {
@@ -138,7 +149,6 @@ void setupCore () {
 
 
 void loopCore () {
-  loopCore();
   // Well temp
   double wellTempRaw = readWellTemp();
   tempBuff[tempBuffIndex] = wellTempRaw;
@@ -206,7 +216,7 @@ double bConstantForVoltage (int rangeCount, ThermistorRange *ranges, double volt
 
 double readWellTemp () {
   double wellVoltage = readWellThermistorVoltageRatio();
-#if WELL_THERMISTOR_PLACE==THERMISTOR_LOW_SIDE
+#if WELL_THERMISTOR_PLACE == 1
   double voltageRatio = wellVoltage;
 #else
   double voltageRatio = 1.0 - wellVoltage;
@@ -224,4 +234,16 @@ double readAirTemp () {
 #endif
   float bConstant = bConstantForVoltage(airThermistorRangeCount, airThermistorRanges, voltageRatio);
   return voltageToTemp(voltageRatio, AIR_R, bConstant, AIR_R_0, AIR_THERMISTOR_BASE_TEMP);
+}
+
+NinjaLAMPCore::NinjaLAMPCore () {
+  
+}
+void NinjaLAMPCore::setup () {
+  Serial.println("NinjaLAMPCore::startup");
+  setupCore();
+  
+}
+void NinjaLAMPCore::loop () {
+  loopCore();
 }

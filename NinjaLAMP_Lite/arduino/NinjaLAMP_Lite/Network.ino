@@ -78,11 +78,11 @@ void sendAcceptedMessage (bool isAccepted, char * commandName) {
   }
 }
 /* Handle request to "/pause" */
-void requestHandlerPause() {
+void requestHandlerStop() {
   sendAcceptedMessage(true,"pause");
 }
 /* Handle request to "/pause" */
-void requestHandlerResume() {
+void requestHandlerStart() {
   sendAcceptedMessage(true,"resume");
 }
 /* Handle request to "/status" */
@@ -98,7 +98,7 @@ void requestHandlerStatus() {
 /* Handle request to "/connect" */
 void requestHandlerConnect() {
     String response = "{connected:true,version:\"";
-    response += String(OPENPCR_FIRMWARE_VERSION_STRING);
+    response += String(NINJALAMP_FIRMWARE_VERSION_STRING);
     response += "\"}";
     char *chResponse = (char *) malloc(sizeof(char) * (response.length()+1));
     response.toCharArray(chResponse, response.length()+1);
@@ -174,10 +174,9 @@ void startAP() {
 
 void setPCROperationHandlers () {
   server.on("/connect", requestHandlerConnect);
-  server.on("/command", requestHandlerCommand);
+  server.on("/start", requestHandlerStart);
   server.on("/status", requestHandlerStatus);
-  server.on("/pause", requestHandlerPause);
-  server.on("/resume", requestHandlerResume);
+  server.on("/stop", requestHandlerStop);
 }
 
 /* Scan for nearby APs -> save APs -> start AP */

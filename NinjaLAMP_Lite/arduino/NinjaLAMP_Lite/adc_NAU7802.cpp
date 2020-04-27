@@ -98,7 +98,7 @@ bool waitForFlag (uint8_t regAddress, int flagIndex, bool flagValue, long timeou
     }
   } while (elapsed < timeoutMsec);
   // Timeout
-  Serial.print("TIMEOUT! resetting.");
+  Serial.println("TIMEOUT! resetting.");
   initADC();
   delay(200);
   return false;

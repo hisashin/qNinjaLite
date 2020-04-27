@@ -1,10 +1,8 @@
 #include <EEPROM.h>
+#include "NinjaLAMPCore.h"
 
-struct ThermistorRange {
-  double tempLowerLimit;
-  int bConst;
-  double voltageLimit;
-};
+
+NinjaLAMPCore core;
 
 #define USE_WIFI /* Use WiFi functionalities */
 #define PIN_WIFI_MODE 16 /* Digitai input pin to switch AP (pairing) mode and Normal mode  */
@@ -13,6 +11,7 @@ bool isApMode = false;
 void setup() {
   Serial.begin(9600);
   Serial.println("NinjaLAMP");
+  /*
   EEPROM.begin(1024);
   pinMode(PIN_WIFI_MODE, INPUT);
   delay(100);
@@ -26,6 +25,8 @@ void setup() {
     startWiFiHTTPServerMode();
     setupCore();
   }
+  */
+  core.setup();
 }
 
 void loop() {
@@ -34,7 +35,9 @@ void loop() {
       loopWiFiHTTPServer();
   }
   */
-  loopWiFiHTTPServer();
+  
+  core.loop();
+  // loopWiFiHTTPServer();
   /*
   if (isApMode) {
     

@@ -73,7 +73,7 @@ void loadOTAConfig() {
         readStringFromEEPROM(cOriginalVersion, EEPROM_OTA_CURRENT_VERSION_ADDR,
         EEPROM_OTA_CURRENT_VERSION_MAXLENGTH);
         String originalVersion(cOriginalVersion);
-        String currentVersion(OPENPCR_FIRMWARE_VERSION_STRING);
+        String currentVersion(NINJALAMP_FIRMWARE_VERSION_STRING);
         free(cOriginalVersion);
         PCR_DEBUG_LINE("OriginalVersion=" + originalVersion);
 
@@ -162,7 +162,7 @@ void requestHandlerConfig() {
     Serial.print("type=");
     Serial.print(type);
     saveStringToEEPROM(type, EEPROM_OTA_TYPE_ADDR, 1);
-    saveStringToEEPROM(OPENPCR_FIRMWARE_VERSION_STRING,
+    saveStringToEEPROM(NINJALAMP_FIRMWARE_VERSION_STRING,
     EEPROM_OTA_CURRENT_VERSION_ADDR,
     EEPROM_OTA_CURRENT_VERSION_MAXLENGTH);
     wifi_send("{accepted:true}", "onConf");
@@ -178,7 +178,7 @@ void requestHandlerFirmwareUpdate() {
     Serial.print("type=");
     Serial.print(type);
     saveStringToEEPROM("2", EEPROM_OTA_TYPE_ADDR, 1);
-    saveStringToEEPROM(OPENPCR_FIRMWARE_VERSION_STRING,
+    saveStringToEEPROM(NINJALAMP_FIRMWARE_VERSION_STRING,
     EEPROM_OTA_CURRENT_VERSION_ADDR,
     EEPROM_OTA_CURRENT_VERSION_MAXLENGTH);
     wifi_send("{accepted:true}", "onConf");

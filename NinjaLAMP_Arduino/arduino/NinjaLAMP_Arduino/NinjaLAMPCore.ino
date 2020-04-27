@@ -138,7 +138,6 @@ void setupCore () {
 
 
 void loopCore () {
-  loopCore();
   // Well temp
   double wellTempRaw = readWellTemp();
   tempBuff[tempBuffIndex] = wellTempRaw;
