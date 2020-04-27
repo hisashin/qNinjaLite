@@ -1,5 +1,5 @@
 #include <PID_v1.h>
-#include "adc_NAU7802.h"
+// #include "adc_NAU7802.h"
 
 /* Temperature COnfig */
 #define TARGET_TEMP 63
@@ -20,14 +20,14 @@ const int WELL_THERMISTOR_PLACE = THERMISTOR_LOW_SIDE;
 #define WELL_THERMISTOR_BASE_TEMP 25.0
 // #define WELL_R 47 // Counter resistor (breadboard test)
 
-#define WELL_R_SWITCHING
+// #define WELL_R_SWITCHING
 #ifdef WELL_R_SWITCHING
 #define PIN_WELL_HIGH_TEMP 16
 #define WELL_R_LOW 30 // Counter resistor (Low mode)
 #define WELL_R_HIGH 10 // Counter resistor (High mode)
 #define WELL_R_SWITCHING_TEMP 54
 #else
-#define WELL_R 30 // Counter resistor
+#define WELL_R 47 // Counter resistor
 #endif
 
 #ifdef WELL_R_SWITCHING
@@ -59,10 +59,10 @@ struct ThermistorRange airThermistorRanges[3] = {
 const int AIR_THERMISTOR_PLACE = THERMISTOR_HIGH_SIDE;
 #define AIR_R_0 100.0 // R0
 #define AIR_THERMISTOR_BASE_TEMP 25.0
-#define AIR_R 4.99 // Counter resistor
+#define AIR_R 47 // Counter resistor
 // #define AIR_R 47 // Counter resistor (breadboard test)
 
-#define USE_EXTERNAL_ADC
+// #define USE_EXTERNAL_ADC
 
 /* Pinouts */
 const int WELL_HEATER_PWM = 15;
