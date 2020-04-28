@@ -2,8 +2,15 @@
 #define _NINJALAMP_CORE_H_
 
 #include "Arduino.h"
+#include "ADC.h"
+#include <PID_v1.h>
 
-#define TARGET_TEMP 63
+#define TARGET_TEMP 63 /* Typical temp for LAMP */
+
+#define THERMISTOR_LOW_SIDE 1
+#define THERMISTOR_HIGH_SIDE 2
+
+#define MAX_OUTPUT_THRESHOLD 5
 
 struct ThermistorRange {
   double tempLowerLimit;
@@ -11,9 +18,25 @@ struct ThermistorRange {
   double voltageLimit;
 };
 
+/* Thermistor config */
+struct Thermistor {
+  int bConstRangeCount;
+  ThermistorRange *bConstRanges;
+  double r0;
+  double baseTemp;
+  int place;
+  bool useSwitching;
+  double r;
+  double rLow;
+  double rHigh;
+  double switchingTemp;
+  int switchingPin;
+};
+
 class NinjaLAMPCore {
   public:
-    NinjaLAMPCore();
+    NinjaLAMPCore(Thermistor *wellThermistorConf, Thermistor *airThermistorConf, 
+      ADC *adc, double wellKP, double wellKI, double wellKD, int heaterPWM);
     // Called from Arduino's setup & loop functions
     void setup();
     void loop();
@@ -21,7 +44,24 @@ class NinjaLAMPCore {
     void start(double temp);
     void stop();
   private:
+    Thermistor *wellThermistor;
+    Thermistor *airThermistor;
+    ADC *adc;
     bool started;
+    PID *pid;
+    int heaterPWMPin;
+    void controlTemp();
+    void setupPID();
+    double readWellTemp ();
+    double readAirTemp ();
+    double bConstantForVoltage (int rangeCount, ThermistorRange *ranges, double voltageRatio);
+    void calcVoltageLimits (Thermistor *thermistor);
+    void switchWellR (double temp);
+    double voltageToTemp (double voltageRatio, float resistance, 
+      float b_constant, float r0, double baseTemp);
+    double tempToVoltageRatio (double tempCelsius, double resistance, 
+      double bConst, double r0, double baseTemp);
+    double averageTemp ();
 };
 
 #endif _NINJALAMP_CORE_H_
