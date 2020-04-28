@@ -1,6 +1,9 @@
 #include "ADCArduino.h"
 #include "NinjaLAMPCore.h"
 
+/* Target temperature (Celsius) */
+#define TARGET_TEMP 63
+
 /* Pinouts */
 const int WELL_HEATER_PWM = 15;
 const int WELL_THERMISTOR_AIN = A0;
@@ -15,13 +18,13 @@ struct ThermistorRange wellThermistorRanges[3] = {
   { 85.0, 4334, 0.0, } /* 4334 for 85-100 deg */
 };
 Thermistor wellThermistor = { 
-  .bConstRangeCount = 3,
+  .bConstRangeCount = 3, /* Number of B-constant ranges */
   .bConstRanges = wellThermistorRanges, 
-  .r0 = 100.0,
+  .r0 = 100.0, /* kOhm */
   .baseTemp = 25.0,
   .place = THERMISTOR_LOW_SIDE,
   .useSwitching = false,
-  .r = 47.0
+  .r = 47.0 /* kOhm */
 };
 /* Air */
 struct ThermistorRange airThermistorRanges[3] = {
@@ -30,13 +33,13 @@ struct ThermistorRange airThermistorRanges[3] = {
   { 85.0, 4334, 0.0, } /* 4334 for 85-100 deg */
 };
 Thermistor airThermistor = { 
-  .bConstRangeCount = 3,
+  .bConstRangeCount = 3, /* Number of B-constant ranges */
   .bConstRanges = airThermistorRanges, 
-  .r0 = 100.0,
+  .r0 = 100.0, /* kOhm */
   .baseTemp = 25.0,
   .place = THERMISTOR_LOW_SIDE,
   .useSwitching = false,
-  .r = 47.0
+  .r = 47.0 /* kOhm */
 };
 
 /* PID constants (Dependend on wells and heaters */
@@ -54,7 +57,6 @@ NinjaLAMPCore core = {
   .heaterPWM = WELL_HEATER_PWM
   };
   
-#define TARGET_TEMP 63
 
 void setup() {
   Serial.begin(9600);

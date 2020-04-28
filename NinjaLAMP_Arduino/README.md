@@ -2,11 +2,15 @@
 
 ## Customization
 
+To customize for your hardware, modify  NinjaLAMP_Arduino/arduino/NinjaLAMP_Arduino/NinjaLAMP_Arduino.ino
+
+### Target temperature
+
+```
+#define TARGET_TEMP 63
+```
+
 ### Pinouts
-
-To customize for your hardware, modify lines below (if needed):
-
-NinjaLAMP_Arduino/arduino/NinjaLAMP_Arduino/NinjaLAMP_Arduino.ino lines 5-7
 
 ```
 const int WELL_HEATER_PWM = 15;
@@ -15,8 +19,6 @@ const int AIR_THERMISTOR_AIN = A1;
 ```
 
 ### Thermistors & resistors
-
-TODO
 
 Resistors
 
@@ -28,13 +30,13 @@ struct ThermistorRange wellThermistorRanges[3] = {
   { 85.0, 4334, 0.0, } /* 4334 for 85-100 deg */
 };
 Thermistor wellThermistor = { 
-  .bConstRangeCount = 3,
+  .bConstRangeCount = 3, /* Number of B-constant ranges */
   .bConstRanges = wellThermistorRanges, 
-  .r0 = 100.0,
+  .r0 = 100.0, /* kOhm */
   .baseTemp = 25.0,
   .place = THERMISTOR_LOW_SIDE,
   .useSwitching = false,
-  .r = 47.0
+  .r = 47.0 /* kOhm */
 };
 /* Air */
 struct ThermistorRange airThermistorRanges[3] = {
@@ -43,13 +45,13 @@ struct ThermistorRange airThermistorRanges[3] = {
   { 85.0, 4334, 0.0, } /* 4334 for 85-100 deg */
 };
 Thermistor airThermistor = { 
-  .bConstRangeCount = 3,
+  .bConstRangeCount = 3, /* Number of B-constant ranges */
   .bConstRanges = airThermistorRanges, 
-  .r0 = 100.0,
+  .r0 = 100.0, /* kOhm */
   .baseTemp = 25.0,
   .place = THERMISTOR_LOW_SIDE,
   .useSwitching = false,
-  .r = 47.0
+  .r = 47.0 /* kOhm */
 };
 ```
 
