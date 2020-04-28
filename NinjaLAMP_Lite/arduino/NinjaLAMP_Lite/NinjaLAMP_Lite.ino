@@ -1,7 +1,6 @@
 #include <EEPROM.h>
 #include "NinjaLAMPCore.h"
 
-
 NinjaLAMPCore core;
 
 #define USE_WIFI /* Use WiFi functionalities */

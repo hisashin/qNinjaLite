@@ -1,27 +1,11 @@
-#ifndef ___ADC_H___
-#define ___ADC_H___
+#ifndef ___ADC___
+#define ___ADC___
 
-#include <stdint.h>
-
-uint8_t initADC ();
-
-enum HardwareStatus {
-    HARD_NO_ERROR=0,
-    HARD_ERROR_ADC=1,
-    HARD_ERROR_LID_DANGEROUS_TEMP=2,
-    HARD_ERROR_WELL_DANGEROUS_TEMP=3,
-    HARD_ERROR_LID_THERMISTOR_DISCONNECTED=4,
-    HARD_ERROR_LID_THERMISTOR_SHORT=5,
-    HARD_ERROR_WELL_THERMISTOR_DISCONNECTED=6,
-    HARD_ERROR_WELL_THERMISTOR_SHORT=7,
-    HARD_ERROR_LID_NOT_REFLECTED=8,
-    HARD_ERROR_WELL_NOT_REFLECTED=9,
-    HARD_ERROR_WELL_REVERSE=10
+class ADC {
+  public:
+    virtual void initADC() = 0;
+    virtual double getWellADCValue() = 0;
+    virtual double getAirADCValue() = 0;
 };
 
-
-// Returns (ADC value)/(ADC resolution)
-HardwareStatus getWellADCValue (float *val);
-HardwareStatus getLidADCValue (float *val);
-
-#endif /* ___ADC_H___ */
+#endif /* ___ADC___ */

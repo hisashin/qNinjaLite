@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "NinjaLAMPCore.h"
 #include <PID_v1.h>
-#include "adc_NAU7802.h"
+#include "ADC.h"
 
 /* Temperature COnfig */
 #define MAX_OUTPUT_THRESHOLD 5
@@ -76,9 +76,11 @@ struct ThermistorRange airThermistorRanges[3] = {
 const int WELL_HEATER_PWM = 15;
 
 /* Define analog input pins to use Arduino's AIN pins */
-#ifndef USE_EXTERNAL_ADC
-const int WELL_THERMISTOR_AIN = A0;
-const int AIR_THERMISTOR_AIN = A1;
+#ifdef USE_EXTERNAL_ADC
+#include "adc_NAU7802.h"
+ADCNAU7802 adc;
+#else
+ADCArduino adc;
 #endif
 
 /* PID constants */
@@ -135,6 +137,7 @@ void setupCore () {
   calcVoltageLimits(wellThermistorRangeCount, wellThermistorRanges, wellR, WELL_R_0, WELL_THERMISTOR_BASE_TEMP);
   calcVoltageLimits(airThermistorRangeCount, airThermistorRanges, AIR_R, AIR_R_0, AIR_THERMISTOR_BASE_TEMP);
   pinMode(WELL_HEATER_PWM, OUTPUT);
+  adc.initADC();
 #ifdef WELL_R_SWITCHING
   pinMode(PIN_WELL_HIGH_TEMP, OUTPUT);
   digitalWrite(PIN_WELL_HIGH_TEMP, LOW);
@@ -184,27 +187,13 @@ void loopCore () {
   delay(INTERVAL_MSEC/2);  
 }
 
-
 /* Read analog value */
 double readWellThermistorVoltageRatio () {
-#ifdef USE_EXTERNAL_ADC
-  float voltageRatio;
-  HardwareStatus result = getWellADCValue(&voltageRatio);
-  return voltageRatio;
-#else
-  return analogRead(WELL_THERMISTOR_AIN) / 1024.0;
-#endif
+  return adc.getWellADCValue();
 }
 
 double readAirThermistorVoltageRatio () {
-#ifdef USE_EXTERNAL_ADC
-  float voltageRatio;
-  HardwareStatus result = getLidADCValue(&voltageRatio);
-  return voltageRatio;
-#else
-  return analogRead(AIR_THERMISTOR_AIN) / 1024.0;
-#endif
-  
+  return adc.getAirADCValue();
 }
 
 double bConstantForVoltage (int rangeCount, ThermistorRange *ranges, double voltageRatio) {

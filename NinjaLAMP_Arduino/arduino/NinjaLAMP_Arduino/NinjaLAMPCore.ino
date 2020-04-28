@@ -184,7 +184,7 @@ double readWellThermistorVoltageRatio () {
 double readAirThermistorVoltageRatio () {
 #ifdef USE_EXTERNAL_ADC
   float voltageRatio;
-  HardwareStatus result = getLidADCValue(&voltageRatio);
+  HardwareStatus result = getAirADCValue(&voltageRatio);
   return voltageRatio;
 #else
   return analogRead(AIR_THERMISTOR_AIN) / 1024.0;

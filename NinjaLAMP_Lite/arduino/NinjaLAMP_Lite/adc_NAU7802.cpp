@@ -1,4 +1,3 @@
-#include "adc.h"
 #include "adc_NAU7802.h"
 #include "board_conf.h"
 #include <Arduino.h>
@@ -8,9 +7,11 @@
 // #define ADC_DUMMY_MODE 
 #define NO_ERR 0x00
 HardwareStatus switchADCConfig (uint8_t channel, uint8_t SPS0, uint8_t SPS1, uint8_t SPS2);
-/* Implementation of NAU7802 A/D Converter */
+/* Implementation of NAU7802 A/D CinitADCNAU7802onverter */
 char i2c_err;
 // Basic communication
+
+uint8_t initADCNAU7802 ();
 static char wellADCWriteRegValue(uint8_t reg_address, uint8_t b) {
   Wire.beginTransmission(NAU7802_DEVICE_ADDRESS); // transmit to device #0x2A
   Wire.write(reg_address);// sends 1 byte
@@ -99,12 +100,12 @@ bool waitForFlag (uint8_t regAddress, int flagIndex, bool flagValue, long timeou
   } while (elapsed < timeoutMsec);
   // Timeout
   Serial.println("TIMEOUT! resetting.");
-  initADC();
+  initADCNAU7802();
   delay(200);
   return false;
 }
 
-uint8_t initADC () {
+uint8_t initADCNAU7802 () {
   if (isAdcInitialized) {
     return 0;
   }
@@ -124,9 +125,9 @@ uint8_t initADC () {
   setRegisterBit(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_PUD);
   // Wait for power up ready flag
   if (waitForFlag(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_PUR, true, 1000)) {
-    Serial.println("initADC SUCCESS");
+    Serial.println("initADCNAU7802 SUCCESS");
   } else {
-    Serial.println("initADC FAIL");
+    Serial.println("initADCNAU7802 FAIL");
     
   }
   // Power up analog
@@ -207,7 +208,7 @@ float getADCValue () {
 001 = 20SPS
 000 = 10SPS
 */
-HardwareStatus getWellADCValue (float *val) {
+HardwareStatus _getWellADCValue (float *val) {
 #ifdef ADC_DUMMY_MODE
   return 0;
 #endif /* ADC_DUMMY_MODE */
@@ -220,7 +221,7 @@ HardwareStatus getWellADCValue (float *val) {
 }
 
 // Read ADC value of channel 1
-HardwareStatus getLidADCValue (float *val) {
+HardwareStatus _getAirADCValue (float *val) {
 #ifdef ADC_DUMMY_MODE
   return 0;
 #endif /* ADC_DUMMY_MODE */
@@ -230,6 +231,22 @@ HardwareStatus getLidADCValue (float *val) {
   *val = getADCValue();
   HardwareStatus result = switchADCConfig(0, 0, 1, 0); //1ch, 40SPS
   return result;
+}
+ADCNAU7802::ADCNAU7802 () {
+  
+}
+void ADCNAU7802::initADC () {
+  initADCNAU7802();
+}
+double ADCNAU7802::getWellADCValue () {
+  float voltageRatio;
+  HardwareStatus result = _getWellADCValue(&voltageRatio);
+  return voltageRatio;
+}
+double ADCNAU7802::getAirADCValue () {
+  float voltageRatio;
+  HardwareStatus result = _getAirADCValue(&voltageRatio);
+  return voltageRatio;
 }
 
 #endif /* USE_ADC_NAU7802 */
