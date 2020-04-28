@@ -1,6 +1,7 @@
 #include <EEPROM.h>
 #include "NinjaLAMPCore.h"
-
+#include "adc_NAU7802.h"
+ADCNAU7802 adc;
 
 /* Well */
 struct ThermistorRange wellThermistorRanges[3] = {
@@ -49,18 +50,6 @@ const int WELL_HEATER_PWM = 15;
 #define WELL_KP (0.11)
 #define WELL_KI (0.5)
 #define WELL_KD (2.0)
-
-#define USE_EXTERNAL_ADC
-#ifdef USE_EXTERNAL_ADC
-#include "adc_NAU7802.h"
-ADCNAU7802 adc;
-#else
-#include "ADCArduino.h"
-/* Define analog input pins to use Arduino's AIN pins */
-const int WELL_THERMISTOR_AIN = A0;
-const int AIR_THERMISTOR_AIN = A1;
-ADCArduino adc(WELL_THERMISTOR_AIN, AIR_THERMISTOR_AIN);
-#endif
 
 NinjaLAMPCore core = {
   .wellThermistorConf = &wellThermistor, 

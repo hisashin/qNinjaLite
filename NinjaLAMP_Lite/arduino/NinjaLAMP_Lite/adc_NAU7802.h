@@ -57,7 +57,7 @@ HardwareStatus getWellADCValue (float *val);
 HardwareStatus getAirADCValue (float *val);
 */
 
-class ADCNAU7802 : public ADC {
+class ADCNAU7802 : public ADCCustom {
   public:
     ADCNAU7802();
     void initADC() override;

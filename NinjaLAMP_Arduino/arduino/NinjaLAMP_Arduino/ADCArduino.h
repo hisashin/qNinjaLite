@@ -2,7 +2,7 @@
 #define ___ADC_ARDUINO___
 #include "ADC.h"
 
-class ADCArduino : public ADC {
+class ADCArduino : public ADCCustom {
   public:
     ADCArduino(int ainWell, int ainAir);
     void initADC() override;
