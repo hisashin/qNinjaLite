@@ -16,4 +16,4 @@ Make your own LAMP machine with Arduino.
 
 ![Top](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/top.jpg "top")
 ![Bottom](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/bottom.jpg "bottom")
-![Graph](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/serial_plotter.jpg "graph")
+![Graph](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/serial_plotter.png "graph")
