@@ -1,16 +1,18 @@
-#include "adc.h"
 #include "adc_NAU7802.h"
 #include "board_conf.h"
 #include <Arduino.h>
 #include <Wire.h>
+
 #ifdef USE_ADC_NAU7802
 /* Skip init sequence and return dummy values. This mode is for testing board without */
 // #define ADC_DUMMY_MODE 
 #define NO_ERR 0x00
 HardwareStatus switchADCConfig (uint8_t channel, uint8_t SPS0, uint8_t SPS1, uint8_t SPS2);
-/* Implementation of NAU7802 A/D Converter */
+/* Implementation of NAU7802 A/D CinitADCNAU7802onverter */
 char i2c_err;
 // Basic communication
+
+uint8_t initADCNAU7802 ();
 static char wellADCWriteRegValue(uint8_t reg_address, uint8_t b) {
   Wire.beginTransmission(NAU7802_DEVICE_ADDRESS); // transmit to device #0x2A
   Wire.write(reg_address);// sends 1 byte
@@ -24,7 +26,6 @@ static char wellADCWriteRegValues (uint8_t reg_address, char *data, uint8_t data
   for (i = 0; i < dataSize; i++) {
     Wire.write(data[i]);
   }
-  // delay (1); //100 usec
   return NO_ERR;
 }
 
@@ -64,8 +65,8 @@ void setRegisterBit (uint8_t reg_addr, int index) {
 
 }
 static bool isAdcInitialized = false;
-static uint8_t adc_default_conf = 0b0111100; //320sps (111)(OK)
-//static uint8_t adc_default_conf = 0b0010100; //40sps (010)
+//static uint8_t adc_default_conf = 0b0111100; //320sps (111)
+static uint8_t adc_default_conf = 0b0010100; //40sps (010)
 //static uint8_t adc_default_conf = 0b0001100; //80sps (010)
 
 /**
@@ -88,23 +89,17 @@ bool waitForFlag (uint8_t regAddress, int flagIndex, bool flagValue, long timeou
       startMillis = millis(); // Reset
     }
     if (flagResult == flagValue) {
-      /*
-        Serial.print("e=");
-        Serial.print(count);
-        Serial.print(".");
-        PCR_ADC_DEBUG_LINE(elapsed);
-        */
         return true;
     }
   } while (elapsed < timeoutMsec);
   // Timeout
   Serial.println("TIMEOUT! resetting.");
-  initADC();
+  initADCNAU7802();
   delay(200);
   return false;
 }
 
-uint8_t initADC () {
+uint8_t initADCNAU7802 () {
   if (isAdcInitialized) {
     return 0;
   }
@@ -124,9 +119,9 @@ uint8_t initADC () {
   setRegisterBit(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_PUD);
   // Wait for power up ready flag
   if (waitForFlag(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_PUR, true, 1000)) {
-    Serial.println("initADC SUCCESS");
+    Serial.println("initADCNAU7802 SUCCESS");
   } else {
-    Serial.println("initADC FAIL");
+    Serial.println("initADCNAU7802 FAIL");
     
   }
   // Power up analog
@@ -201,35 +196,30 @@ float getADCValue () {
 }
 
 /*
-111 = 320SPS
-011 = 80SPS
-010 = 40SPS
-001 = 20SPS
-000 = 10SPS
-*/
-HardwareStatus getWellADCValue (float *val) {
-#ifdef ADC_DUMMY_MODE
-  return 0;
-#endif /* ADC_DUMMY_MODE */
-  // Wait for "Cycle ready" flag
-  if (waitForFlag(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_CR, true, 500)==false) { return HARD_ERROR_ADC; }
-  // Wait (if needed) Read -> save timestamp -> Switch Channel & Set SPS
-  *val = getADCValue();
-  HardwareStatus result = switchADCConfig(1, 0, 1, 0); //2ch, 40SPS
-  return result;
+ Implementation of ADCNAU7802 class
+ (Supposed to be called by NInjaLAMCore)
+ */
+ADCNAU7802::ADCNAU7802 () {
+  
 }
-
-// Read ADC value of channel 1
-HardwareStatus getLidADCValue (float *val) {
-#ifdef ADC_DUMMY_MODE
-  return 0;
-#endif /* ADC_DUMMY_MODE */
+void ADCNAU7802::initADC () {
+  initADCNAU7802();
+}
+double ADCNAU7802::getWellADCValue () {
   // Wait for "Cycle ready" flag
   if (waitForFlag(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_CR, true, 500)==false) { return HARD_ERROR_ADC; }
   // Wait (if needed) Read -> save timestamp -> Switch Channel & Set SPS
-  *val = getADCValue();
-  HardwareStatus result = switchADCConfig(0, 0, 1, 0); //1ch, 40SPS
-  return result;
+  double val = getADCValue();
+  HardwareStatus result = switchADCConfig(1, 0, 1, 0); // 2ch, 40SPS
+  return val;
+}
+double ADCNAU7802::getAirADCValue () {
+  // Wait for "Cycle ready" flag
+  if (waitForFlag(NAU7802_REG_ADDR_PU_CTRL, NAU7802_BIT_CR, true, 500)==false) { return HARD_ERROR_ADC; }
+  // Wait (if needed) Read -> save timestamp -> Switch Channel & Set SPS
+  double val = getADCValue();
+  HardwareStatus result = switchADCConfig(0, 0, 1, 0); // 1ch, 40SPS
+  return val;
 }
 
 #endif /* USE_ADC_NAU7802 */

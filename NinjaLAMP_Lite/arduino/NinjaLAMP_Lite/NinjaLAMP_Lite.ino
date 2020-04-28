@@ -1,8 +1,65 @@
 #include <EEPROM.h>
 #include "NinjaLAMPCore.h"
+#include "adc_NAU7802.h"
+ADCNAU7802 adc;
 
+/* Well */
+struct ThermistorRange wellThermistorRanges[3] = {
+  { 0.0, 4250, 0.0, }, /* 4250 for 0-50 deg */
+  { 50.0, 4311, 0.0, }, /* 4311 for 50-85 deg */
+  { 85.0, 4334, 0.0, } /* 4334 for 85-100 deg */
+};
+Thermistor wellThermistor = { 
+  .bConstRangeCount = 3,
+  .bConstRanges = wellThermistorRanges, 
+  .r0 = 100.0,
+  .baseTemp = 25.0,
+  .place = THERMISTOR_LOW_SIDE,
+  /*
+   .useSwitching = false,
+   .r = 47.0
+   */
+  .useSwitching = true,
+  .r = 30.0,
+  .rLow = 30.0,
+  .rHigh = 10.0,
+  .switchingTemp = 54.0,
+  .switchingPin = 0
+};
+/* Air */
+struct ThermistorRange airThermistorRanges[3] = {
+  { 0.0, 4250, 0.0, }, /* 4250 for 0-50 deg */
+  { 50.0, 4311, 0.0, }, /* 4311 for 50-85 deg */
+  { 85.0, 4334, 0.0, } /* 4334 for 85-100 deg */
+};
+Thermistor airThermistor = { 
+  .bConstRangeCount = 3,
+  .bConstRanges = airThermistorRanges, 
+  .r0 = 100.0,
+  .baseTemp = 25.0,
+  .place = THERMISTOR_HIGH_SIDE,
+  .useSwitching = false,
+  .r = 4.99
+  // .r = 47.0
+};
 
-NinjaLAMPCore core;
+/* Pinouts */
+const int WELL_HEATER_PWM = 15;
+
+/* PID constants */
+#define WELL_KP (0.11)
+#define WELL_KI (0.5)
+#define WELL_KD (2.0)
+
+NinjaLAMPCore core = {
+  .wellThermistorConf = &wellThermistor, 
+  .airThermistorConf = &airThermistor,
+  .adc = &adc,
+  .wellKP = WELL_KP,
+  .wellKI = WELL_KI,
+  .wellKD = WELL_KD,
+  .heaterPWM = WELL_HEATER_PWM
+  };
 
 #define USE_WIFI /* Use WiFi functionalities */
 #define PIN_WIFI_MODE 16 /* Digitai input pin to switch AP (pairing) mode and Normal mode  */

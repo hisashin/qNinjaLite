@@ -2,8 +2,8 @@
 #define _NINJALAMP_CORE_H_
 
 #include "Arduino.h"
-#include "ADC.h"
 #include <PID_v1.h>
+#include "ADC.h"
 
 #define TARGET_TEMP 63 /* Typical temp for LAMP */
 
