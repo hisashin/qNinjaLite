@@ -16,7 +16,7 @@ Thermistor wellThermistor = {
   .bConstRanges = wellThermistorRanges, 
   .r0 = 100.0,
   .baseTemp = 25.0,
-  .place = THERMISTOR_HIGH_SIDE,
+  .place = THERMISTOR_LOW_SIDE,
   .useSwitching = false,
   .r = 47.0
 };
@@ -31,7 +31,7 @@ Thermistor airThermistor = {
   .bConstRanges = airThermistorRanges, 
   .r0 = 100.0,
   .baseTemp = 25.0,
-  .place = THERMISTOR_HIGH_SIDE,
+  .place = THERMISTOR_LOW_SIDE,
   .useSwitching = false,
   .r = 47.0
 };
