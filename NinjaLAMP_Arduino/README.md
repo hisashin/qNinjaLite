@@ -1,4 +1,4 @@
-Schematic and wirings on breadboard is [here](http://fritzing.org/projects/ninjalamp-for-arduino)
+Schematic and layout can be found at eagle directory.
 
-![Schematic](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Arduino/images/shematic.png "schematic")
-![Wirings](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Arduino/images/breadboard.jpg "wirings")
+![Schematic](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Arduino/eagle/shematic.png "schematic")
+![Layout](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Arduino/eagle/layout.jpg "layout")
