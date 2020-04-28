@@ -4,7 +4,7 @@ Make your own LAMP machine with Arduino.
 
 - Why NinjaLAMP?
   - Precise temperature control with thermal simulation model sensing not only tube holder but air
-  - Support different kinds of core parts. Look "Advanced" below.
+  - Support different kinds of core parts and share how to calibrate them to minimize error. Look "Advanced" below.
 - BOM (Bill of materials) to buy
 - 3d print [STL](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/3d/4x4_3dprint.stl) ([3d model](https://gallery.autodesk.com/projects/149287/ninjalamp))
 - Set target temperature
