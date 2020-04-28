@@ -9,7 +9,7 @@ Make your own LAMP machine with Arduino.
 - Upload source to Arduino
 - Run and monitor temperature graph
 
-# Advanced
+### Advanced
 
 - How to choose different tube holder, heater, thermistor
 - [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/How-to-change-source-for-Arduino)
