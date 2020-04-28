@@ -1,8 +1,11 @@
 #include "ADCArduino.h"
 #include "NinjaLAMPCore.h"
-/* Define analog input pins to use Arduino's AIN pins */
+
+/* Pinouts */
+const int WELL_HEATER_PWM = 15;
 const int WELL_THERMISTOR_AIN = A0;
 const int AIR_THERMISTOR_AIN = A1;
+
 ADCArduino adc(WELL_THERMISTOR_AIN, AIR_THERMISTOR_AIN);
 
 /* Well */
@@ -36,10 +39,7 @@ Thermistor airThermistor = {
   .r = 47.0
 };
 
-/* Pinouts */
-const int WELL_HEATER_PWM = 15;
-
-/* PID constants */
+/* PID constants (Dependend on wells and heaters */
 #define WELL_KP (0.11)
 #define WELL_KI (0.5)
 #define WELL_KD (2.0)
