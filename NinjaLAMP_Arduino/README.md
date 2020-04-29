@@ -1,64 +1,22 @@
-# NinjaLAMP Arduino
+# NinjaLAMP for Arduino
 
-## Customization
+Make your own LAMP machine with Arduino.
 
-To customize for your hardware, modify  NinjaLAMP_Arduino/arduino/NinjaLAMP_Arduino/NinjaLAMP_Arduino.ino
+- Why NinjaLAMP?
+  - Precise temperature control with thermal simulation model sensing not only tube holder but air
+  - Support different kinds of core parts guiding how to choose and calibrate to minimize error. Look "Advanced" below.
+  - Easy to build. Only 4 resistors, 1 mosfet, 2 thermistors on [circuit](https://github.com/hisashin/NinjaLAMP/tree/master/NinjaLAMP_Arduino/eagle).
+- [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-BOM) to buy
+- 3d print [STL](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/3d/4x4_3dprint.stl) without support ([3d model](https://gallery.autodesk.com/projects/149287/ninjalamp))
+- Set target temperature
+- Upload source to Arduino
+- Run and monitor temperature graph
 
-### Target temperature
+### Advanced
 
-```
-#define TARGET_TEMP 63
-```
+- How to choose and calibrate different tube holder, heater, thermistor
+- [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/How-to-change-source-for-Arduino)
 
-### Pinouts
-
-```
-const int WELL_HEATER_PWM = 15;
-const int WELL_THERMISTOR_AIN = A0;
-const int AIR_THERMISTOR_AIN = A1;
-```
-
-### Thermistors & resistors
-
-Resistors
-
-```
-/* Well */
-struct ThermistorRange wellThermistorRanges[3] = {
-  { 0.0, 4250, 0.0, }, /* 4250 for 0-50 deg */
-  { 50.0, 4311, 0.0, }, /* 4311 for 50-85 deg */
-  { 85.0, 4334, 0.0, } /* 4334 for 85-100 deg */
-};
-Thermistor wellThermistor = { 
-  .bConstRangeCount = 3, /* Number of B-constant ranges */
-  .bConstRanges = wellThermistorRanges, 
-  .r0 = 100.0, /* kOhm */
-  .baseTemp = 25.0,
-  .place = THERMISTOR_LOW_SIDE,
-  .useSwitching = false,
-  .r = 47.0 /* kOhm */
-};
-/* Air */
-struct ThermistorRange airThermistorRanges[3] = {
-  { 0.0, 4250, 0.0, }, /* 4250 for 0-50 deg */
-  { 50.0, 4311, 0.0, }, /* 4311 for 50-85 deg */
-  { 85.0, 4334, 0.0, } /* 4334 for 85-100 deg */
-};
-Thermistor airThermistor = { 
-  .bConstRangeCount = 3, /* Number of B-constant ranges */
-  .bConstRanges = airThermistorRanges, 
-  .r0 = 100.0, /* kOhm */
-  .baseTemp = 25.0,
-  .place = THERMISTOR_LOW_SIDE,
-  .useSwitching = false,
-  .r = 47.0 /* kOhm */
-};
-```
-
-PID constants
-
-```
-#define WELL_KP (0.11)
-#define WELL_KI (0.5)
-#define WELL_KD (2.0)
-```
+![Top](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/top.jpg "top")
+![Bottom](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/bottom.jpg "bottom")
+![Graph](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/serial_plotter.png "graph")
