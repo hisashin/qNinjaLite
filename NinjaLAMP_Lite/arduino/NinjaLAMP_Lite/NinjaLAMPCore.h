@@ -36,8 +36,6 @@ struct Thermistor {
   double rHigh;
   double switchingTemp;
   int switchingPin;
-  
-  double estimatedSampleTemp;
 };
 
 class NinjaLAMPCore {
@@ -69,6 +67,7 @@ class NinjaLAMPCore {
     double tempToVoltageRatio (double tempCelsius, double resistance, 
       double bConst, double r0, double baseTemp);
     double averageTemp ();
+    double estimatedSampleTemp;
 };
 
 #endif _NINJALAMP_CORE_H_
