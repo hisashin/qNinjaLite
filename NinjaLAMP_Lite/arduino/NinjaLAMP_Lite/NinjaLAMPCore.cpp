@@ -7,8 +7,9 @@
 #define TEMP_BUFF_SIZE 5
 
 double setpoint, input, output;
-double tempBuff[TEMP_BUFF_SIZE];
-int tempBuffIndex = 0;
+double wellTempBuff[TEMP_BUFF_SIZE];
+int wellTempBuffIndex = 0;
+
 double targetTemp = TARGET_TEMP;
 
 NinjaLAMPCore::NinjaLAMPCore (Thermistor *wellThermistorConf, Thermistor *airThermistorConf, ADCCustom *adc,
@@ -29,12 +30,10 @@ void NinjaLAMPCore::setup () {
     pinMode(wellThermistor->switchingPin, OUTPUT);
     digitalWrite(wellThermistor->switchingPin, LOW);
   }
-  input = readWellTemp();
-  for (int i=0; i<TEMP_BUFF_SIZE; i++) {
-    tempBuff[i] = input;
-  }
-  switchWellR(input);
+  switchWellR(readWellTemp());
   setupPID();
+  delay(INTERVAL_MSEC/2);
+  readAirTemp();
   delay(INTERVAL_MSEC/2);
 }
 void NinjaLAMPCore::loop () {
@@ -47,6 +46,14 @@ void NinjaLAMPCore::loop () {
 void NinjaLAMPCore::start (double temp) {
   targetTemp = temp;
   setupPID();
+  // Fill well temp buff
+  input = readWellTemp();
+  for (int i=0; i<TEMP_BUFF_SIZE; i++) {
+    wellTempBuff[i] = input;
+  }
+  delay(INTERVAL_MSEC/2);
+  // To switch ADC channel
+  readAirTemp();
   started = true;
 }
 void NinjaLAMPCore::stop () {
@@ -58,9 +65,9 @@ void NinjaLAMPCore::stop () {
 void NinjaLAMPCore::controlTemp () {
   // Well temp
   double wellTempRaw = readWellTemp();
-  tempBuff[tempBuffIndex] = wellTempRaw;
+  wellTempBuff[wellTempBuffIndex] = wellTempRaw;
   switchWellR(wellTempRaw);
-  tempBuffIndex = (tempBuffIndex + 1) % TEMP_BUFF_SIZE;
+  wellTempBuffIndex = (wellTempBuffIndex + 1) % TEMP_BUFF_SIZE;
   double temp = averageTemp();
   if (temp < targetTemp - MAX_OUTPUT_THRESHOLD) {
     // Max drive
@@ -74,7 +81,16 @@ void NinjaLAMPCore::controlTemp () {
     double pwmOutput = (output + 0.5) * 408/*1024*/;
     analogWrite(heaterPWMPin, (int)pwmOutput);
   }
-  // TODO: switch high/low resistors if needed
+  /*
+  double diff = ((wellTemp - iEstimatedSampleTemp)/THETA_WELL + (estimatedAirTemp-iEstimatedSampleTemp)/THETA_LID ) / CAPACITY_TUBE;
+
+  if (!iTempUpdated) {
+    iTempUpdated = true;
+    iEstimatedSampleTemp = estimatedAirTemp;
+  } else if ( 5>diff && diff > -5) {
+    iEstimatedSampleTemp += diff;
+  }
+  */
   delay(INTERVAL_MSEC/2);
 
   // Air temp
@@ -166,7 +182,7 @@ double NinjaLAMPCore::tempToVoltageRatio (double tempCelsius, double resistance,
 double NinjaLAMPCore::averageTemp () {
   double tempSum = 0;
   for (int i=0; i<TEMP_BUFF_SIZE; i++) {
-    tempSum += tempBuff[i];
+    tempSum += wellTempBuff[i];
   }
   return tempSum / TEMP_BUFF_SIZE;
 }

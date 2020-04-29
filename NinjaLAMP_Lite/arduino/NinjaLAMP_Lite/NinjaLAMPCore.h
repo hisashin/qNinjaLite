@@ -20,17 +20,24 @@ struct ThermistorRange {
 
 /* Thermistor config */
 struct Thermistor {
+  // Thermistor config
   int bConstRangeCount;
   ThermistorRange *bConstRanges;
   double r0;
   double baseTemp;
+  
+  // Thermistor & resistor circuit
   int place;
   bool useSwitching;
   double r;
+  
+  // Resistor switching (for well)
   double rLow;
   double rHigh;
   double switchingTemp;
   int switchingPin;
+  
+  double estimatedSampleTemp;
 };
 
 class NinjaLAMPCore {
