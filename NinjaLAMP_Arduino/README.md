@@ -15,7 +15,7 @@ Make your own LAMP machine with Arduino.
 ### Advanced
 
 - How to choose and calibrate different tube holder, heater, thermistor
-- [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/How-to-change-source-for-Arduino)
+- [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-customize-source-before-uploading)
 
 ![Top](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/top.jpg "top")
 ![Bottom](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/bottom.jpg "bottom")
