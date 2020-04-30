@@ -6,9 +6,19 @@
 #define INTERVAL_MSEC 250
 #define TEMP_BUFF_SIZE 5
 
+/* Thermal resistance*/
+#define THETA_WELL 3.0
+#define THETA_AIR 15.0
+/* Capacity */
+#define CAPACITY_TUBE 3.0
+
+#define THERMAL_RESISTANCE_RATIO (63-62/62-38)
+#define TUBE_THERMAL_CAPACITY 3.0
+
 double setpoint, input, output;
-double tempBuff[TEMP_BUFF_SIZE];
-int tempBuffIndex = 0;
+double wellTempBuff[TEMP_BUFF_SIZE];
+int wellTempBuffIndex = 0;
+
 double targetTemp = TARGET_TEMP;
 
 NinjaLAMPCore::NinjaLAMPCore (Thermistor *wellThermistorConf, Thermistor *airThermistorConf, ADCCustom *adc,
@@ -29,12 +39,10 @@ void NinjaLAMPCore::setup () {
     pinMode(wellThermistor->switchingPin, OUTPUT);
     digitalWrite(wellThermistor->switchingPin, LOW);
   }
-  input = readWellTemp();
-  for (int i=0; i<TEMP_BUFF_SIZE; i++) {
-    tempBuff[i] = input;
-  }
-  switchWellR(input);
+  switchWellR(readWellTemp());
   setupPID();
+  delay(INTERVAL_MSEC/2);
+  readAirTemp();
   delay(INTERVAL_MSEC/2);
 }
 void NinjaLAMPCore::loop () {
@@ -47,6 +55,14 @@ void NinjaLAMPCore::loop () {
 void NinjaLAMPCore::start (double temp) {
   targetTemp = temp;
   setupPID();
+  // Fill well temp buff
+  input = readWellTemp();
+  for (int i=0; i<TEMP_BUFF_SIZE; i++) {
+    wellTempBuff[i] = input;
+  }
+  delay(INTERVAL_MSEC/2);
+  // To switch ADC channel
+  readAirTemp();
   started = true;
 }
 void NinjaLAMPCore::stop () {
@@ -58,30 +74,45 @@ void NinjaLAMPCore::stop () {
 void NinjaLAMPCore::controlTemp () {
   // Well temp
   double wellTempRaw = readWellTemp();
-  tempBuff[tempBuffIndex] = wellTempRaw;
+  wellTempBuff[wellTempBuffIndex] = wellTempRaw;
   switchWellR(wellTempRaw);
-  tempBuffIndex = (tempBuffIndex + 1) % TEMP_BUFF_SIZE;
-  double temp = averageTemp();
-  if (temp < targetTemp - MAX_OUTPUT_THRESHOLD) {
+  wellTempBuffIndex = (wellTempBuffIndex + 1) % TEMP_BUFF_SIZE;
+  double wellTemp = averageTemp();
+  if (wellTemp < targetTemp - MAX_OUTPUT_THRESHOLD) {
     // Max drive
     analogWrite(heaterPWMPin, 1023);
     pid->SetMode(MANUAL);
   } else {
     // PID drive
-    input = temp;
+    input = wellTemp;
     pid->SetMode(AUTOMATIC);
     pid->Compute();
     double pwmOutput = (output + 0.5) * 408/*1024*/;
     analogWrite(heaterPWMPin, (int)pwmOutput);
   }
-  // TODO: switch high/low resistors if needed
   delay(INTERVAL_MSEC/2);
 
   // Air temp
   double airTemp = readAirTemp();
+  /*
+  double diff = ((wellTemp - estimatedSampleTemp)/THETA_WELL + (airTemp-estimatedSampleTemp)/THETA_AIR ) / CAPACITY_TUBE;
+
+  if (5 > diff && diff > -5) {
+    estimatedSampleTemp += diff;
+  }
+
+  if (airTemp < wellTemp) {
+    setpoint = targetTemp + (targetTemp - airTemp) * THETA_WELL / THETA_AIR;
+  }
+  */
+  // Update setpoint according to air & target temp
+  Serial.print(setpoint);
+  Serial.print("\t");
   Serial.print(airTemp);
   Serial.print("\t");
-  Serial.println(temp);
+  Serial.print(wellTemp);
+  Serial.print("\t");
+  Serial.println(estimatedSampleTemp);
   delay(INTERVAL_MSEC/2);  
 }
 void NinjaLAMPCore::setupPID () {
@@ -147,7 +178,6 @@ void NinjaLAMPCore::switchWellR (double temp) {
     digitalWrite(wellThermistor->switchingPin, LOW);
   }
   if (wellThermistor->r != prevValue) {
-    Serial.println("R SWITCH");
     calcVoltageLimits(wellThermistor);
   }
 }
@@ -166,7 +196,7 @@ double NinjaLAMPCore::tempToVoltageRatio (double tempCelsius, double resistance,
 double NinjaLAMPCore::averageTemp () {
   double tempSum = 0;
   for (int i=0; i<TEMP_BUFF_SIZE; i++) {
-    tempSum += tempBuff[i];
+    tempSum += wellTempBuff[i];
   }
   return tempSum / TEMP_BUFF_SIZE;
 }
