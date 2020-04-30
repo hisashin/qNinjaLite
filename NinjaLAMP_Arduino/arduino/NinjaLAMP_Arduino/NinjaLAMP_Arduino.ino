@@ -19,7 +19,7 @@ struct ThermistorRange wellThermistorRanges[3] = {
 };
 Thermistor wellThermistor = { 
   .bConstRangeCount = 3, /* Number of B-constant ranges */
-  .bConstRanges = wellThermistorRanges, 
+  .bConstRanges = wellThermistorRanges, /* Pointer to the B-constant ranges array */
   .r0 = 100.0, /* kOhm */
   .baseTemp = 25.0,
   .place = THERMISTOR_LOW_SIDE,
@@ -34,7 +34,7 @@ struct ThermistorRange airThermistorRanges[3] = {
 };
 Thermistor airThermistor = { 
   .bConstRangeCount = 3, /* Number of B-constant ranges */
-  .bConstRanges = airThermistorRanges, 
+  .bConstRanges = airThermistorRanges, /* Pointer to the B-constant ranges array */
   .r0 = 100.0, /* kOhm */
   .baseTemp = 25.0,
   .place = THERMISTOR_LOW_SIDE,
