@@ -6,15 +6,6 @@
 #define INTERVAL_MSEC 250
 #define TEMP_BUFF_SIZE 5
 
-/* Thermal resistance*/
-#define THETA_WELL 3.0
-#define THETA_AIR 15.0
-/* Capacity */
-#define CAPACITY_TUBE 3.0
-
-#define THERMAL_RESISTANCE_RATIO (63-62/62-38)
-#define TUBE_THERMAL_CAPACITY 3.0
-
 double setpoint, input, output;
 double wellTempBuff[TEMP_BUFF_SIZE];
 int wellTempBuffIndex = 0;
@@ -41,7 +32,7 @@ void NinjaLAMPCore::setup () {
   }
   wellTemp = readWellTemp();
   estimatedSampleTemp = wellTemp;
-  switchWellR(welLTemp);
+  switchWellR(wellTemp);
   setupPID();
   delay(INTERVAL_MSEC/2);
   readAirTemp();
@@ -115,17 +106,17 @@ void NinjaLAMPCore::controlTemp () {
       estimatedSampleTemp += diff;
     }
     if (airTemp < wellTemp) {
-      setpoint = targetTemp + (targetTemp - airTemp) * THETA_WELL / THETA_AIR;
+      setpoint = targetTemp + (targetTemp - airTemp) / heatResistanceRatio;
     }
   }
-  Serial.print(setpoint);
-  Serial.print("\t");
   Serial.print(airTemp);
   Serial.print("\t");
   Serial.print(wellTemp);
   if (isSampleTempSimulationEnabled) {
     Serial.print("\t");
     Serial.print(estimatedSampleTemp);
+    Serial.print("\t");
+    Serial.print(setpoint);
   }
   Serial.println("");
   delay(INTERVAL_MSEC/2);  

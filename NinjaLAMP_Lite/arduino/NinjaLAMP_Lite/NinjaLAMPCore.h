@@ -59,6 +59,9 @@ class NinjaLAMPCore {
     int heaterPWMPin;
     double wellTemp;
     double airTemp;
+    bool isSampleTempSimulationEnabled;
+    double sampleHeatCapacity;
+    double heatResistanceRatio;
     double estimatedSampleTemp;
     void controlTemp();
     void setupPID();
@@ -72,7 +75,6 @@ class NinjaLAMPCore {
     double tempToVoltageRatio (double tempCelsius, double resistance, 
       double bConst, double r0, double baseTemp);
     double averageTemp ();
-    double estimatedSampleTemp;
 };
 
 #endif _NINJALAMP_CORE_H_
