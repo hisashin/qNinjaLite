@@ -10,7 +10,7 @@ Make your own LAMP machine with Arduino.
 - 3d print [base](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/3d/4x4_3d_base.stl) and [cover](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/3d/4x4_3d_cover.stl) upside down without support ([3d model](https://gallery.autodesk.com/projects/149287/ninjalamp))
 - Set target temperature
 - [Upload source to Arduino](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-upload-the-software)
-- Run and monitor temperature graph
+- [Run and monitor temperature graph](https://github.com/hisashin/NinjaLAMP/wiki/Run-and-monitor-temperature-graph)
 
 ### Advanced
 
