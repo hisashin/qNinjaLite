@@ -20,13 +20,18 @@ struct ThermistorRange {
 
 /* Thermistor config */
 struct Thermistor {
+  // Thermistor config
   int bConstRangeCount;
   ThermistorRange *bConstRanges;
   double r0;
   double baseTemp;
+  
+  // Thermistor & resistor circuit
   int place;
   bool useSwitching;
   double r;
+  
+  // Resistor switching (for well)
   double rLow;
   double rHigh;
   double switchingTemp;
@@ -39,6 +44,8 @@ class NinjaLAMPCore {
       ADCCustom *adc, double wellKP, double wellKI, double wellKD, int heaterPWM);
     // Called from Arduino's setup & loop functions
     void setup();
+    void enableSampleTempSimulation (double heatResistanceRatio, double sampleHeatCapacity);
+    void NinjaLAMPCore::disableSampleTempSimulation ();
     void loop();
     // Called by interfaces
     void start(double temp);
@@ -62,6 +69,7 @@ class NinjaLAMPCore {
     double tempToVoltageRatio (double tempCelsius, double resistance, 
       double bConst, double r0, double baseTemp);
     double averageTemp ();
+    double estimatedSampleTemp;
 };
 
 #endif _NINJALAMP_CORE_H_

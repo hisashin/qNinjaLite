@@ -39,12 +39,24 @@ void NinjaLAMPCore::setup () {
     pinMode(wellThermistor->switchingPin, OUTPUT);
     digitalWrite(wellThermistor->switchingPin, LOW);
   }
-  switchWellR(readWellTemp());
+  wellTemp = readWellTemp();
+  estimatedSampleTemp = wellTemp;
+  switchWellR(welLTemp);
   setupPID();
   delay(INTERVAL_MSEC/2);
   readAirTemp();
   delay(INTERVAL_MSEC/2);
 }
+
+void NinjaLAMPCore::enableSampleTempSimulation (double heatResistanceRatio, double sampleHeatCapacity) {
+  this->isSampleTempSimulationEnabled = true;
+  this->heatResistanceRatio = heatResistanceRatio;
+  this->sampleHeatCapacity = sampleHeatCapacity;
+}
+void NinjaLAMPCore::disableSampleTempSimulation () {
+  isSampleTempSimulationEnabled = false;
+}
+
 void NinjaLAMPCore::loop () {
   if (started) {
     controlTemp();
@@ -77,7 +89,7 @@ void NinjaLAMPCore::controlTemp () {
   wellTempBuff[wellTempBuffIndex] = wellTempRaw;
   switchWellR(wellTempRaw);
   wellTempBuffIndex = (wellTempBuffIndex + 1) % TEMP_BUFF_SIZE;
-  double wellTemp = averageTemp();
+  wellTemp = averageTemp();
   if (wellTemp < targetTemp - MAX_OUTPUT_THRESHOLD) {
     // Max drive
     analogWrite(heaterPWMPin, 1023);
@@ -94,25 +106,28 @@ void NinjaLAMPCore::controlTemp () {
 
   // Air temp
   double airTemp = readAirTemp();
-  /*
-  double diff = ((wellTemp - estimatedSampleTemp)/THETA_WELL + (airTemp-estimatedSampleTemp)/THETA_AIR ) / CAPACITY_TUBE;
-
-  if (5 > diff && diff > -5) {
-    estimatedSampleTemp += diff;
+  if (isSampleTempSimulationEnabled) {
+    // Update setpoint according to air & target temp
+    double diff = (INTERVAL_MSEC/1000.0) 
+      * ((wellTemp - estimatedSampleTemp)/1.0 + (airTemp-estimatedSampleTemp)/heatResistanceRatio ) 
+      / sampleHeatCapacity;
+    if (5 > diff && diff > -5) {
+      estimatedSampleTemp += diff;
+    }
+    if (airTemp < wellTemp) {
+      setpoint = targetTemp + (targetTemp - airTemp) * THETA_WELL / THETA_AIR;
+    }
   }
-
-  if (airTemp < wellTemp) {
-    setpoint = targetTemp + (targetTemp - airTemp) * THETA_WELL / THETA_AIR;
-  }
-  */
-  // Update setpoint according to air & target temp
   Serial.print(setpoint);
   Serial.print("\t");
   Serial.print(airTemp);
   Serial.print("\t");
   Serial.print(wellTemp);
-  Serial.print("\t");
-  Serial.println(estimatedSampleTemp);
+  if (isSampleTempSimulationEnabled) {
+    Serial.print("\t");
+    Serial.print(estimatedSampleTemp);
+  }
+  Serial.println("");
   delay(INTERVAL_MSEC/2);  
 }
 void NinjaLAMPCore::setupPID () {
