@@ -57,6 +57,9 @@ class NinjaLAMPCore {
     bool started;
     PID *pid;
     int heaterPWMPin;
+    double wellTemp;
+    double airTemp;
+    double estimatedSampleTemp;
     void controlTemp();
     void setupPID();
     double readWellTemp ();
