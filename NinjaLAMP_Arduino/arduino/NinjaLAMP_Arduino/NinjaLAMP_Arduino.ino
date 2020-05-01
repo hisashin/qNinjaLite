@@ -19,8 +19,8 @@ struct ThermistorRange wellThermistorRanges[3] = {
 };
 Thermistor wellThermistor = { 
   .bConstRangeCount = 3, /* Number of B-constant ranges */
-  .bConstRanges = wellThermistorRanges, 
-  .r0 = 100.0, /* kOhm */
+  .bConstRanges = wellThermistorRanges, /* Pointer to the B-constant ranges array */
+  .r0 = 100.0, /* Resistance at "baseTemp" (kOhm) */
   .baseTemp = 25.0,
   .place = THERMISTOR_LOW_SIDE,
   .useSwitching = false,
@@ -34,8 +34,8 @@ struct ThermistorRange airThermistorRanges[3] = {
 };
 Thermistor airThermistor = { 
   .bConstRangeCount = 3, /* Number of B-constant ranges */
-  .bConstRanges = airThermistorRanges, 
-  .r0 = 100.0, /* kOhm */
+  .bConstRanges = airThermistorRanges, /* Pointer to the B-constant ranges array */
+  .r0 = 100.0, /* Resistance at "baseTemp" (kOhm) */
   .baseTemp = 25.0,
   .place = THERMISTOR_LOW_SIDE,
   .useSwitching = false,
@@ -57,10 +57,16 @@ NinjaLAMPCore core = {
   .heaterPWM = WELL_HEATER_PWM
   };
   
+#define ENABLE_SAMPLE_TEMP_SIMULATION
+#define HEAT_RESISTANCE_RATIO 24.0
+#define TUBE_HEAT_CAPACITY 20.0
 
 void setup() {
   Serial.begin(9600);
   core.setup();
+#ifdef ENABLE_SAMPLE_TEMP_SIMULATION
+  core.enableSampleTempSimulation(HEAT_RESISTANCE_RATIO, TUBE_HEAT_CAPACITY);
+#endif /* ENABLE_SAMPLE_TEMP_SIMULATION */
   delay(100);
   core.start(TARGET_TEMP);
   delay(100);
