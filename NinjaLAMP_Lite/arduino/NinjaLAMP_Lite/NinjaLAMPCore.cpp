@@ -68,6 +68,10 @@ void NinjaLAMPCore::start (double temp) {
   readAirTemp();
   started = true;
 }
+void NinjaLAMPCore::setTargetTemp(double temp) {
+  targetTemp = temp;
+  setupPID();
+}
 void NinjaLAMPCore::stop () {
   started = false;
   // Turn off well heater

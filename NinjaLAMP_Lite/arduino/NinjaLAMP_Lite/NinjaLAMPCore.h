@@ -49,6 +49,7 @@ class NinjaLAMPCore {
     void loop();
     // Called by interfaces
     void start(double temp);
+    void setTargetTemp(double temp);
     void stop();
   private:
     Thermistor *wellThermistor;
