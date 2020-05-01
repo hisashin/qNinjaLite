@@ -117,6 +117,8 @@ void NinjaLAMPCore::controlTemp () {
     Serial.print(estimatedSampleTemp);
     Serial.print("\t");
     Serial.print(setpoint);
+    Serial.print("\t");
+    Serial.print(targetTemp);
   }
   Serial.println("");
   delay(INTERVAL_MSEC/2);  

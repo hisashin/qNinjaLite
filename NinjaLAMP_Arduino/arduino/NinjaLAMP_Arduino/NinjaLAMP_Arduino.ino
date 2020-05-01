@@ -58,10 +58,12 @@ NinjaLAMPCore core = {
   };
 
 /*
+// Use 3 lines below to enable temperature simulation feature
 #define ENABLE_SAMPLE_TEMP_SIMULATION
 #define HEAT_RESISTANCE_RATIO 24.0
 #define TUBE_HEAT_CAPACITY 8.0
 */
+
 
 void setup() {
   Serial.begin(9600);
