@@ -30,4 +30,4 @@ GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wi
 
 ![Top](https://github.com/hisashin/NinjaLAMP/blob/master/images/top.jpg "top")
 ![Bottom](https://github.com/hisashin/NinjaLAMP/blob/master/images/bottom.jpg "bottom")
-![Graph](https://github.com/hisashin/NinjaLAMP/blob/master/images/serial_plotter.png "graph")
+![Graph](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/graph.png "graph")
