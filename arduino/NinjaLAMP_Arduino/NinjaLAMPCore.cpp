@@ -17,6 +17,8 @@ NinjaLAMPCore::NinjaLAMPCore (Thermistor *wellThermistorConf, Thermistor *airThe
   wellThermistor = wellThermistorConf;
   airThermistor = airThermistorConf;
   this->adc = adc;
+  totalElapsedTime = 0;
+  stageElapsedTime = 0;
   pid = new PID(&input, &output, &setpoint, wellKP, wellKI, wellKD, wellKD);
   this->heaterPWMPin = heaterPWM;
 }
@@ -48,13 +50,6 @@ void NinjaLAMPCore::disableSampleTempSimulation () {
   isSampleTempSimulationEnabled = false;
 }
 
-void NinjaLAMPCore::loop () {
-  if (started) {
-    controlTemp();
-  } else {
-    delay(100);
-  }
-}
 void NinjaLAMPCore::start (double temp) {
   targetTemp = temp;
   setupPID();
@@ -67,6 +62,7 @@ void NinjaLAMPCore::start (double temp) {
   // To switch ADC channel
   readAirTemp();
   started = true;
+  lastTimestamp = millis();
 }
 void NinjaLAMPCore::setTargetTemp(double temp) {
   targetTemp = temp;
@@ -77,25 +73,39 @@ void NinjaLAMPCore::stop () {
   // Turn off well heater
   analogWrite(heaterPWMPin, 0);
 }
+/* Getter */
+double NinjaLAMPCore::getWellTemp() {
+  return wellTemp;
+}
+double NinjaLAMPCore::getAirTemp() {
+  return airTemp;
+}
+double NinjaLAMPCore::getEstimatedSampleTemp() {
+  return estimatedSampleTemp;
+}
+double NinjaLAMPCore::getTargetTemp() {
+  return targetTemp;
+}
+double NinjaLAMPCore::getTempSetpoint() {
+  return setpoint;
+}
+unsigned long NinjaLAMPCore::getTotalElapsedTime() {
+  return totalElapsedTime;
+}
+unsigned long NinjaLAMPCore::getStageElapsedTime() {
+  return stageElapsedTime;
+}
 /* Private functions */
-void NinjaLAMPCore::controlTemp () {
+void NinjaLAMPCore::loop () {
   // Well temp
   double wellTempRaw = readWellTemp();
   wellTempBuff[wellTempBuffIndex] = wellTempRaw;
   switchWellR(wellTempRaw);
   wellTempBuffIndex = (wellTempBuffIndex + 1) % TEMP_BUFF_SIZE;
   wellTemp = averageTemp();
-  if (wellTemp < targetTemp - MAX_OUTPUT_THRESHOLD) {
-    // Max drive
-    analogWrite(heaterPWMPin, 1023);
-    pid->SetMode(MANUAL);
-  } else {
-    // PID drive
-    input = wellTemp;
-    pid->SetMode(AUTOMATIC);
-    pid->Compute();
-    double pwmOutput = (output + 0.5) * 408/*1024*/;
-    analogWrite(heaterPWMPin, (int)pwmOutput);
+  
+  if (started) {
+    controlTemp();
   }
   delay(INTERVAL_MSEC/2);
 
@@ -125,7 +135,28 @@ void NinjaLAMPCore::controlTemp () {
     Serial.print(targetTemp);
   }
   Serial.println("");
-  delay(INTERVAL_MSEC/2);  
+  delay(INTERVAL_MSEC/2);
+  unsigned long timestamp = millis();
+  if (timestamp > lastTimestamp) {
+    totalElapsedTime += (timestamp - lastTimestamp);
+    stageElapsedTime += (timestamp - lastTimestamp);
+  }
+  lastTimestamp = timestamp;
+}
+
+void NinjaLAMPCore::controlTemp () {
+  if (wellTemp < targetTemp - MAX_OUTPUT_THRESHOLD) {
+    // Max drive
+    analogWrite(heaterPWMPin, 1023);
+    pid->SetMode(MANUAL);
+  } else {
+    // PID drive
+    input = wellTemp;
+    pid->SetMode(AUTOMATIC);
+    pid->Compute();
+    double pwmOutput = (output + 0.5) * 408/*1024*/;
+    analogWrite(heaterPWMPin, (int)pwmOutput);
+  }
 }
 void NinjaLAMPCore::setupPID () {
   setpoint = targetTemp;

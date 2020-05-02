@@ -51,6 +51,15 @@ class NinjaLAMPCore {
     void start(double temp);
     void setTargetTemp(double temp);
     void stop();
+    
+    // Getters
+    double getWellTemp();
+    double getAirTemp();
+    double getEstimatedSampleTemp();
+    double getTargetTemp();
+    double getTempSetpoint();
+    unsigned long getTotalElapsedTime();
+    unsigned long getStageElapsedTime();
   private:
     Thermistor *wellThermistor;
     Thermistor *airThermistor;
@@ -64,6 +73,11 @@ class NinjaLAMPCore {
     double sampleHeatCapacity;
     double heatResistanceRatio;
     double estimatedSampleTemp;
+    
+    unsigned long lastTimestamp;
+    unsigned long totalElapsedTime; /* msec */
+    unsigned long stageElapsedTime; /* msec */
+    
     void controlTemp();
     void setupPID();
     double readWellTemp ();
