@@ -1,6 +1,6 @@
 #ifndef ___ADC_ARDUINO___
 #define ___ADC_ARDUINO___
-#include "ADC.h"
+#include "adc.h"
 
 class ADCArduino : public ADCCustom {
   public:

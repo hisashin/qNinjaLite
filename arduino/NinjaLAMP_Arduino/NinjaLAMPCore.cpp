@@ -1,10 +1,12 @@
 #include "Arduino.h"
 #include "NinjaLAMPCore.h"
-#include "ADC.h"
+#include "adc.h"
 
 #define KELVIN 273.15
 #define INTERVAL_MSEC 250
 #define TEMP_BUFF_SIZE 5
+
+#define HOLDING_TEMP_TOLERANCE 0.5
 
 double setpoint, input, output;
 double wellTempBuff[TEMP_BUFF_SIZE];
@@ -66,12 +68,18 @@ void NinjaLAMPCore::start (double temp) {
 }
 void NinjaLAMPCore::setTargetTemp(double temp) {
   targetTemp = temp;
+  isHolding = false;
+  stageElapsedTime = 0;
   setupPID();
 }
 void NinjaLAMPCore::stop () {
   started = false;
   // Turn off well heater
   analogWrite(heaterPWMPin, 0);
+  isHolding = false;
+  targetTemp = airTemp;
+  setpoint = airTemp;
+  stageElapsedTime = 0;
 }
 /* Getter */
 double NinjaLAMPCore::getWellTemp() {
@@ -95,7 +103,6 @@ unsigned long NinjaLAMPCore::getTotalElapsedTime() {
 unsigned long NinjaLAMPCore::getStageElapsedTime() {
   return stageElapsedTime;
 }
-/* Private functions */
 void NinjaLAMPCore::loop () {
   // Well temp
   double wellTempRaw = readWellTemp();
@@ -110,7 +117,7 @@ void NinjaLAMPCore::loop () {
   delay(INTERVAL_MSEC/2);
 
   // Air temp
-  double airTemp = readAirTemp();
+  airTemp = readAirTemp();
   if (isSampleTempSimulationEnabled) {
     // Update setpoint according to air & target temp
     double diff = (INTERVAL_MSEC/1000.0) 
@@ -122,28 +129,29 @@ void NinjaLAMPCore::loop () {
     if (airTemp < wellTemp) {
       setpoint = targetTemp + (targetTemp - airTemp) / heatResistanceRatio;
     }
+  } else {
+    estimatedSampleTemp = wellTemp;
   }
-  Serial.print(airTemp);
-  Serial.print("\t");
-  Serial.print(wellTemp);
-  if (isSampleTempSimulationEnabled) {
-    Serial.print("\t");
-    Serial.print(estimatedSampleTemp);
-    Serial.print("\t");
-    Serial.print(setpoint);
-    Serial.print("\t");
-    Serial.print(targetTemp);
-  }
-  Serial.println("");
+  if (!isHolding && abs(estimatedSampleTemp - targetTemp) < HOLDING_TEMP_TOLERANCE) {
+    isHolding = true;
+  } 
   delay(INTERVAL_MSEC/2);
   unsigned long timestamp = millis();
+  unsigned long elapsed;
   if (timestamp > lastTimestamp) {
-    totalElapsedTime += (timestamp - lastTimestamp);
-    stageElapsedTime += (timestamp - lastTimestamp);
+    elapsed = timestamp - lastTimestamp;
+  } else {
+    // In case of overflow
+    elapsed = INTERVAL_MSEC;
+  }
+  totalElapsedTime += elapsed;
+  if (isHolding) {
+    stageElapsedTime += elapsed;
   }
   lastTimestamp = timestamp;
 }
 
+/* Private functions */
 void NinjaLAMPCore::controlTemp () {
   if (wellTemp < targetTemp - MAX_OUTPUT_THRESHOLD) {
     // Max drive
