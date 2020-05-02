@@ -1,6 +1,11 @@
-# NinjaLAMP for Arduino
+# NinjaLAMP
 
-Make your own LAMP machine with Arduino.
+GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine. Anyone can make their own LAMP machine by adding any kinds of aluminium tube holder, heater, MOSFET and cheap resistance to Arduino. Calibration manual will be shared soon. accuracy is less than 0.3 degree celsius after calibration.
+
+References : 
+- [Rapid colorimetric detection of COVID-19 coronavirus using a reverse tran-scriptional loop-mediated isothermal amplification (RT-LAMP) diagnostic plat-form: iLACO](https://www.medrxiv.org/content/10.1101/2020.02.20.20025874v1)
+- [Reference : [Rapid colorimetric detection of COVID-19 coronavirus using a reverse tran-scriptional loop-mediated isothermal amplification (RT-LAMP) diagnostic plat-form: iLACO](https://www.medrxiv.org/content/10.1101/2020.02.20.20025874v1)
+](https://www.medrxiv.org/content/10.1101/2020.02.26.20028373v1?fbclid=IwAR3H5GrvC2Q1XY7ty38PRCX5mh1jTq4wlv4akUhHNMqptYJHYWhMloOea0Q)
 
 - Why NinjaLAMP?
   - Precise temperature control with thermal simulation model sensing not only tube holder but air
