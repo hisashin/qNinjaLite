@@ -9,9 +9,9 @@
 
 ### Why NinjaLAMP?
 - **Precise** with thermal simulation model sensing not only tube holder but air
-- **Customizable** Support different kinds of core parts guiding how to choose and calibrate to minimize error. Look "Advanced" below.
-- **Easy to build** Only 4 resistors, 1 mosfet, 2 thermistors on [circuit](https://github.com/hisashin/NinjaLAMP/tree/master/NinjaLAMP_Arduino/eagle).
 ![Simulation](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/heat_simulation/illustration_s.png)
+- **Easy to custom** by supporting wide range of core parts. Software is also easy to extend.
+- **Easy to build** Only 4 resistors, 1 mosfet, 2 thermistors on [circuit](https://github.com/hisashin/NinjaLAMP/tree/master/eagle).
 
 ### Steps to make
 
