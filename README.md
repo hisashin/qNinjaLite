@@ -1,15 +1,23 @@
-GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine.
+# NinjaLAMP for Arduino
 
-Reference : [Rapid colorimetric detection of COVID-19 coronavirus using a reverse tran-scriptional loop-mediated isothermal amplification (RT-LAMP) diagnostic plat-form: iLACO](https://www.medrxiv.org/content/10.1101/2020.02.20.20025874v1)
+Make your own LAMP machine with Arduino.
 
-There are 3 versions.
+- Why NinjaLAMP?
+  - Precise temperature control with thermal simulation model sensing not only tube holder but air
+  - Support different kinds of core parts guiding how to choose and calibrate to minimize error. Look "Advanced" below.
+  - Easy to build. Only 4 resistors, 1 mosfet, 2 thermistors on [circuit](https://github.com/hisashin/NinjaLAMP/tree/master/NinjaLAMP_Arduino/eagle).
+- [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-BOM) to buy
+- 3d print [base](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/3d/4x4_3d_base.stl) and [cover](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/3d/4x4_3d_cover.stl) upside down without support ([3d model](https://gallery.autodesk.com/projects/149287/ninjalamp))
+- Set target temperature
+- [Upload source to Arduino](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-upload-the-software)
+- [Run and monitor temperature graph](https://github.com/hisashin/NinjaLAMP/wiki/Run-and-monitor-temperature-graph)
 
-[**NinjaLAMP for Arduino**](https://github.com/hisashin/NinjaLAMP/tree/master/NinjaLAMP_Arduino) (Done) : Anyone can make their own LAMP machine by adding any kinds of aluminium tube holder, heater, MOSFET and cheap resistance to Arduino. Calibration manual will be shared soon. accuracy is less than 0.3 degree celsius after calibration.
+### Advanced
 
-[**NinjaLAMP Lite**](https://github.com/hisashin/NinjaLAMP/tree/master/NinjaLAMP_Lite) (Finish soon) : Tube holder, lid heater and PCB of NinjaPCR are packed like [this](https://gallery.autodesk.com/projects/149287/ninjalamp-lite) WiFi supported and its accuracy is less than 0.1 degree celsius. it has 2 minor versions (4x4 tubes and 2x8 tubes). I will make 4x4 tomorrow. 177x126x51mm
+- How to choose and calibrate different tube holder, heater, thermistor
+- [How to use simulated sample temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature)
+- [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-customize-source-before-uploading)
 
-[**NinjaLAMP**](https://github.com/hisashin/NinjaLAMP/tree/master/NinjaLAMP) (Not yet) : After we make [Ninja qPCR](https://github.com/hisashin/Ninja-qPCR), LED+Photodiode array unit will be imported to Lite 2x8 so that we can get results digitally. Ninja qPCR - lid heater - cooler fan = Ninja LAMP
-
-![lite_outside](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Lite/images/outside.jpg "lite_outside")
-![lite_inside](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Lite/images/inside.jpg "lite_inside")
-
+![Top](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/top.jpg "top")
+![Bottom](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/bottom.jpg "bottom")
+![Graph](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/serial_plotter.png "graph")
