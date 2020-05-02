@@ -2,7 +2,7 @@
 
 Most precise GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine. We share model but that is an example. Anyone can make their own LAMP machine by assembling any kinds of aluminium tube holder, heater, MOSFET and cheap resistor to Arduino. PID Calibration manual is [here](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature). After calibration,less than 0.3 degree celsius accuracy can be expected.
 
-### References
+### References for COVID-19 detection
 
 - [Rapid colorimetric detection of COVID-19 coronavirus using a reverse tran-scriptional loop-mediated isothermal amplification (RT-LAMP) diagnostic plat-form: iLACO](https://www.medrxiv.org/content/10.1101/2020.02.20.20025874v1)
 - [Rapid colorimetric detection of COVID-19 coronavirus using a reverse tran-scriptional loop-mediated isothermal amplification (RT-LAMP) diagnostic plat-form: iLACO](https://www.medrxiv.org/content/10.1101/2020.02.20.20025874v1)
