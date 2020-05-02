@@ -28,6 +28,6 @@ GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wi
 - [How to use simulated sample temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature)
 - [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-customize-source-before-uploading)
 
-![Top](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/top.jpg "top")
-![Bottom](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/bottom.jpg "bottom")
-![Graph](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/images/serial_plotter.png "graph")
+![Top](https://github.com/hisashin/NinjaLAMP/blob/master/images/top.jpg "top")
+![Bottom](https://github.com/hisashin/NinjaLAMP/blob/master/images/bottom.jpg "bottom")
+![Graph](https://github.com/hisashin/NinjaLAMP/blob/master/images/serial_plotter.png "graph")
