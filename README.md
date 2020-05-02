@@ -1,6 +1,6 @@
 # NinjaLAMP
 
-GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine. Anyone can make their own LAMP machine by adding any kinds of aluminium tube holder, heater, MOSFET and cheap resistance to Arduino. Calibration manual will be shared soon. accuracy is less than 0.3 degree celsius after calibration.
+Most precise GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine. We share model but that is an example. Anyone can make their own LAMP machine by assembling any kinds of aluminium tube holder, heater, MOSFET and cheap resistor to Arduino. PID Calibration manual is [here](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature). After calibration,less than 0.3 degree celsius accuracy can be expected.
 
 ### References
 
@@ -9,9 +9,9 @@ GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wi
 ](https://www.medrxiv.org/content/10.1101/2020.02.26.20028373v1?fbclid=IwAR3H5GrvC2Q1XY7ty38PRCX5mh1jTq4wlv4akUhHNMqptYJHYWhMloOea0Q)
 
 ### Why NinjaLAMP?
-- Precise temperature control with thermal simulation model sensing not only tube holder but air
-- Support different kinds of core parts guiding how to choose and calibrate to minimize error. Look "Advanced" below.
-- Easy to build. Only 4 resistors, 1 mosfet, 2 thermistors on [circuit](https://github.com/hisashin/NinjaLAMP/tree/master/NinjaLAMP_Arduino/eagle).
+- **Precise** with thermal simulation model sensing not only tube holder but air
+- **Customizable** Support different kinds of core parts guiding how to choose and calibrate to minimize error. Look "Advanced" below.
+- **Easy to build** Only 4 resistors, 1 mosfet, 2 thermistors on [circuit](https://github.com/hisashin/NinjaLAMP/tree/master/NinjaLAMP_Arduino/eagle).
 ![Simulation](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/heat_simulation/illustration_s.png)
 
 ### Steps to make
