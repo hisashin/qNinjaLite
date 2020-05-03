@@ -31,4 +31,5 @@
 - How to choose and calibrate different tube holder, heater, thermistor
 - [How to use simulated sample temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature)
 - [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-customize-source-before-uploading)
+- [Experiments with multiple temperature stages](https://github.com/hisashin/NinjaLAMP/wiki/Experiments-with-multiple-temperature-stages)
 
