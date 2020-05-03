@@ -56,16 +56,14 @@ const int stagesCount = 1;
 struct Stage stages[1] = {
   { TARGET_TEMP, 0 }
 };
-
 /*
 const int stagesCount = 3;
 struct Stage stages[3] = {
-  { 35, 20 * 1000 },
-  { 45, 15 * 1000 },
-  { 55, 20 * 1000 },
+  { 35.0, 20 * 1000 },
+  { 45.0, 15 * 1000 },
+  { 55.0, 0 },
 };
 */
-
 int stageIndex = 0;
 
 /* PID constants (Dependend on wells and heaters */
