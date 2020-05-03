@@ -53,13 +53,13 @@ class NinjaLAMPCore {
     void stop();
     
     // Getters
-    double getWellTemp();
-    double getAirTemp();
-    double getEstimatedSampleTemp();
-    double getTargetTemp();
-    double getTempSetpoint();
-    unsigned long getTotalElapsedTime();
-    unsigned long getStageElapsedTime();
+    double getWellTemp(); /* Well temperature (Celsius) */
+    double getAirTemp(); /* Air temperature (Celsius) */
+    double getEstimatedSampleTemp(); /* Estimated temperature (Celsius) */
+    double getTargetTemp(); /* Target temperature (Celsius) */
+    double getTempSetpoint(); /* Setpoint of well temperature (Celsius) */
+    unsigned long getTotalElapsedTime(); /* Total elapsed time from the start of the device (msec) */
+    unsigned long getStageElapsedTime(); /* Elapsed time since the temperature reached the target (msec) */
     bool isHolding;
   private:
     Thermistor *wellThermistor;
