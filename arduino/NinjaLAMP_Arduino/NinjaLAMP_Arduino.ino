@@ -1,6 +1,11 @@
 #include "ADCArduino.h"
 #include "NinjaLAMPCore.h"
 
+/*
+  How to customize source before uploading
+  https://github.com/hisashin/NinjaLAMP/wiki/How-to-customize-source-before-uploading
+*/
+
 /* Target temperature (Celsius) */
 #define TARGET_TEMP 63
 
@@ -89,6 +94,10 @@ void setup() {
   Serial.begin(9600);
   core.setup();
 #ifdef ENABLE_SAMPLE_TEMP_SIMULATION
+  /*
+    How to use simulated sample temperature
+    https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature
+  */
   core.enableSampleTempSimulation(HEAT_RESISTANCE_RATIO, TUBE_HEAT_CAPACITY);
 #endif /* ENABLE_SAMPLE_TEMP_SIMULATION */
   delay(100);
