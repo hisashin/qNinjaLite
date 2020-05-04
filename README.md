@@ -1,10 +1,8 @@
 # NinjaLAMP
 
-**Most precise GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine based on Arduino**. We share 3dpint/lasercut model but that is just an example. You can make your own LAMP machine by assembling any kinds of aluminium tube holder, heater, MOSFET and cheap resistor to Arduino. PID Calibration manual is [here](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature). Less than 0.3 degree celsius accuracy can be expected after calibration.
+**Most precise GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine based on Arduino**. Less than 0.3 degree celsius accuracy can be expected after calibration.
 
-![Top](https://github.com/hisashin/NinjaLAMP/blob/master/images/top.jpg "top")
-![Bottom](https://github.com/hisashin/NinjaLAMP/blob/master/images/bottom.jpg "bottom")
-![Graph](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/graph.png "graph")
+![Header](https://github.com/hisashin/NinjaLAMP/blob/master/images/header.png "header")
 
 ### References for COVID-19 detection
 
@@ -18,20 +16,20 @@
 - **Easy to use** [Monitor and control](https://github.com/hisashin/NinjaLAMP/wiki/Run-and-monitor-temperature-graph) via SerialPlotter of Arduino.
 - **Easy to custom** [Calibration manual](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature) allows you to change core parts.
 
-### Steps to make
+### Steps
 
-- Choose [3dprint]() or [lasercut]()
-- [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-BOM) to buy
-- 3d print [base](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/3d/4x4_3d_base.stl) and [cover](https://github.com/hisashin/NinjaLAMP/blob/master/NinjaLAMP_Arduino/3d/4x4_3d_cover.stl) upside down without support ([3d model](https://gallery.autodesk.com/projects/149287/ninjalamp))
-- Set target temperature
-- [Upload source to Arduino](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-upload-the-software)
+- [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/BOM,-Bill-of-Materials) to buy
+- Solder parts on universal breadboard like bottom photos of [this page](https://github.com/hisashin/NinjaLAMP/tree/master/eagle) or order PCB.
+- 3d print [base](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_base.stl) and [cover](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_cover.stl) upside down without support. Use [belt](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_belt.stl) to hold PCB or glue. DXF for lasercut is [here](https://github.com/hisashin/NinjaLAMP/tree/master/dxf) ([3d model](https://gallery.autodesk.com/projects/149287/ninjalamp))
+- [Set target temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-customize-source-before-uploading)
+- [Upload source to Arduino](https://github.com/hisashin/NinjaLAMP/wiki/How-to-upload-the-software)
 - [Run and monitor temperature graph](https://github.com/hisashin/NinjaLAMP/wiki/Run-and-monitor-temperature-graph)
+- Use cover to keep air temperature high and stable while running.
 
 ### Advanced
 
-- How to choose and calibrate different tube holder, heater, thermistor
 - [How to use simulated sample temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature)
-- [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-customize-source-before-uploading)
+- [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/How-to-customize-source-before-uploading)
 - [Experiments with multiple temperature stages](https://github.com/hisashin/NinjaLAMP/wiki/Experiments-with-multiple-temperature-stages)
 - [How to customize the output](https://github.com/hisashin/NinjaLAMP/wiki/Customizing-the-output)
 
