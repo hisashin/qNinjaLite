@@ -18,7 +18,7 @@
 
 ### Steps to make
 
-- [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/BOM) to buy
+- [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/BOM,-Bill-of-Materials) to buy
 - 3d print [base](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_base.stl) and [cover](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_cover.stl) upside down without support. Use [belt](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_belt.stl) to hold PCB or glue. ([3d model](https://gallery.autodesk.com/projects/149287/ninjalamp))
 - We have [DXF](https://github.com/hisashin/NinjaLAMP/tree/master/dxf) for lasercut too.
 - [Set target temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-customize-source-before-uploading)
