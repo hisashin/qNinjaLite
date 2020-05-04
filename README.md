@@ -18,18 +18,18 @@
 
 ### Steps to make
 
-- Choose [3dprint]() or [lasercut]()
-- [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-BOM) to buy
+- [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/BOM) to buy
 - 3d print [base](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_base.stl) and [cover](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_cover.stl) upside down without support. Use [belt](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_belt.stl) to hold PCB or glue. ([3d model](https://gallery.autodesk.com/projects/149287/ninjalamp))
-- Set target temperature
-- [Upload source to Arduino](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-upload-the-software)
+- We have [DXF](https://github.com/hisashin/NinjaLAMP/tree/master/dxf) for lasercut too.
+- [Set target temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-customize-source-before-uploading)
+- [Upload source to Arduino](https://github.com/hisashin/NinjaLAMP/wiki/How-to-upload-the-software)
 - [Run and monitor temperature graph](https://github.com/hisashin/NinjaLAMP/wiki/Run-and-monitor-temperature-graph)
 
 ### Advanced
 
 - How to choose and calibrate different tube holder, heater, thermistor
 - [How to use simulated sample temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature)
-- [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/%5BArduino%5D-How-to-customize-source-before-uploading)
+- [How to customize source before uploading](https://github.com/hisashin/NinjaLAMP/wiki/How-to-customize-source-before-uploading)
 - [Experiments with multiple temperature stages](https://github.com/hisashin/NinjaLAMP/wiki/Experiments-with-multiple-temperature-stages)
 - [How to customize the output](https://github.com/hisashin/NinjaLAMP/wiki/Customizing-the-output)
 
