@@ -1,6 +1,6 @@
 # NinjaLAMP
 
-**Most precise GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine based on Arduino**. We share 3dpint/lasercut model but that is just an example. You can make your own LAMP machine by assembling any kinds of aluminium tube holder, heater, MOSFET and cheap resistor to Arduino. PID Calibration manual is [here](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature). Less than 0.3 degree celsius accuracy can be expected after calibration.
+**Most precise GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine based on Arduino**. Less than 0.3 degree celsius accuracy can be expected after calibration.
 
 ![Header](https://github.com/hisashin/NinjaLAMP/blob/master/images/header.png "header")
 
