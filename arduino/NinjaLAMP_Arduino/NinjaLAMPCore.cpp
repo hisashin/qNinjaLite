@@ -1,10 +1,12 @@
 #include "Arduino.h"
 #include "NinjaLAMPCore.h"
-#include "ADC.h"
+#include "adc.h"
 
 #define KELVIN 273.15
 #define INTERVAL_MSEC 250
 #define TEMP_BUFF_SIZE 5
+
+#define HOLDING_TEMP_TOLERANCE 0.5
 
 double setpoint, input, output;
 double wellTempBuff[TEMP_BUFF_SIZE];
@@ -17,6 +19,8 @@ NinjaLAMPCore::NinjaLAMPCore (Thermistor *wellThermistorConf, Thermistor *airThe
   wellThermistor = wellThermistorConf;
   airThermistor = airThermistorConf;
   this->adc = adc;
+  totalElapsedTime = 0;
+  stageElapsedTime = 0;
   pid = new PID(&input, &output, &setpoint, wellKP, wellKI, wellKD, wellKD);
   this->heaterPWMPin = heaterPWM;
 }
@@ -48,13 +52,6 @@ void NinjaLAMPCore::disableSampleTempSimulation () {
   isSampleTempSimulationEnabled = false;
 }
 
-void NinjaLAMPCore::loop () {
-  if (started) {
-    controlTemp();
-  } else {
-    delay(100);
-  }
-}
 void NinjaLAMPCore::start (double temp) {
   targetTemp = temp;
   setupPID();
@@ -67,24 +64,95 @@ void NinjaLAMPCore::start (double temp) {
   // To switch ADC channel
   readAirTemp();
   started = true;
+  lastTimestamp = millis();
 }
 void NinjaLAMPCore::setTargetTemp(double temp) {
   targetTemp = temp;
+  isHolding = false;
+  stageElapsedTime = 0;
   setupPID();
 }
 void NinjaLAMPCore::stop () {
   started = false;
   // Turn off well heater
   analogWrite(heaterPWMPin, 0);
+  isHolding = false;
+  targetTemp = airTemp;
+  setpoint = airTemp;
+  stageElapsedTime = 0;
 }
-/* Private functions */
-void NinjaLAMPCore::controlTemp () {
+/* Getter */
+double NinjaLAMPCore::getWellTemp() {
+  return wellTemp;
+}
+double NinjaLAMPCore::getAirTemp() {
+  return airTemp;
+}
+double NinjaLAMPCore::getEstimatedSampleTemp() {
+  return estimatedSampleTemp;
+}
+double NinjaLAMPCore::getTargetTemp() {
+  return targetTemp;
+}
+double NinjaLAMPCore::getTempSetpoint() {
+  return setpoint;
+}
+unsigned long NinjaLAMPCore::getTotalElapsedTime() {
+  return totalElapsedTime;
+}
+unsigned long NinjaLAMPCore::getStageElapsedTime() {
+  return stageElapsedTime;
+}
+void NinjaLAMPCore::loop () {
   // Well temp
   double wellTempRaw = readWellTemp();
   wellTempBuff[wellTempBuffIndex] = wellTempRaw;
   switchWellR(wellTempRaw);
   wellTempBuffIndex = (wellTempBuffIndex + 1) % TEMP_BUFF_SIZE;
   wellTemp = averageTemp();
+  
+  if (started) {
+    controlTemp();
+  }
+  delay(INTERVAL_MSEC/2);
+
+  // Air temp
+  airTemp = readAirTemp();
+  if (isSampleTempSimulationEnabled) {
+    // Update setpoint according to air & target temp
+    double diff = (INTERVAL_MSEC/1000.0) 
+      * ((wellTemp - estimatedSampleTemp)/1.0 + (airTemp-estimatedSampleTemp)/heatResistanceRatio ) 
+      / sampleHeatCapacity;
+    if (5 > diff && diff > -5) {
+      estimatedSampleTemp += diff;
+    }
+    if (airTemp < wellTemp) {
+      setpoint = targetTemp + (targetTemp - airTemp) / heatResistanceRatio;
+    }
+  } else {
+    estimatedSampleTemp = wellTemp;
+  }
+  if (!isHolding && abs(estimatedSampleTemp - targetTemp) < HOLDING_TEMP_TOLERANCE) {
+    isHolding = true;
+  } 
+  delay(INTERVAL_MSEC/2);
+  unsigned long timestamp = millis();
+  unsigned long elapsed;
+  if (timestamp > lastTimestamp) {
+    elapsed = timestamp - lastTimestamp;
+  } else {
+    // In case of overflow
+    elapsed = INTERVAL_MSEC;
+  }
+  totalElapsedTime += elapsed;
+  if (isHolding) {
+    stageElapsedTime += elapsed;
+  }
+  lastTimestamp = timestamp;
+}
+
+/* Private functions */
+void NinjaLAMPCore::controlTemp () {
   if (wellTemp < targetTemp - MAX_OUTPUT_THRESHOLD) {
     // Max drive
     analogWrite(heaterPWMPin, 1023);
@@ -97,35 +165,6 @@ void NinjaLAMPCore::controlTemp () {
     double pwmOutput = (output + 0.5) * 408/*1024*/;
     analogWrite(heaterPWMPin, (int)pwmOutput);
   }
-  delay(INTERVAL_MSEC/2);
-
-  // Air temp
-  double airTemp = readAirTemp();
-  if (isSampleTempSimulationEnabled) {
-    // Update setpoint according to air & target temp
-    double diff = (INTERVAL_MSEC/1000.0) 
-      * ((wellTemp - estimatedSampleTemp)/1.0 + (airTemp-estimatedSampleTemp)/heatResistanceRatio ) 
-      / sampleHeatCapacity;
-    if (5 > diff && diff > -5) {
-      estimatedSampleTemp += diff;
-    }
-    if (airTemp < wellTemp) {
-      setpoint = targetTemp + (targetTemp - airTemp) / heatResistanceRatio;
-    }
-  }
-  Serial.print(airTemp);
-  Serial.print("\t");
-  Serial.print(wellTemp);
-  if (isSampleTempSimulationEnabled) {
-    Serial.print("\t");
-    Serial.print(estimatedSampleTemp);
-    Serial.print("\t");
-    Serial.print(setpoint);
-    Serial.print("\t");
-    Serial.print(targetTemp);
-  }
-  Serial.println("");
-  delay(INTERVAL_MSEC/2);  
 }
 void NinjaLAMPCore::setupPID () {
   setpoint = targetTemp;

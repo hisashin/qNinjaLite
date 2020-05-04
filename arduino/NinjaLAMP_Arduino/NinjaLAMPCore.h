@@ -2,7 +2,7 @@
 #define _NINJALAMP_CORE_H_
 
 #include "Arduino.h"
-#include "ADC.h"
+#include "ADCArduino.h"
 #include <PID_v1.h>
 
 #define TARGET_TEMP 63 /* Typical temp for LAMP */
@@ -51,6 +51,16 @@ class NinjaLAMPCore {
     void start(double temp);
     void setTargetTemp(double temp);
     void stop();
+    
+    // Getters
+    double getWellTemp(); /* Well temperature (Celsius) */
+    double getAirTemp(); /* Air temperature (Celsius) */
+    double getEstimatedSampleTemp(); /* Estimated temperature (Celsius) */
+    double getTargetTemp(); /* Target temperature (Celsius) */
+    double getTempSetpoint(); /* Setpoint of well temperature (Celsius) */
+    unsigned long getTotalElapsedTime(); /* Total elapsed time from the start of the device (msec) */
+    unsigned long getStageElapsedTime(); /* Elapsed time since the temperature reached the target (msec) */
+    bool isHolding;
   private:
     Thermistor *wellThermistor;
     Thermistor *airThermistor;
@@ -64,6 +74,11 @@ class NinjaLAMPCore {
     double sampleHeatCapacity;
     double heatResistanceRatio;
     double estimatedSampleTemp;
+    
+    unsigned long lastTimestamp;
+    unsigned long totalElapsedTime; /* msec */
+    unsigned long stageElapsedTime; /* msec */
+    
     void controlTemp();
     void setupPID();
     double readWellTemp ();
