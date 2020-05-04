@@ -15,7 +15,8 @@
 - **Precise** with thermal simulation model sensing not only tube holder but air
 ![Simulation](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/heat_simulation/illustration_s.png)
 - **Easy to custom** by supporting wide range of core parts. Software is also easy to extend.
-- **Easy to build** Only 4 resistors, 1 mosfet, 2 thermistors on [circuit](https://github.com/hisashin/NinjaLAMP/tree/master/eagle).
+- **Easy to build** Only 4 resistors, 1 mosfet, 2 thermistors are indespensable on [circuit](https://github.com/hisashin/NinjaLAMP/tree/master/eagle).
+- **Easy to use** You can [monitor and control](https://github.com/hisashin/NinjaLAMP/wiki/Run-and-monitor-temperature-graph) via SerialPlotter of Arduino.
 
 ### Steps to make
 
