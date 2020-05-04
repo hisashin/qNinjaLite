@@ -19,7 +19,7 @@
 ### Steps to make
 
 - [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/BOM,-Bill-of-Materials) to buy
-- Solder parts on universal breadboard like bottom photos of [this page](https://github.com/hisashin/NinjaLAMP/tree/master/eagle)
+- Solder parts on universal breadboard like bottom photos of [this page](https://github.com/hisashin/NinjaLAMP/tree/master/eagle) or order PCB.
 - 3d print [base](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_base.stl) and [cover](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_cover.stl) upside down without support. Use [belt](https://github.com/hisashin/NinjaLAMP/blob/master/3d/4x4_3d_belt.stl) to hold PCB or glue. DXF for lasercut is [here](https://github.com/hisashin/NinjaLAMP/tree/master/dxf) ([3d model](https://gallery.autodesk.com/projects/149287/ninjalamp))
 - [Set target temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-customize-source-before-uploading)
 - [Upload source to Arduino](https://github.com/hisashin/NinjaLAMP/wiki/How-to-upload-the-software)
