@@ -16,7 +16,7 @@
 - **Easy to use** [Monitor and control](https://github.com/hisashin/NinjaLAMP/wiki/Run-and-monitor-temperature-graph) via SerialPlotter of Arduino.
 - **Easy to custom** [Calibration manual](https://github.com/hisashin/NinjaLAMP/wiki/How-to-use-simulated-sample-temperature) allows you to change core parts.
 
-### Steps to make
+### Steps
 
 - [BOM (Bill of materials)](https://github.com/hisashin/NinjaLAMP/wiki/BOM,-Bill-of-Materials) to buy
 - Solder parts on universal breadboard like bottom photos of [this page](https://github.com/hisashin/NinjaLAMP/tree/master/eagle) or order PCB.
@@ -24,6 +24,7 @@
 - [Set target temperature](https://github.com/hisashin/NinjaLAMP/wiki/How-to-customize-source-before-uploading)
 - [Upload source to Arduino](https://github.com/hisashin/NinjaLAMP/wiki/How-to-upload-the-software)
 - [Run and monitor temperature graph](https://github.com/hisashin/NinjaLAMP/wiki/Run-and-monitor-temperature-graph)
+- Use cover to keep air temperature high and stable while running.
 
 ### Advanced
 
