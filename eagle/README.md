@@ -1,5 +1,8 @@
 *Schematic*
-![Schematic](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Arduino/eagle/schematic.png "schematic")
+![Schematic](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/eagle/schematic.png "schematic")
 
-*Layout example*
-![Layout](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/NinjaLAMP_Arduino/eagle/layout.png "layout")
+*Layout for simple hand wiring*
+![Layout](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/eagle/layout_easy.png "layout")
+
+*Layout for PCB order*
+![Layout](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/eagle/layout.png "layout")
