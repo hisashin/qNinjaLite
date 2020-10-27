@@ -733,7 +733,7 @@ U 1 1 5F9E21A3
 P 8250 4850
 F 0 "SW1" H 8200 5150 50  0000 L CNN
 F 1 "TACTILE_4" H 8100 5050 50  0000 L CNN
-F 2 "Ninja-qPCR:TACTILE_4" H 8250 5050 50  0001 C CNN
+F 2 "Ninja-qPCR:SW_TH_Tactile_Omron_B3F-10xx" H 8250 5050 50  0001 C CNN
 F 3 "http://www.apem.com/int/index.php?controller=attachment&id_attachment=488" H 8250 5050 50  0001 C CNN
 	1    8250 4850
 	1    0    0    -1  
