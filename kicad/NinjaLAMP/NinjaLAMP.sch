@@ -1,0 +1,566 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Connector:Barrel_Jack_Switch J?
+U 1 1 5F85EDDF
+P 5150 2650
+F 0 "J?" H 5207 2967 50  0000 C CNN
+F 1 "Barrel_Jack_Switch" H 5207 2876 50  0000 C CNN
+F 2 "" H 5200 2610 50  0001 C CNN
+F 3 "~" H 5200 2610 50  0001 C CNN
+	1    5150 2650
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5F85F3DF
+P 5600 2900
+F 0 "#PWR?" H 5600 2650 50  0001 C CNN
+F 1 "GND" H 5605 2727 50  0000 C CNN
+F 2 "" H 5600 2900 50  0001 C CNN
+F 3 "" H 5600 2900 50  0001 C CNN
+	1    5600 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+12V #PWR?
+U 1 1 5F85FAA6
+P 5600 2300
+F 0 "#PWR?" H 5600 2150 50  0001 C CNN
+F 1 "+12V" H 5615 2473 50  0000 C CNN
+F 2 "" H 5600 2300 50  0001 C CNN
+F 3 "" H 5600 2300 50  0001 C CNN
+	1    5600 2300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5450 2550 5600 2550
+Wire Wire Line
+	5600 2550 5600 2300
+Wire Wire Line
+	5450 2750 5600 2750
+Wire Wire Line
+	5600 2750 5600 2900
+Wire Wire Line
+	5450 2650 5600 2650
+Wire Wire Line
+	5600 2650 5600 2750
+Connection ~ 5600 2750
+$Comp
+L Connector:Conn_01x02_Female NTC_WELL
+U 1 1 5F860D5F
+P 7200 1850
+F 0 "NTC_WELL" H 7228 1826 50  0000 L CNN
+F 1 "Conn_01x02_Female" H 7228 1735 50  0000 L CNN
+F 2 "" H 7200 1850 50  0001 C CNN
+F 3 "~" H 7200 1850 50  0001 C CNN
+	1    7200 1850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F861BD7
+P 7150 1700
+F 0 "R?" V 6943 1700 50  0000 C CNN
+F 1 "R" V 7034 1700 50  0000 C CNN
+F 2 "" V 7080 1700 50  0001 C CNN
+F 3 "~" H 7150 1700 50  0001 C CNN
+	1    7150 1700
+	0    1    1    0   
+$EndComp
+Text GLabel 6850 1700 0    50   Input ~ 0
+A6
+$Comp
+L power:GND #PWR?
+U 1 1 5F862FCE
+P 6950 2100
+F 0 "#PWR?" H 6950 1850 50  0001 C CNN
+F 1 "GND" H 6955 1927 50  0000 C CNN
+F 2 "" H 6950 2100 50  0001 C CNN
+F 3 "" H 6950 2100 50  0001 C CNN
+	1    6950 2100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7000 1950 6950 1950
+Wire Wire Line
+	6950 1950 6950 2100
+Wire Wire Line
+	7000 1700 6950 1700
+Wire Wire Line
+	7000 1850 6950 1850
+Wire Wire Line
+	6950 1850 6950 1700
+Connection ~ 6950 1700
+Wire Wire Line
+	6950 1700 6850 1700
+$Comp
+L power:+3.3V #PWR?
+U 1 1 5F8626FB
+P 7500 1600
+F 0 "#PWR?" H 7500 1450 50  0001 C CNN
+F 1 "+3.3V" H 7515 1773 50  0000 C CNN
+F 2 "" H 7500 1600 50  0001 C CNN
+F 3 "" H 7500 1600 50  0001 C CNN
+	1    7500 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_01x02_Female NTC_AIR
+U 1 1 5F869C8C
+P 7200 3050
+F 0 "NTC_AIR" H 7228 3026 50  0000 L CNN
+F 1 "Conn_01x02_Female" H 7228 2935 50  0000 L CNN
+F 2 "" H 7200 3050 50  0001 C CNN
+F 3 "~" H 7200 3050 50  0001 C CNN
+	1    7200 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F869C96
+P 7150 2900
+F 0 "R?" V 6943 2900 50  0000 C CNN
+F 1 "R" V 7034 2900 50  0000 C CNN
+F 2 "" V 7080 2900 50  0001 C CNN
+F 3 "~" H 7150 2900 50  0001 C CNN
+	1    7150 2900
+	0    1    1    0   
+$EndComp
+Text GLabel 6850 2900 0    50   Input ~ 0
+A7
+$Comp
+L power:GND #PWR?
+U 1 1 5F869CA1
+P 6950 3300
+F 0 "#PWR?" H 6950 3050 50  0001 C CNN
+F 1 "GND" H 6955 3127 50  0000 C CNN
+F 2 "" H 6950 3300 50  0001 C CNN
+F 3 "" H 6950 3300 50  0001 C CNN
+	1    6950 3300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7000 3150 6950 3150
+Wire Wire Line
+	6950 3150 6950 3300
+Wire Wire Line
+	7000 2900 6950 2900
+Wire Wire Line
+	7000 3050 6950 3050
+Wire Wire Line
+	6950 3050 6950 2900
+Connection ~ 6950 2900
+Wire Wire Line
+	6950 2900 6850 2900
+$Comp
+L power:+3.3V #PWR?
+U 1 1 5F869CB3
+P 7500 2800
+F 0 "#PWR?" H 7500 2650 50  0001 C CNN
+F 1 "+3.3V" H 7515 2973 50  0000 C CNN
+F 2 "" H 7500 2800 50  0001 C CNN
+F 3 "" H 7500 2800 50  0001 C CNN
+	1    7500 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_01x02_Female HEATER?
+U 1 1 5F86CAB1
+P 7250 4400
+F 0 "HEATER?" H 7278 4376 50  0000 L CNN
+F 1 "Conn_01x02_Female" H 7278 4285 50  0000 L CNN
+F 2 "" H 7250 4400 50  0001 C CNN
+F 3 "~" H 7250 4400 50  0001 C CNN
+	1    7250 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+12V #PWR?
+U 1 1 5F86DBE8
+P 6950 4250
+F 0 "#PWR?" H 6950 4100 50  0001 C CNN
+F 1 "+12V" H 6965 4423 50  0000 C CNN
+F 2 "" H 6950 4250 50  0001 C CNN
+F 3 "" H 6950 4250 50  0001 C CNN
+	1    6950 4250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Transistor_FET:BSP89 Q?
+U 1 1 5F87013A
+P 6850 4850
+F 0 "Q?" H 7055 4896 50  0000 L CNN
+F 1 "BSP89" H 7055 4805 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-223-3_TabPin2" H 7050 4775 50  0001 L CIN
+F 3 "https://www.infineon.com/dgdl/Infineon-BSP89-DS-v02_02-en.pdf?fileId=db3a30433b47825b013b4b8a07f90d55" H 6850 4850 50  0001 L CNN
+	1    6850 4850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F871941
+P 6300 4850
+F 0 "R?" V 6093 4850 50  0000 C CNN
+F 1 "R" V 6184 4850 50  0000 C CNN
+F 2 "" V 6230 4850 50  0001 C CNN
+F 3 "~" H 6300 4850 50  0001 C CNN
+	1    6300 4850
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F871EF0
+P 6700 5250
+F 0 "R?" V 6493 5250 50  0000 C CNN
+F 1 "R" V 6584 5250 50  0000 C CNN
+F 2 "" V 6630 5250 50  0001 C CNN
+F 3 "~" H 6700 5250 50  0001 C CNN
+	1    6700 5250
+	0    1    1    0   
+$EndComp
+$Comp
+L Ninja-qPCR:SeeeduinoXIAO U?
+U 1 1 5F886373
+P 2750 3850
+F 0 "U?" H 2050 4850 50  0000 C CNN
+F 1 "SeeeduinoXIAO" H 2100 4750 50  0000 C CNN
+F 2 "" H 2400 4050 50  0001 C CNN
+F 3 "" H 2400 4050 50  0001 C CNN
+	1    2750 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7050 4400 6950 4400
+Wire Wire Line
+	6950 4400 6950 4250
+Wire Wire Line
+	7050 4500 6950 4500
+Wire Wire Line
+	6950 4500 6950 4650
+Wire Wire Line
+	6650 4850 6500 4850
+Wire Wire Line
+	6850 5250 6950 5250
+Wire Wire Line
+	6950 5250 6950 5050
+Wire Wire Line
+	6550 5250 6500 5250
+Wire Wire Line
+	6500 5250 6500 4850
+Connection ~ 6500 4850
+Wire Wire Line
+	6500 4850 6450 4850
+$Comp
+L power:GND #PWR?
+U 1 1 5F890886
+P 6950 5350
+F 0 "#PWR?" H 6950 5100 50  0001 C CNN
+F 1 "GND" H 6955 5177 50  0000 C CNN
+F 2 "" H 6950 5350 50  0001 C CNN
+F 3 "" H 6950 5350 50  0001 C CNN
+	1    6950 5350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6950 5250 6950 5350
+Connection ~ 6950 5250
+Text GLabel 6050 4850 0    50   Input ~ 0
+D3
+Wire Wire Line
+	6050 4850 6150 4850
+Wire Wire Line
+	7500 1700 7500 1600
+Wire Wire Line
+	7300 1700 7500 1700
+Wire Wire Line
+	7500 2900 7500 2800
+Wire Wire Line
+	7300 2900 7500 2900
+$Comp
+L Device:R R?
+U 1 1 5F89415B
+P 9100 2650
+F 0 "R?" H 9030 2604 50  0000 R CNN
+F 1 "R" H 9030 2695 50  0000 R CNN
+F 2 "" V 9030 2650 50  0001 C CNN
+F 3 "~" H 9100 2650 50  0001 C CNN
+	1    9100 2650
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	9350 2350 9350 2500
+$Comp
+L power:+12V #PWR?
+U 1 1 5F89786E
+P 9350 3900
+F 0 "#PWR?" H 9350 3750 50  0001 C CNN
+F 1 "+12V" H 9365 4073 50  0000 C CNN
+F 2 "" H 9350 3900 50  0001 C CNN
+F 3 "" H 9350 3900 50  0001 C CNN
+	1    9350 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Transistor_FET:BSP89 Q?
+U 1 1 5F897878
+P 9250 4900
+F 0 "Q?" H 9455 4946 50  0000 L CNN
+F 1 "BSP89" H 9455 4855 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-223-3_TabPin2" H 9450 4825 50  0001 L CIN
+F 3 "https://www.infineon.com/dgdl/Infineon-BSP89-DS-v02_02-en.pdf?fileId=db3a30433b47825b013b4b8a07f90d55" H 9250 4900 50  0001 L CNN
+	1    9250 4900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F897882
+P 8700 4900
+F 0 "R?" V 8493 4900 50  0000 C CNN
+F 1 "R" V 8584 4900 50  0000 C CNN
+F 2 "" V 8630 4900 50  0001 C CNN
+F 3 "~" H 8700 4900 50  0001 C CNN
+	1    8700 4900
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F89788C
+P 9100 5300
+F 0 "R?" V 8893 5300 50  0000 C CNN
+F 1 "R" V 8984 5300 50  0000 C CNN
+F 2 "" V 9030 5300 50  0001 C CNN
+F 3 "~" H 9100 5300 50  0001 C CNN
+	1    9100 5300
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9350 4050 9350 3900
+Wire Wire Line
+	9350 4550 9350 4700
+Wire Wire Line
+	9050 4900 8900 4900
+Wire Wire Line
+	9250 5300 9350 5300
+Wire Wire Line
+	9350 5300 9350 5100
+Wire Wire Line
+	8950 5300 8900 5300
+Wire Wire Line
+	8900 5300 8900 4900
+Connection ~ 8900 4900
+Wire Wire Line
+	8900 4900 8850 4900
+$Comp
+L power:GND #PWR?
+U 1 1 5F8978A1
+P 9350 5400
+F 0 "#PWR?" H 9350 5150 50  0001 C CNN
+F 1 "GND" H 9355 5227 50  0000 C CNN
+F 2 "" H 9350 5400 50  0001 C CNN
+F 3 "" H 9350 5400 50  0001 C CNN
+	1    9350 5400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9350 5300 9350 5400
+Connection ~ 9350 5300
+Text GLabel 8450 4900 0    50   Input ~ 0
+D3
+Wire Wire Line
+	8450 4900 8550 4900
+$Comp
+L Motor:Fan_3pin M?
+U 1 1 5F8B28BB
+P 9350 4250
+F 0 "M?" H 9508 4246 50  0000 L CNN
+F 1 "Fan_3pin" H 9508 4155 50  0000 L CNN
+F 2 "" H 9350 4160 50  0001 C CNN
+F 3 "http://www.hardwarecanucks.com/forum/attachments/new-builds/16287d1330775095-help-chassis-power-fan-connectors-motherboard-asus_p8z68.jpg" H 9350 4160 50  0001 C CNN
+	1    9350 4250
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR?
+U 1 1 5F8E672D
+P 3700 3700
+F 0 "#PWR?" H 3700 3550 50  0001 C CNN
+F 1 "+3.3V" V 3715 3828 50  0000 L CNN
+F 2 "" H 3700 3700 50  0001 C CNN
+F 3 "" H 3700 3700 50  0001 C CNN
+	1    3700 3700
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3550 3700 3700 3700
+$Comp
+L power:GND #PWR?
+U 1 1 5F8E817A
+P 3700 3550
+F 0 "#PWR?" H 3700 3300 50  0001 C CNN
+F 1 "GND" V 3705 3422 50  0000 R CNN
+F 2 "" H 3700 3550 50  0001 C CNN
+F 3 "" H 3700 3550 50  0001 C CNN
+	1    3700 3550
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3550 3550 3700 3550
+$Comp
+L OPL_Optoelectronics:DIP-LED-RGB-COMMON-ANODE_4P-D8MM_ D?
+U 1 1 5F90037C
+P 9350 2150
+F 0 "D?" V 9308 2412 45  0000 L CNN
+F 1 "DIP-LED-RGB-COMMON-ANODE_4P-D8MM_" V 9392 2412 45  0000 L CNN
+F 2 "" H 9350 2150 50  0001 C CNN
+F 3 "" H 9350 2150 50  0001 C CNN
+F 4 "CZXR-80RGB03-A" H 9380 2300 20  0001 C CNN "MPN"
+F 5 "304090065" H 9380 2300 20  0001 C CNN "SKU"
+	1    9350 2150
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F90683F
+P 9350 2650
+F 0 "R?" H 9280 2604 50  0000 R CNN
+F 1 "R" H 9280 2695 50  0000 R CNN
+F 2 "" V 9280 2650 50  0001 C CNN
+F 3 "~" H 9350 2650 50  0001 C CNN
+	1    9350 2650
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F906A91
+P 9600 2650
+F 0 "R?" H 9530 2604 50  0000 R CNN
+F 1 "R" H 9530 2695 50  0000 R CNN
+F 2 "" V 9530 2650 50  0001 C CNN
+F 3 "~" H 9600 2650 50  0001 C CNN
+	1    9600 2650
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	9600 2500 9600 2450
+Wire Wire Line
+	9600 2450 9450 2450
+Wire Wire Line
+	9450 2450 9450 2350
+Wire Wire Line
+	9100 2500 9100 2450
+Wire Wire Line
+	9100 2450 9250 2450
+Wire Wire Line
+	9250 2450 9250 2350
+$Comp
+L power:+3.3V #PWR?
+U 1 1 5F90C3A5
+P 9350 1750
+F 0 "#PWR?" H 9350 1600 50  0001 C CNN
+F 1 "+3.3V" H 9365 1923 50  0000 C CNN
+F 2 "" H 9350 1750 50  0001 C CNN
+F 3 "" H 9350 1750 50  0001 C CNN
+	1    9350 1750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9350 1750 9350 1950
+Text GLabel 9350 2950 3    50   Input ~ 0
+D0
+Text GLabel 9100 2950 3    50   Input ~ 0
+D1
+Text GLabel 9600 2950 3    50   Input ~ 0
+D2
+Wire Wire Line
+	9600 2800 9600 2950
+Wire Wire Line
+	9350 2800 9350 2950
+Wire Wire Line
+	9100 2800 9100 2950
+Text GLabel 1750 3400 0    50   Input ~ 0
+D0
+Text GLabel 1750 3550 0    50   Input ~ 0
+D1
+Text GLabel 1750 3700 0    50   Input ~ 0
+D2
+Text GLabel 1750 3850 0    50   Input ~ 0
+D3
+Text GLabel 1750 4000 0    50   Input ~ 0
+D4
+Text GLabel 1750 4150 0    50   Input ~ 0
+D5
+Text GLabel 1750 4300 0    50   Input ~ 0
+D6
+$Comp
+L power:GND #PWR?
+U 1 1 5F929D15
+P 2850 4850
+F 0 "#PWR?" H 2850 4600 50  0001 C CNN
+F 1 "GND" V 2855 4722 50  0000 R CNN
+F 2 "" H 2850 4850 50  0001 C CNN
+F 3 "" H 2850 4850 50  0001 C CNN
+	1    2850 4850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2850 4700 2850 4850
+$Comp
+L power:GND #PWR?
+U 1 1 5F92D78C
+P 3100 2850
+F 0 "#PWR?" H 3100 2600 50  0001 C CNN
+F 1 "GND" V 3105 2722 50  0000 R CNN
+F 2 "" H 3100 2850 50  0001 C CNN
+F 3 "" H 3100 2850 50  0001 C CNN
+	1    3100 2850
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	3000 2950 3000 2850
+Wire Wire Line
+	3000 2850 3100 2850
+Text GLabel 3700 4300 2    50   Input ~ 0
+D7
+Text GLabel 3700 4150 2    50   Input ~ 0
+D8
+Text GLabel 3700 4000 2    50   Input ~ 0
+D9
+Text GLabel 3700 3850 2    50   Input ~ 0
+D10
+Wire Wire Line
+	3700 3850 3550 3850
+Wire Wire Line
+	3700 4000 3550 4000
+Wire Wire Line
+	3700 4150 3550 4150
+Wire Wire Line
+	3700 4300 3550 4300
+Wire Wire Line
+	1750 4300 1900 4300
+Wire Wire Line
+	1750 4150 1900 4150
+Wire Wire Line
+	1750 4000 1900 4000
+Wire Wire Line
+	1750 3850 1900 3850
+Wire Wire Line
+	1750 3700 1900 3700
+Wire Wire Line
+	1750 3550 1900 3550
+Wire Wire Line
+	1750 3400 1900 3400
+$EndSCHEMATC
