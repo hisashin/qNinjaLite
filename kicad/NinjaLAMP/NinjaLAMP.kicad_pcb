@@ -287,6 +287,11 @@
       (net 19 "Net-(D2-Pad2)"))
     (pad 1 thru_hole circle (at 2.99974 0 90) (size 1.39954 1.39954) (drill 0.84836) (layers *.Cu *.Mask)
       (net 6 "Net-(D2-Pad1)"))
+    (model :kicad-packages3D:LED_THT.3dshapes/LED_D8.0mm.step
+      (offset (xyz -1.27 0 -2.9464))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (module Ninja-qPCR:ELECTRO-SMD-C-12.5x13.5MM (layer F.Cu) (tedit 5F97AD86) (tstamp 5FA54AD0)
