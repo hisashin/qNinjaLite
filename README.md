@@ -1,6 +1,6 @@
 ### NinjaLAMP needs Arduino programmer's help!
 
-<img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/upgrading.jpg" alt="upgrading" width="100">
+<img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/upgrading.jpg" alt="upgrading" width="600">
 
 In April, NinjaLAMP was released just after a week of rapid prototyping by Shingo and Mariko. Now Shingo upgraded its PCB and 3d model with widely used [Seeeduino Xiao](https://wiki.seeedstudio.com/Seeeduino-XIAO/), [I2C SSD1306 LCD](https://www.aliexpress.com/item/33028828291.html?spm=a2g0s.9042311.0.0.26274c4dPiM0Ki), [I2C 2kb EEPROM](https://www.digikey.com/en/products/detail/stmicroelectronics/M24C02-RMN6TP/2038677) and 3 tact switches.
 - [Hardware updrade is done (2020 Nov 10)](https://www.facebook.com/hisakawa/posts/10158727487954481)
@@ -14,7 +14,7 @@ NinjaLAMP will get following benefits from this upgrade.
 - '''Programmable''' : We can create custom temperature profile with tacts and store it into EEPROM.
 - '''Manufacture Friendly''' : PCB supports [Seeed PCBA](https://www.seeedstudio.com/prototype-pcb-assembly.html) service and here is their quotation. All electric parts are included and soldered except $1.66 LCD and $0.46 thermistor. With $10 heater and $10 tube holder, NinjaLAMP can be manufactured less than $40. That's great advantage if you are planning to use it for screening.
 
-<img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/seeed_quotation.jpg" alt="seeed_quotation" width="100">
+<img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/seeed_quotation.jpg" alt="seeed_quotation" width="300">
 
 It's not difficult to upgrade Arduino software to support new features above but currently Shingo and Mariko are focusing on development of [Ninja qPCR](https://hackaday.io/project/174501-covid-19-detectors-300-real-time-pcr-50-lamp/) and it will take long time to be completed.
 If you want to help NinjaLAMP, contact us and we will send new hardware so that all you need to do is to connect it to your PC and write codes on Arduino.
