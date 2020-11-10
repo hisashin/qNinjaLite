@@ -1,6 +1,6 @@
 <div class="background-color:#fffbdd">
 
-### NinjaLAMP needs Arduino programmer's help!
+### :izakaya_lantern: NinjaLAMP needs Arduino programmer's help!
 
 <img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/upgrading.jpg" alt="upgrading" width="600">
 
