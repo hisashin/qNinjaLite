@@ -1,3 +1,5 @@
+<div class=".bg-yellow-light">
+
 ### NinjaLAMP needs Arduino programmer's help!
 
 <img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/upgrading.jpg" alt="upgrading" width="600">
@@ -18,6 +20,8 @@ NinjaLAMP will get following benefits from this upgrade.
 
 It's not difficult to add some codes to [current Arduino sources](https://github.com/hisashin/NinjaLAMP/tree/master/arduino) to support new features above. But currently Shingo and Mariko are focusing on development of [Ninja qPCR](https://hackaday.io/project/174501-covid-19-detectors-300-real-time-pcr-50-lamp/) and it will take long time to be completed if we need to wait until qPCR is done.
 If you want to help NinjaLAMP, contact us and we will send new hardware so that all you need to do is to connect it to your PC and write codes on Arduino.
+
+</div>
 
 # NinjaLAMP
 
