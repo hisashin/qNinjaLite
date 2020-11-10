@@ -10,8 +10,8 @@ In April, NinjaLAMP was released just after a week of rapid prototyping by Shing
 - [3d model](https://gallery.autodesk.com/projects/149287/ninjalamp)
 
 NinjaLAMP will get following benefits from this upgrade.
-- **Standalone** : No need to be connected to PC anymore. LCD displays all informations and we can choose menu by tapping 3 tact switches as up/down/ok.
-- **Programmable** : We can create custom temperature profile with tacts and store it into EEPROM.
+- **Standalone** : No need to be connected to PC anymore. LCD displays all informations and we can choose menu by tapping switches as up/down/ok buttons.
+- **Programmable** : We can configure custom temperature profiles with switches and store them in EEPROM.
 - **Manufacture Friendly** : PCB supports [Seeed PCBA](https://www.seeedstudio.com/prototype-pcb-assembly.html) service and here is their quotation. All electric parts are included and soldered except $1.66 LCD and $0.46 thermistor. With $10 heater and $10 tube holder, NinjaLAMP can be manufactured less than $40. That's great advantage for screening mass poplulation.
 
 <img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/seeed_quotation.jpg" alt="seeed_quotation" width="300">
