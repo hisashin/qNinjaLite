@@ -1,4 +1,4 @@
-<div class=".bg-yellow-light">
+<div class="background-color:#fffbdd">
 
 ### NinjaLAMP needs Arduino programmer's help!
 
