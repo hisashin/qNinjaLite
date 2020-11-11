@@ -19,6 +19,8 @@ NinjaLAMP will get following benefits from this upgrade.
 It's not difficult to add some codes to [current Arduino sources](https://github.com/hisashin/NinjaLAMP/tree/master/arduino) to support new features above. [ssd1306_demo](https://github.com/lexus2k/ssd1306/blob/master/examples/demos/ssd1306_demo/ssd1306_demo.ino) worked so we don't need to write from scratch to show temperature data (hopefully graph) on LCD. But currently @hisashin and @maripo are focusing on development of [Ninja qPCR](https://hackaday.io/project/174501-covid-19-detectors-300-real-time-pcr-50-lamp/) and it will take long time to be completed if we need to wait until qPCR is done.
 If you want to help NinjaLAMP, contact us and we will send new hardware so that all you need to do is to connect it to your PC and write codes on Arduino.
 
+**@valeriod joined as collaborator and we have no extra tube holder to send for now. Thank you!**
+
 # NinjaLAMP
 
 **Most precise GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine based on Arduino**. Less than 0.3 degree celsius accuracy can be expected after calibration.
