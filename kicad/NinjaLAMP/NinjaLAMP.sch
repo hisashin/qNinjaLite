@@ -152,7 +152,7 @@ F 3 "" H 9600 1850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Transistor_FET:BSP89 Q1
+L Transistor_FET:BSN20 Q1
 U 1 1 5F87013A
 P 9500 2450
 F 0 "Q1" H 9705 2496 50  0000 L CNN
