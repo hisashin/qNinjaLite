@@ -45,7 +45,7 @@ class NinjaLAMPCore {
     // Called from Arduino's setup & loop functions
     void setup();
     void enableSampleTempSimulation (double heatResistanceRatio, double sampleHeatCapacity);
-    void NinjaLAMPCore::disableSampleTempSimulation ();
+    void disableSampleTempSimulation ();
     void loop();
     // Called by interfaces
     void start(double temp);
