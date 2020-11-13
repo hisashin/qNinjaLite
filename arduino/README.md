@@ -1,10 +1,7 @@
 <img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/versions.png" alt="versions" width="600">
+**This README is for ver1.0**
 
-## 1. How to Setup
-
-## Hardware config
-
-The configuration for each model can be found in HardwareConf.cpp and HardwareConf.h.
+The configuration for each version can be found in HardwareConf.cpp and HardwareConf.h.
 HardwareConf class has two construction methods for two models:
 
 * ver0.9 (initFirstModel)
@@ -12,12 +9,10 @@ HardwareConf class has two construction methods for two models:
 
 Pins, thermistors, PID constants and some model-specific properties for NinjaLAMP's basic functionalities are defined in HardwareConf::initFirstModel() function.
 
-## How to setup Arduino IDE
+## 1. Setup Arduino IDE
 
-You need to setup the Arduino IDE by adding some packages for Seeeduino XIAO, NinjaLAMP's core module.
-Please follow the tutorial.
-
-* [Seeeduino XIAO - Seeed Wiki](https://wiki.seeedstudio.com/Seeeduino-XIAO/)
+- Follow **[Software Step 1 to 5](https://wiki.seeedstudio.com/Seeeduino-XIAO/#software)** to upload "File > Examples > 01.Basics > Blink"
+- Follow **[Software Step 1 to 5](https://wiki.seeedstudio.com/Seeeduino-XIAO/#software)** to upload "File > Examples > 01.Basics > Blink"
 
 
 ## TODO
