@@ -1,11 +1,18 @@
 #include "ADCArduino.h"
 #include "NinjaLAMPCore.h"
 #include "HardwareConf.h"
-/* Well */
+
 struct ThermistorRange NXFT15WF104FA2B100[3] = {
   { 0.0, 4250, 0.0, }, /* 4250 for 0-50 deg */
   { 50.0, 4311, 0.0, }, /* 4311 for 50-85 deg */
   { 85.0, 4334, 0.0, } /* 4334 for 85-100 deg */
+};
+
+struct ThermistorRange NTCG164KF104FT1S[4] = {
+  { 0.0, 4419, 0.0, }, /* 4419 for 25-50 deg */
+  { 50.0, 4468, 0.0, }, /* 4468 for 50-75 deg */
+  { 75.0, 4485, 0.0, }, /* 4485 for 75-85 deg */
+  { 85.0, 4509, 0.0, } /* 4509 for 85-100 deg */
 };
 
 NinjaLAMPCore * HardwareConf::initFirstModel () {
@@ -82,8 +89,8 @@ NinjaLAMPCore * HardwareConf::initLCDModel () {
     .r = 47.0 /* kOhm */
   };
   Thermistor *airThermistor = new Thermistor{ 
-    .bConstRangeCount = 3, /* Number of B-constant ranges */
-    .bConstRanges = NXFT15WF104FA2B100, /* Pointer to the B-constant ranges array */
+    .bConstRangeCount = 4, /* Number of B-constant ranges */
+    .bConstRanges = NTCG164KF104FT1S, /* Pointer to the B-constant ranges array */
     .r0 = 100.0, /* Resistance at "baseTemp" (kOhm) */
     .baseTemp = 25.0,
     .place = THERMISTOR_LOW_SIDE,
