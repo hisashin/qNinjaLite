@@ -1,5 +1,22 @@
 <img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/versions.png" alt="versions" width="600">
 
+---
+**This section is for all ver1.0 user**
+
+## How to Setup
+
+1. Connect NinjaLAMP to your computer with USB TypeC cable. No need to connect 12V AC adapter at first.
+1. NinjaLAMP ver1.0 uses [Seeeduino XIAO](https://wiki.seeedstudio.com/Seeeduino-XIAO/)(not AVR but SAMD21). Follow their **[Software Step 1 to 5](https://wiki.seeedstudio.com/Seeeduino-XIAO/#software)** and upload "File > Examples > 01.Basics > Blink" to NinjaLAMP. Orange LED next to USB connector will start blinking.
+1. Go to **Sketch-> Include Library-> Manage Libraries**, search "ssd1306" and install Alexey Dynda's **[ssd1306 library](https://github.com/lexus2k/ssd1306)**.
+
+---
+**This section is for Valerio**
+
+Not yet
+
+---
+**Memo**
+
 The configuration for each version can be found in HardwareConf.cpp and HardwareConf.h.
 HardwareConf class has two construction methods for two models:
 
@@ -7,15 +24,6 @@ HardwareConf class has two construction methods for two models:
 * ver1.0 (initLCDModel)
 
 Pins, thermistors, PID constants and some model-specific properties for NinjaLAMP's basic functionalities are defined in HardwareConf::initFirstModel() function.
-
----
-**This section is for ver1.0**
-
-## 1. Setup Arduino IDE
-
-- Follow **[Software Step 1 to 5](https://wiki.seeedstudio.com/Seeeduino-XIAO/#software)** to upload "File > Examples > 01.Basics > Blink"
-- Follow **[Software Step 1 to 5](https://wiki.seeedstudio.com/Seeeduino-XIAO/#software)** to upload "File > Examples > 01.Basics > Blink"
-
 
 ## TODO
 
