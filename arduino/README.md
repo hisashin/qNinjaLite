@@ -30,10 +30,10 @@ The values can be plotted by the serial plotter of Arduino IDE. This process is 
 * AIN_WELL : PB09_A7_D7_RX
 
 ---
-**For Valerio**
----
 
-## How to Setup
+**For Valerio**
+
+## How to Setup IDE and test for the first time
 
 * Connect NinjaLAMP to your computer with USB TypeC cable. No need to connect 12V AC adapter at first.
 * NinjaLAMP ver1.0 uses [Seeeduino XIAO](https://wiki.seeedstudio.com/Seeeduino-XIAO/)(not AVR but SAMD21). Follow their **[Software Step 1 to 5](https://wiki.seeedstudio.com/Seeeduino-XIAO/#software)**
