@@ -1,12 +1,14 @@
-![versions](https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/versions.png width=500)
+<img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/versions.png" alt="versions" width="600">
+
+## 1. How to Setup
 
 ## Hardware config
 
 The configuration for each model can be found in HardwareConf.cpp and HardwareConf.h.
 HardwareConf class has two construction methods for two models:
 
-* Initial model (initFirstModel)
-* Seeeduino XIAO + LCD model (initLCDModel)
+* ver0.9 (initFirstModel)
+* ver1.0 (initLCDModel)
 
 Pins, thermistors, PID constants and some model-specific properties for NinjaLAMP's basic functionalities are defined in HardwareConf::initFirstModel() function.
 
