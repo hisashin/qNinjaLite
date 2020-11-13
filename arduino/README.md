@@ -10,12 +10,12 @@ Pins, thermistors, PID constants and some model-specific properties for NinjaLAM
 
 ## ver0.9
 
-The first model has no dedicated user interfaces. It sends values every 250　milliseconds by serial communication.
+ver0.9 has no dedicated user interfaces. It sends values every 250　milliseconds by serial communication.
 The values can be plotted by the serial plotter of Arduino IDE. This process is implemented in the loop function.
 
-To make it standalone, we need to implement additional program the tact switches and the display.
+## ver1.0
 
-## ver1.0 Pin assignment
+### Pin assignment
 
 * LED_R : PA02_A0_D0
 * LED_G : PA04_A1_D1
@@ -30,7 +30,8 @@ To make it standalone, we need to implement additional program the tact switches
 * AIN_WELL : PB09_A7_D7_RX
 
 ---
-**This section is for Valerio**
+**For Valerio**
+---
 
 ## How to Setup
 
