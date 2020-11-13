@@ -1,5 +1,4 @@
 <img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/versions.png" alt="versions" width="600">
-**This README is for ver1.0**
 
 The configuration for each version can be found in HardwareConf.cpp and HardwareConf.h.
 HardwareConf class has two construction methods for two models:
@@ -8,6 +7,9 @@ HardwareConf class has two construction methods for two models:
 * ver1.0 (initLCDModel)
 
 Pins, thermistors, PID constants and some model-specific properties for NinjaLAMP's basic functionalities are defined in HardwareConf::initFirstModel() function.
+
+---
+**This section is for ver1.0**
 
 ## 1. Setup Arduino IDE
 
