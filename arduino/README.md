@@ -60,13 +60,13 @@ NinjaLAMP will get following benefits from this upgrade.
 * Restart Arduino IDE
 * Upload **"File > Examples > ssd1306 > demos > ssd1306_demo"** to NinjaLAMP. I2C LCD displays [demo](https://github.com/lexus2k/ssd1306/blob/master/examples/demos/ssd1306_demo/ssd1306_demo.ino).
 * Clone this NinjaLAMP respository to somewhere
-* Upload [NinjaLAMP/arduino/xiao_example_gpio](https://github.com/hisashin/NinjaLAMP/tree/master/arduino/xiao_example_gpio)
+* Upload [NinjaLAMP/arduino/examples/xiao_example_gpio](https://github.com/hisashin/NinjaLAMP/tree/master/arduino/examples/xiao_example_gpio)
 * Click magnifying glass icon at the top-right corner and set rate to "9600 baud"
 * Tap switches to change values. If adapter is connected, tube holders will be heaten. Be careful.
 
 <img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/xiao_example_gpio.png" alt="ssd1306" width="500">
 
-* Upload [NinjaLAMP/arduino/xiao_example_eeprom](https://github.com/hisashin/NinjaLAMP/tree/master/arduino/xiao_example_eeprom)
+* Upload [NinjaLAMP/arduino/examples/xiao_example_eeprom](https://github.com/hisashin/NinjaLAMP/tree/master/arduino/examples/xiao_example_eeprom)
 * Click magnifying glass icon at the top-right corner and set rate to "9600 baud"
 * Program writes 0x32(=50) at address 0 of EEPROM on board with writeI2CByte(). Then readI2CByte() read the value of the same address.
 
