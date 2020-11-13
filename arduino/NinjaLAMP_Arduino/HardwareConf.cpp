@@ -78,6 +78,15 @@ NinjaLAMPCore * HardwareConf::initLCDModel () {
   int WELL_THERMISTOR_AIN = A7;
   int AIR_THERMISTOR_AIN = A6;
   
+  int PIN_LED_R = 0;
+  int PIN_LED_G = 1;
+  int PIN_LED_B = 2;
+  int PIN_I2C_SDA = 4;
+  int PIN_I2C_SCL = 5;
+  int PIN_TACT0 = 8;
+  int PIN_TACT1 = 9;
+  int PIN_TACT2 = 810;
+  
   ADCArduino *adc = new ADCArduino(WELL_THERMISTOR_AIN, AIR_THERMISTOR_AIN);
   Thermistor *wellThermistor = new Thermistor{ 
     .bConstRangeCount = 3, /* Number of B-constant ranges */
