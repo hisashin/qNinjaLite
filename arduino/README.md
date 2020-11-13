@@ -15,7 +15,7 @@ The values can be plotted by the serial plotter of Arduino IDE. This process is 
 
 ## ver1.0
 
-In April, NinjaLAMP was released just after a week of rapid prototyping by @hisashin and @maripo. Now @hisashin upgraded its PCB and 3d model with widely used [Seeeduino Xiao](https://wiki.seeedstudio.com/Seeeduino-XIAO/), [I2C SSD1306 LCD](https://www.aliexpress.com/item/33028828291.html?spm=a2g0s.9042311.0.0.26274c4dPiM0Ki), [I2C 2kb EEPROM](https://www.digikey.com/en/products/detail/stmicroelectronics/M24C02-RMN6TP/2038677) and 3 tact switches.
+In April, ver0.9 was released just after a week of rapid prototyping by @hisashin and @maripo. Now @hisashin upgraded its PCB and 3d model  to ver1.0 with widely used [Seeeduino Xiao](https://wiki.seeedstudio.com/Seeeduino-XIAO/), [I2C SSD1306 LCD](https://www.aliexpress.com/item/33028828291.html?spm=a2g0s.9042311.0.0.26274c4dPiM0Ki), [I2C 2kb EEPROM](https://www.digikey.com/en/products/detail/stmicroelectronics/M24C02-RMN6TP/2038677) and 3 tact switches.
 - [Hardware updrade is done (2020 Nov 10)](https://www.facebook.com/hisakawa/posts/10158727487954481)
 - [New Package (2020 Nov 6)](https://www.facebook.com/hisakawa/posts/10158717794254481)
 - [New PCB (2020 Oct 28)](https://www.facebook.com/hisakawa/posts/10158696375544481)
