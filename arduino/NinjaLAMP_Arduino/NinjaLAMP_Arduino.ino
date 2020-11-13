@@ -10,8 +10,8 @@
 /* Target temperature (Celsius) */
 #define TARGET_TEMP 63
 
-NinjaLAMPCore *core = HardwareConf::initFirstModel();
-// NinjaLAMPCore *core = HardwareConf::initLCDModel();
+// NinjaLAMPCore *core = HardwareConf::initFirstModel();
+NinjaLAMPCore *core = HardwareConf::initLCDModel();
 
 struct Stage {
   double targetTemp; /* Celsius */
