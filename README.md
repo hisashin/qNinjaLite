@@ -1,26 +1,3 @@
-### :izakaya_lantern: NinjaLAMP needs Arduino programmer's help! (2020 Nov10) ---> Matched! :thumbsup: (2020 Nov11)
-
-<img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/upgrading.jpg" alt="upgrading" width="600">
-
-In April, NinjaLAMP was released just after a week of rapid prototyping by @hisashin and @maripo. Now @hisashin upgraded its PCB and 3d model with widely used [Seeeduino Xiao](https://wiki.seeedstudio.com/Seeeduino-XIAO/), [I2C SSD1306 LCD](https://www.aliexpress.com/item/33028828291.html?spm=a2g0s.9042311.0.0.26274c4dPiM0Ki), [I2C 2kb EEPROM](https://www.digikey.com/en/products/detail/stmicroelectronics/M24C02-RMN6TP/2038677) and 3 tact switches.
-- [Hardware updrade is done (2020 Nov 10)](https://www.facebook.com/hisakawa/posts/10158727487954481)
-- [New Package (2020 Nov 6)](https://www.facebook.com/hisakawa/posts/10158717794254481)
-- [New PCB (2020 Oct 28)](https://www.facebook.com/hisakawa/posts/10158696375544481)
-- [KiCad](https://github.com/hisashin/NinjaLAMP/tree/master/kicad/NinjaLAMP)
-- [3d model](https://gallery.autodesk.com/projects/149287/ninjalamp)
-
-NinjaLAMP will get following benefits from this upgrade.
-- **Standalone** : No need to be connected to PC anymore. LCD displays all informations and we can choose menu by tapping switches as up/down/ok buttons.
-- **Programmable** : We can configure custom temperature profiles with switches and store them in EEPROM.
-- **Manufacture Friendly** : PCB supports [Seeed PCBA](https://www.seeedstudio.com/prototype-pcb-assembly.html) service and here is their quotation. All electric parts are included and soldered except $1.66 LCD and $0.46 thermistor. With $10 heater and $10 tube holder, NinjaLAMP can be manufactured less than $40. That's great advantage for screening mass poplulation.
-
-<img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/seeed_quotation.jpg" alt="seeed_quotation" width="300">
-
-It's not difficult to add some codes to [current Arduino sources](https://github.com/hisashin/NinjaLAMP/tree/master/arduino) to support new features above. [ssd1306_demo](https://github.com/lexus2k/ssd1306/blob/master/examples/demos/ssd1306_demo/ssd1306_demo.ino) worked so we don't need to write from scratch to show temperature data (hopefully graph) on LCD. But currently @hisashin and @maripo are focusing on development of [Ninja qPCR](https://hackaday.io/project/174501-covid-19-detectors-300-real-time-pcr-50-lamp/) and it will take long time to be completed if we need to wait until qPCR is done.
-If you want to help NinjaLAMP, contact us and we will send new hardware so that all you need to do is to connect it to your PC and write codes on Arduino.
-
-**@valeriod joined as collaborator and we have no extra tube holder to send for now. Thank you!**
-
 # NinjaLAMP
 
 **Most precise GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine based on Arduino**. Less than 0.3 degree celsius accuracy can be expected after calibration.
