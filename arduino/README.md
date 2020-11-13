@@ -10,10 +10,16 @@
 * Upload **"File > Examples > 01.Basics > Blink"** to NinjaLAMP. Orange LED next to USB connector will start blinking.
 * Go to **Sketch-> Include Library-> Manage Libraries**, search "ssd1306" and install Alexey Dynda's **[ssd1306 library](https://github.com/lexus2k/ssd1306)**.
 
-<img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/ssd1306.png" alt="ssd1306" width="300">
+<img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/ssd1306.png" alt="ssd1306" width="500">
 
 * Restart Arduino IDE
-* Upload **"File > Examples > ssd1306 > demos > ssd1306_demo"** to NinjaLAMP. Display shows [demo](https://github.com/lexus2k/ssd1306/blob/master/examples/demos/ssd1306_demo/ssd1306_demo.ino).
+* Upload **"File > Examples > ssd1306 > demos > ssd1306_demo"** to NinjaLAMP. I2C LCD displays [demo](https://github.com/lexus2k/ssd1306/blob/master/examples/demos/ssd1306_demo/ssd1306_demo.ino).
+* Clone this NinjaLAMP respository to somewhere
+* Upload [NinjaLAMP/arduino/xiao_example_gpio](https://github.com/hisashin/NinjaLAMP/tree/master/arduino/xiao_example_gpio)
+* Click magnifying glass icon at the top-right corner and set rate to "9600 baud"
+* Tap switches to change values. If adapter is connected, tube holders will be heaten. Be careful.
+
+<img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/xiao_example_gpio.png" alt="ssd1306" width="500">
 
 ---
 **This section is for Valerio**
