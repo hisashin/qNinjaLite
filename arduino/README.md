@@ -15,6 +15,19 @@ The values can be plotted by the serial plotter of Arduino IDE. This process is 
 
 ## ver1.0
 
+In April, NinjaLAMP was released just after a week of rapid prototyping by @hisashin and @maripo. Now @hisashin upgraded its PCB and 3d model with widely used [Seeeduino Xiao](https://wiki.seeedstudio.com/Seeeduino-XIAO/), [I2C SSD1306 LCD](https://www.aliexpress.com/item/33028828291.html?spm=a2g0s.9042311.0.0.26274c4dPiM0Ki), [I2C 2kb EEPROM](https://www.digikey.com/en/products/detail/stmicroelectronics/M24C02-RMN6TP/2038677) and 3 tact switches.
+- [Hardware updrade is done (2020 Nov 10)](https://www.facebook.com/hisakawa/posts/10158727487954481)
+- [New Package (2020 Nov 6)](https://www.facebook.com/hisakawa/posts/10158717794254481)
+- [New PCB (2020 Oct 28)](https://www.facebook.com/hisakawa/posts/10158696375544481)
+- [KiCad](https://github.com/hisashin/NinjaLAMP/tree/master/kicad/NinjaLAMP)
+- [3d model](https://gallery.autodesk.com/projects/149287/ninjalamp)
+
+- **Standalone** : No need to be connected to PC anymore. LCD displays all informations and we can choose menu by tapping switches as up/down/ok buttons.
+- **Programmable** : We can configure custom temperature profiles with switches and store them in EEPROM.
+- **Manufacture Friendly** : PCB supports [Seeed PCBA](https://www.seeedstudio.com/prototype-pcb-assembly.html) service and here is their quotation. All electric parts are included and soldered except $1.66 LCD and $0.46 thermistor. With $10 heater and $10 tube holder, NinjaLAMP can be manufactured less than $40. That's great advantage for screening mass poplulation.
+
+<img src="https://github.com/hisashin/NinjaLAMP/blob/master/images/seeed_quotation.jpg" alt="seeed_quotation" width="300">
+
 ### Pin assignment
 
 * LED_R : PA02_A0_D0
