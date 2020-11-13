@@ -23,24 +23,29 @@ void loop()
   } else {
     Serial.print("tact0=LOW  ");
   }
+  
   if(digitalRead(tact1) == HIGH) {
     Serial.print("tact1=HIGH ");
   } else {
     Serial.print("tact1=LOW  ");
   }
+  
   if(digitalRead(tact2) == HIGH) {
     Serial.print("tact2=HIGH ");
   } else {
     Serial.print("tact2=LOW  ");
   }
+  
   air = analogRead(pinAir);
   Serial.print("air=");
   Serial.print(air);
   Serial.print(" ");
+  
   well = analogRead(pinWell);
   Serial.print("well=");
   Serial.print(well);
   Serial.print(" ");
+  
   if(heater < 30) {
     Serial.print("heater=HIGH ");
     digitalWrite(pinHeater, HIGH);
