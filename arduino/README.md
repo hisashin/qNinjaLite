@@ -5,10 +5,15 @@
 
 ## How to Setup
 
-1. Connect NinjaLAMP to your computer with USB TypeC cable. No need to connect 12V AC adapter at first.
-1. NinjaLAMP ver1.0 uses [Seeeduino XIAO](https://wiki.seeedstudio.com/Seeeduino-XIAO/)(not AVR but SAMD21). Follow their **[Software Step 1 to 5](https://wiki.seeedstudio.com/Seeeduino-XIAO/#software)** and upload "File > Examples > 01.Basics > Blink" to NinjaLAMP. Orange LED next to USB connector will start blinking.
-1. Go to **Sketch-> Include Library-> Manage Libraries**, search "ssd1306" and install Alexey Dynda's **[ssd1306 library](https://github.com/lexus2k/ssd1306)**.
-<img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/library_ssd1306.png" alt="ssd1306" width="300">
+* Connect NinjaLAMP to your computer with USB TypeC cable. No need to connect 12V AC adapter at first.
+* NinjaLAMP ver1.0 uses [Seeeduino XIAO](https://wiki.seeedstudio.com/Seeeduino-XIAO/)(not AVR but SAMD21). Follow their **[Software Step 1 to 5](https://wiki.seeedstudio.com/Seeeduino-XIAO/#software)**
+* Upload **"File > Examples > 01.Basics > Blink"** to NinjaLAMP. Orange LED next to USB connector will start blinking.
+* Go to **Sketch-> Include Library-> Manage Libraries**, search "ssd1306" and install Alexey Dynda's **[ssd1306 library](https://github.com/lexus2k/ssd1306)**.
+
+<img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/ssd1306.png" alt="ssd1306" width="300">
+
+* Restart Arduino IDE
+* Upload **"File > Examples > ssd1306 > demos > ssd1306_demo"** to NinjaLAMP. Display shows [demo](https://github.com/lexus2k/ssd1306/blob/master/examples/demos/ssd1306_demo/ssd1306_demo.ino).
 
 ---
 **This section is for Valerio**
