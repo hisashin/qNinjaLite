@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/versions.png" alt="versions" width="600">
 
 ---
-**This section is for all ver1.0 user**
+**This section is for Valerio**
 
 ## How to Setup
 
@@ -21,10 +21,14 @@
 
 <img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/xiao_example_gpio.png" alt="ssd1306" width="500">
 
----
-**This section is for Valerio**
+* Upload [NinjaLAMP/arduino/xiao_example_eeprom](https://github.com/hisashin/NinjaLAMP/tree/master/arduino/xiao_example_eeprom)
+* Click magnifying glass icon at the top-right corner and set rate to "9600 baud"
+* Program writes 0x32(=50) at address 0 of EEPROM on board with writeI2CByte(). Then readI2CByte() read the value of the same address.
 
-Not yet
+<img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/xiao_example_eeprom.png" alt="ssd1306" width="500">
+
+* Change (address, value) from (0, 0x32) to another. You can confirm its's saved correctly.
+
 
 ---
 **Memo**
