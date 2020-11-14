@@ -62,7 +62,7 @@ NinjaLAMP will get following benefits from this upgrade.
 * Clone this NinjaLAMP respository to somewhere
 * Upload [NinjaLAMP/arduino/examples/xiao_example_gpio](https://github.com/hisashin/NinjaLAMP/tree/master/arduino/examples/xiao_example_gpio)
 * Click magnifying glass icon at the top-right corner and set rate to "9600 baud"
-* Tap switches to change values. If adapter is connected, tube holders will be heaten. Be careful.
+* Tap switches to change values. If adapter is connected, tube holder will be heaten. Be careful.
 
 <img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/xiao_example_gpio.png" alt="ssd1306" width="500">
 
