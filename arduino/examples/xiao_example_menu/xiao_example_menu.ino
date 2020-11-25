@@ -18,14 +18,7 @@
 #define menuDown 8  /* move down */
 
 /* Define menu items */
-const char *menuItems_top[] =
-{ 
-    "Profile 1",
-    "Profile 2",
-    "Add New",
-    "Settings",
-};
-const char *menuItems_top[] =
+const char *menuItems[] =
 { 
     "menu item 0",  
     "menu item 1",
