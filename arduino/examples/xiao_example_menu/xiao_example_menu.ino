@@ -27,10 +27,16 @@ const char *menuItems_top[] =
 };
 const char *menuItems_top[] =
 { 
-    "Profile 1",
-    "Profile 2",
-    "Add New",
-    "Settings",
+    "menu item 0",  
+    "menu item 1",
+    "menu item 2",
+    "menu item 3",
+    "menu item 4",
+    "menu item 5",
+    "menu item 6",
+    "menu item 7",
+    "menu item 8",
+    "menu item 9",
 };
 /* This variable will hold menu state; it is processed by SSD1306 API functions */
 SAppMenu menu;
