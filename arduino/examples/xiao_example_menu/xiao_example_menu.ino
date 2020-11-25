@@ -18,18 +18,19 @@
 #define menuDown 8  /* move down */
 
 /* Define menu items */
-const char *menuItems[] =
-{
-    "menu item 0",  
-    "menu item 1",
-    "menu item 2",
-    "menu item 3",
-    "menu item 4",
-    "menu item 5",
-    "menu item 6",
-    "menu item 7",
-    "menu item 8",
-    "menu item 9",
+const char *menuItems_top[] =
+{ 
+    "Profile 1",
+    "Profile 2",
+    "Add New",
+    "Settings",
+};
+const char *menuItems_top[] =
+{ 
+    "Profile 1",
+    "Profile 2",
+    "Add New",
+    "Settings",
 };
 /* This variable will hold menu state; it is processed by SSD1306 API functions */
 SAppMenu menu;
@@ -41,7 +42,7 @@ void setup(){
   Serial.begin(9600);
 
   ssd1306_128x64_i2c_init();
-  ssd1306_setFixedFont(ssd1306xled_font6x8);
+  ssd1306_setFixedFont(ssd1306xled_font8x16);
   ssd1306_fillScreen( 0x00 );
   /* Initialize the main menu state */
   ssd1306_createMenu( &menu, menuItems, sizeof(menuItems) / sizeof(char *) );
