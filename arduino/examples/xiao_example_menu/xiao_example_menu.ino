@@ -37,7 +37,7 @@ void setup(){
   Serial.begin(9600);
 
   ssd1306_128x64_i2c_init();
-  ssd1306_setFixedFont(ssd1306xled_font6x8);
+  ssd1306_setFixedFont(ssd1306xled_font8x16);
   ssd1306_fillScreen( 0x00 );
   /* Initialize the main menu state */
   ssd1306_createMenu( &menu, menuItems, sizeof(menuItems) / sizeof(char *) );
