@@ -20,16 +20,12 @@
 /* Define menu items */
 const char *menuItems[] =
 {
-    "menu item 0",  
-    "menu item 1",
-    "menu item 2",
-    "menu item 3",
-    "menu item 4",
-    "menu item 5",
-    "menu item 6",
-    "menu item 7",
-    "menu item 8",
-    "menu item 9",
+    "Ninja LAMP ver1.0",  
+    "1. COVID-19 Kit A",
+    "2. COVID-19 Kit B",
+    "3. Legionella",
+    "4. Salmonella",
+    "5. Campylobacter",
 };
 /* This variable will hold menu state; it is processed by SSD1306 API functions */
 SAppMenu menu;
