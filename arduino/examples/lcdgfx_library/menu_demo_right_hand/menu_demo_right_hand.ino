@@ -46,9 +46,9 @@ DisplaySSD1306_128x64_I2C display(-1);
 const char *menuItems[] =
 {
   "menu item 0",
-  "menu item 1",
-  "menu item 2",
-  "menu item 3",
+  "65:30-85:2",
+  "65c30m:85c:2m",
+  "65c30m-85c:2m",
   "menu item 4",
   "menu item 5",
   "menu item 6",
