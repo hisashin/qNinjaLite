@@ -2,66 +2,61 @@
 #include "lcdgfx.h"
 #include "lcdgfx_gui.h"
 
-#define menuUp 10   /* move up */
-#define menuEnter 9 /* enter */
-#define menuDown 8  /* move down */
-
 #define DEBUG_MENU 1
 
-DisplaySSD1306_128x64_I2C menu_display(-1);
+extern DisplaySSD1306_128x64_I2C display;
 
 // Constructor
 NinjaLAMPMenu::NinjaLAMPMenu () {
 
 }
 
-void NinjaLAMPMenu::setup (int moveUp, int ok, int moveDown, boolean left_handed) {
+void NinjaLAMPMenu::setup (int moveUp, int ok, int moveDown) {
   #ifdef DEBUG
     Serial.println("NinjaLAMPMenu::setup");
   #endif
   pinMoveUp = moveUp;
   pinOk = ok;
   pinMoveDown = moveDown;
-
-
 }
 
 int NinjaLAMPMenu::loop() {
-  if(digitalRead(menuUp) == HIGH) {
-    if(menuUpLow){
-      menuUpLow = false;
+  
+  if(digitalRead(pinMoveUp) == HIGH) {
+    if(pinMoveUpLow){
+      pinMoveUpLow = false;
       /* Move the menu cursor up and refresh the menu on the display */
       menu->up();
-      menu->show( menu_display );    
+      menu->show( display );    
     }
   } else {
-    menuUpLow = true;
+    pinMoveUpLow = true;
   }
 
-  if(digitalRead(menuEnter) == HIGH) {
-    if(menuEnterLow){
-      menuEnterLow = false;
+  if(digitalRead(pinOk) == HIGH) {
+    if(pinOkLow){
+      pinOkLow = false;
       selectedMenuItem = menu->selection( );
-      Serial.print("menuEnter - selected menu item ");
+      Serial.print("pinOk - selected menu item ");
       Serial.print(selectedMenuItem);
       Serial.println();  
       return selectedMenuItem;
     }
   } else {
-    menuEnterLow = true;
+    pinOkLow = true;
   }
 
-
-  if(digitalRead(menuDown) == HIGH) {
-    if(menuDownLow){
-      menuDownLow = false;
+  if(digitalRead(pinMoveDown) == HIGH) {
+    if(pinMoveDownLow){
+      pinMoveDownLow = false;
       /* Move the menu cursor down and refresh the menu on the display */
       menu->down();
-      menu->show( menu_display );     
+      menu->show( display );     
     }
   } else {
-    menuDownLow = true;
+    pinMoveDownLow = true;
   }
+  
   return -1;
 }
 
@@ -73,7 +68,6 @@ void NinjaLAMPMenu::setMenu( const char **  _menuItems, uint8_t menuItemsSize ) 
     Serial.println(sizeof(_menuItems[2]));
   #endif
 
-  
   for(int i = 0; i < menuItemsSize; i++) {
     menuItems[i] = _menuItems[i];
   }
@@ -92,11 +86,7 @@ void NinjaLAMPMenu::setMenu( const char **  _menuItems, uint8_t menuItemsSize ) 
     #endif
   }
   menu = new LcdGfxMenu(menuItems, menuItemsSize); // create new menu
-  
-  menu_display.begin();
-  menu_display.setFixedFont(ssd1306xled_font8x16);
-  menu_display.clear();
-
-  menu->show(menu_display);
+  display.clear();
+  menu->show(display);
 }
  

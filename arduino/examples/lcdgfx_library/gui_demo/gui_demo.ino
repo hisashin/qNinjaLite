@@ -1,6 +1,6 @@
 
 #include "NinjaLAMPGui.h"
-#include "NinjaLAMPStates.h"
+#include "NinjaLAMPDefs.h"
 
 #define DEBUG 1
 
@@ -30,13 +30,10 @@ void loop()
       state = gui.loop(state);
       break;
     case STATE_SETUP_CYCLE:
-      Serial.print("gui_demo - loop - STATE_SETUP_CYCLE");
-      break;
-    case STATE_SETUP_ORIENTATION:
-      Serial.print("gui_demo - loop - STATE_SETUP_CYCLE");
+      state = gui.loop(state);
       break;
     case STATE_RUN_CYCLE:
-      Serial.print("gui_demo - loop - STATE_RUN_CYCLE");
+      state = gui.loop(state);
       break;
     default:
       break;

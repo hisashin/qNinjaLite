@@ -3,7 +3,7 @@
 class NinjaLAMPTopMenu {
   public:
     NinjaLAMPTopMenu();
-    void setup(int pinMoveUp, int pinOk, int pinMoveDown, boolean left_handed); 
+    void setup(int pinMoveUp, int pinOk, int pinMoveDown); 
     int loop(int state);
   private:
     // The pins will be set in setup depending on the orientation.

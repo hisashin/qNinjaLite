@@ -12,4 +12,6 @@ class NinjaLAMPGui {
     void initSetupMenu();
     void initRunMenu();
     int selectedMenuItem;
+    void initCyclePage(int selectedMenuItem);
+    void initRunPage(int selectedMenuItem);
 };

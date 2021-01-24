@@ -1,13 +1,12 @@
 #include "Arduino.h"
 #include "lcdgfx.h"
 #include "lcdgfx_gui.h"
-
-#define MAX_MENU_ITEMS 40
+#include "NinjaLAMPDefs.h"
 
 class NinjaLAMPMenu {
   public:
     NinjaLAMPMenu();
-    void setup(int moveUp, int ok, int moveDown, boolean left_handed);
+    void setup(int moveUp, int ok, int moveDown);
     int loop(); 
     void setMenu( const char **  _menuItems, uint8_t menuItemsSize );
 
@@ -19,7 +18,7 @@ class NinjaLAMPMenu {
     int pinOk = 0;        // enter
     int pinMoveDown = 0;  // move down
     //
-    boolean menuUpLow, menuEnterLow, menuDownLow;
+    boolean pinMoveUpLow, pinOkLow, pinMoveDownLow;
     int selectedMenuItem;
 
 };
