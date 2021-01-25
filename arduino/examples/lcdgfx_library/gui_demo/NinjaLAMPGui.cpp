@@ -8,7 +8,7 @@
 #include "NinjaLAMPRunCyclePage.h"
 
 #define DEBUG_GUI 1
-#define RESET_EEPROM 1
+// #define RESET_EEPROM 1
 
 // Components
 NinjaLAMPSysConfig sysConfig;
