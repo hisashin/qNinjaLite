@@ -13,6 +13,7 @@ struct Cycle {
 class NinjaLAMPSysConfig {
   public:
     NinjaLAMPSysConfig();
+    void resetEEPROM();
     void setup();
     byte orientation_left_handed;
     int cycleMaxCount;

@@ -8,6 +8,7 @@
 #include "NinjaLAMPRunCyclePage.h"
 
 #define DEBUG_GUI 1
+#define RESET_EEPROM 1
 
 // Components
 NinjaLAMPSysConfig sysConfig;
@@ -35,6 +36,9 @@ void NinjaLAMPGui::setup () {
   display.setFixedFont(ssd1306xled_font8x16);
   display.clear();
   display.printFixed(0,  8, "Reading configuration ...", STYLE_NORMAL);
+  #ifdef RESET_EEPROM
+  sysConfig.resetEEPROM();
+  #endif
   // Set up and read the configuration.
   sysConfig.setup();
   #ifdef DEBUG_GUI

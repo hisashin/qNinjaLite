@@ -15,6 +15,8 @@ void NinjaLAMPEEPROM::setup() {
   delay(2000);
 }
 
+#define EEPROM_DELAY 5
+
 void NinjaLAMPEEPROM::writeI2CArray(byte data_addr, byte* data, byte len){
   #ifdef DEBUG_EEPROM
     Serial.print("NinjaLAMPEEPROM::writeI2CArray - data_addr: ");
@@ -23,13 +25,13 @@ void NinjaLAMPEEPROM::writeI2CArray(byte data_addr, byte* data, byte len){
     Serial.println(len);
   #endif
   Wire.beginTransmission(ADDR);
-  delay(100);
+  delay(EEPROM_DELAY);
   Wire.write(data_addr);
-  delay(100);
+  delay(EEPROM_DELAY);
   Wire.write(data, len);
-  delay(100);
+  delay(EEPROM_DELAY);
   Wire.endTransmission();
-  delay(100);
+  delay(EEPROM_DELAY);
 }
 
 void NinjaLAMPEEPROM::writeI2CByte(byte data_addr, byte data){
@@ -40,13 +42,13 @@ void NinjaLAMPEEPROM::writeI2CByte(byte data_addr, byte data){
     Serial.println(data);
   #endif
   Wire.beginTransmission(ADDR);
-  delay(100);
+  delay(EEPROM_DELAY);
   Wire.write(data_addr);
-  delay(100);
+  delay(EEPROM_DELAY);
   Wire.write(data);
-  delay(100);
+  delay(EEPROM_DELAY);
   Wire.endTransmission();
-  delay(100);
+  delay(EEPROM_DELAY);
 }
 
 byte NinjaLAMPEEPROM::readI2CByte(byte data_addr){
@@ -56,18 +58,17 @@ byte NinjaLAMPEEPROM::readI2CByte(byte data_addr){
   #endif
   byte data = NULL;
   Wire.beginTransmission(ADDR);
-  delay(100);
+  delay(EEPROM_DELAY);
   Wire.write(data_addr);
-  delay(100);
+  delay(EEPROM_DELAY);
   Wire.endTransmission();
-  delay(100);
+  delay(EEPROM_DELAY);
   Wire.requestFrom(ADDR, 1); //retrieve 1 returned byte
-  delay(100);
-  delay(1);
+  delay(EEPROM_DELAY);
   if(Wire.available()){
-  delay(100);
+  delay(EEPROM_DELAY);
     data = Wire.read();
   }
-  delay(100);
+  delay(EEPROM_DELAY);
   return data;
 }

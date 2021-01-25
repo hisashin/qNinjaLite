@@ -10,6 +10,14 @@ NinjaLAMPEEPROM eeprom;
 NinjaLAMPSysConfig::NinjaLAMPSysConfig () {
 
 }
+void NinjaLAMPSysConfig::resetEEPROM () {
+  #ifdef DEBUG
+    Serial.println("NinjaLAMPSysConfig::resetEEPROM");
+  #endif
+  // Initialize the wire library.
+  eeprom.setup();
+  eeprom.writeI2CByte(EEPROM_ORIENTATION_LEFT_HANDED_ADDR, 0xFF);
+}
 
 void NinjaLAMPSysConfig::setup () {
   #ifdef DEBUG

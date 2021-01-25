@@ -17,7 +17,7 @@ void NinjaLAMPTopMenu::setup (int moveUp, int ok, int moveDown) {
   pinMoveUp = moveUp;
   pinOk = ok;
   pinMoveDown = moveDown;
-  
+  display.clear();
   btn_run.setFocus(true);
   btn_run.show(display);
   btn_setup.setFocus(false);
