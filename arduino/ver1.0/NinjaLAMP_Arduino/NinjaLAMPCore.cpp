@@ -1,6 +1,5 @@
 #include "Arduino.h"
 #include "NinjaLAMPCore.h"
-#include "adc.h"
 
 #define KELVIN 273.15
 #define INTERVAL_MSEC 250
