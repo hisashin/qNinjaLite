@@ -4,10 +4,10 @@
 #include "Arduino.h"
 
 struct Cycle {
-  int amplifyTemp;
-  int amplifyTime;
-  int stopTemp;
-  int stopTime;
+  int amplifyTemp; // Celsius
+  int amplifyTime; // Sec
+  int stopTemp; // Celsius
+  int stopTime; // Sec
   char menuItem[15];
 };
 

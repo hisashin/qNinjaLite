@@ -69,7 +69,7 @@ class NinjaLAMPCore {
     double getTempSetpoint(); /* Setpoint of well temperature (Celsius) */
     unsigned long getTotalElapsedTime(); /* Total elapsed time from the start of the device (msec) */
     unsigned long getStageElapsedTime(); /* Elapsed time since the temperature reached the target (msec) */
-    bool isHolding;
+    bool isHolding = false;
   private:
     Thermistor *wellThermistor;
     Thermistor *airThermistor;

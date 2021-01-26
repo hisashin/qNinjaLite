@@ -99,31 +99,39 @@ int NinjaLAMPRunCyclePage::loopUI (int state) {
   drawPage();
   return state;
 }
-int NinjaLAMPRunCyclePage::loopThermalCycler() {
-  
-  core->loopWithoutBlocking();
-  /*
-  
-  if (!isFinished && stages[stageIndex].duration > 0 && 
-    stages[stageIndex].duration < core->getStageElapsedTime()) {
-    stageIndex += 1;
-    if (stageIndex >= stagesCount) {
-      // Last stage
-      isFinished = true;
-      core->stop();
-    } else {
-      // Next stage
-      core->setTargetTemp(stages[stageIndex].targetTemp);
-    }
+void NinjaLAMPRunCyclePage::loopThermalCycler() {
+  if (!isRunning()) {
+    return;
   }
-  */
-  /*
+  core->loopWithoutBlocking();
+  if (phase == amplify) {
+    if (core->getStageElapsedTime() > sysConfig.cycles[cyclesIdx].amplifyTime * 1000 ) {
+      // Proceed to "Stop" phase
+      core->setTargetTemp(sysConfig.cycles[cyclesIdx].stopTemp);
+      phase = stop;
+      Serial.println("NinjaLAMPRunCyclePage::loopThermalCycler amplify->stop");
+    }
+  } else if (phase == stop) {
+    if (core->getStageElapsedTime() > sysConfig.cycles[cyclesIdx].stopTime * 1000 ) {
+      // Proceed to "Stop" phase
+      core->stop();
+      phase = complete;
+      Serial.println("NinjaLAMPRunCyclePage::loopThermalCycler stop->complete");
+    }
+    
+  }
   Serial.print(core->getStageElapsedTime());
   Serial.print("\t");
   Serial.print(core->getAirTemp());
   Serial.print("\t");
-  Serial.println(core->getWellTemp());
-  */
+  Serial.print(core->getWellTemp());
+  Serial.print("\t");
+  Serial.print(core->getEstimatedSampleTemp());
+  Serial.print("\t");
+  Serial.println(core->getTargetTemp());
+}
+boolean NinjaLAMPRunCyclePage::isRunning () {
+  return (phase == amplify || phase == stop);
 }
 
 void NinjaLAMPRunCyclePage::initPage(int _cyclesIdx, NinjaLAMPCore *core){
@@ -137,7 +145,9 @@ void NinjaLAMPRunCyclePage::initPage(int _cyclesIdx, NinjaLAMPCore *core){
   
   // TODO: start the cycle
   if (cyclesIdx >= 0) {
+    core->disableSampleTempSimulation();
     core->start(sysConfig.cycles[cyclesIdx].amplifyTemp);
+    phase = amplify;
   }
   display.clear();
   selection = SEL_RUNNING;

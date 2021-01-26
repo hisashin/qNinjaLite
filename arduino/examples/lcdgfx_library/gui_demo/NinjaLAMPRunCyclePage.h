@@ -11,6 +11,14 @@
 #define MODE_NAVIGATION 1
 #define MODE_SELECTION 2
 
+
+enum ExperimentPhase {
+  none,
+  amplify,
+  stop,
+  complete
+};
+
 class NinjaLAMPRunCyclePage {
   public:
     NinjaLAMPRunCyclePage();
@@ -21,16 +29,18 @@ class NinjaLAMPRunCyclePage {
     int cyclesIdx;
     int selection;
     int mode;
+    ExperimentPhase phase = none;
     
     NinjaLAMPCore *core;
     int loopUI(int state);
-    int loopThermalCycler();
+    void loopThermalCycler();
     // Side switches, pin number depends on orientation written in EEPROM, reset in setup
     int pinMoveUp = 10;   // move up
     int pinOk = 9;        // enter
     int pinMoveDown = 8;  // move down
     boolean pinMoveUpLow, pinOkLow, pinMoveDownLow;
     void drawPage();
+    boolean isRunning ();
 
 };
 #endif /* __NINJA_LAMP_RUN_CYCLE_PAGE__ */

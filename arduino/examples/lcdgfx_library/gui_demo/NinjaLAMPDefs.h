@@ -1,3 +1,5 @@
+#ifndef ___NINJA_LAMP_DEFS___
+#define ___NINJA_LAMP_DEFS___
 /**
  * States drive the main loop.
  */
@@ -26,3 +28,5 @@
 #define EEPROM_CYCLES_MAX_COUNT_ADDR 253
 #define EEPROM_CYCLES_START_ADDR 0
 #define EEPROM_CYCLES_LEN 4
+
+#endif /* ___NINJA_LAMP_DEFS___ */
