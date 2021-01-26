@@ -164,8 +164,8 @@ void NinjaLAMPRunCyclePage::drawPage (){
   Serial.print("\t");
   Serial.println(core->getTargetTemp());
   
+  char buff[16];
   if (isRunning()) {
-    char buff[16];
     sprintf(buff, "TEMP %4.1fC/%4.1fC", core->getWellTemp(), core->getTargetTemp()); 
     display.printFixed(0,  16, buff, STYLE_NORMAL);
     int holdTime = (phase == amplify) ? sysConfig.cycles[cyclesIdx].amplifyTime : sysConfig.cycles[cyclesIdx].stopTime;
@@ -174,18 +174,27 @@ void NinjaLAMPRunCyclePage::drawPage (){
   }
   switch (phase) {
     case none:
-    display.printFixed(0,  48, "IDLE   ", STYLE_NORMAL);
+    sprintf(buff, "%-16s","IDLE"); 
     break;
     case amplify:
-    display.printFixed(0,  48, "AMPLIFY", STYLE_NORMAL);
+    if (core->getStageElapsedTime() > 0) {
+      sprintf(buff, "%-16s","AMPLIFY"); 
+    } else {
+      sprintf(buff, "%-16s","RAMP"); 
+    }
     break;
     case stop:
-    display.printFixed(0,  48, "STOP   ", STYLE_NORMAL);
+    if (core->getStageElapsedTime() > 0) {
+      sprintf(buff, "%-16s","STOP"); 
+    } else {
+      sprintf(buff, "%-16s","RAMP"); 
+    }
     break;
     case complete:
-    display.printFixed(0,  48, "COMPLETE", STYLE_NORMAL);
+      sprintf(buff, "%-16s","COMPLETE"); 
     break;
     default:
     break;
   }
+  display.printFixed(0,  48, buff, STYLE_NORMAL);
 }
