@@ -118,17 +118,7 @@ void NinjaLAMPRunCyclePage::loopThermalCycler() {
       phase = complete;
       Serial.println("NinjaLAMPRunCyclePage::loopThermalCycler stop->complete");
     }
-    
   }
-  Serial.print(core->getStageElapsedTime());
-  Serial.print("\t");
-  Serial.print(core->getAirTemp());
-  Serial.print("\t");
-  Serial.print(core->getWellTemp());
-  Serial.print("\t");
-  Serial.print(core->getEstimatedSampleTemp());
-  Serial.print("\t");
-  Serial.println(core->getTargetTemp());
 }
 boolean NinjaLAMPRunCyclePage::isRunning () {
   return (phase == amplify || phase == stop);
@@ -163,4 +153,39 @@ void NinjaLAMPRunCyclePage::drawPage (){
   if(selection == SEL_CANCEL && mode == MODE_NAVIGATION) display.invertColors();
   display.printFixed(72,  0, "Cancel", STYLE_NORMAL);
   if(selection == SEL_CANCEL && mode == MODE_NAVIGATION) display.invertColors();
+  
+  Serial.print(core->getStageElapsedTime());
+  Serial.print("\t");
+  Serial.print(core->getAirTemp());
+  Serial.print("\t");
+  Serial.print(core->getWellTemp());
+  Serial.print("\t");
+  Serial.print(core->getEstimatedSampleTemp());
+  Serial.print("\t");
+  Serial.println(core->getTargetTemp());
+  
+  if (isRunning()) {
+    char buff[16];
+    sprintf(buff, "TEMP %4.1fC/%4.1fC", core->getWellTemp(), core->getTargetTemp()); 
+    display.printFixed(0,  16, buff, STYLE_NORMAL);
+    int holdTime = (phase == amplify) ? sysConfig.cycles[cyclesIdx].amplifyTime : sysConfig.cycles[cyclesIdx].stopTime;
+    sprintf(buff, "TIME %2ds/%2ds    ", core->getStageElapsedTime()/1000, holdTime); 
+    display.printFixed(0,  32, buff, STYLE_NORMAL);
+  }
+  switch (phase) {
+    case none:
+    display.printFixed(0,  48, "IDLE   ", STYLE_NORMAL);
+    break;
+    case amplify:
+    display.printFixed(0,  48, "AMPLIFY", STYLE_NORMAL);
+    break;
+    case stop:
+    display.printFixed(0,  48, "STOP   ", STYLE_NORMAL);
+    break;
+    case complete:
+    display.printFixed(0,  48, "COMPLETE", STYLE_NORMAL);
+    break;
+    default:
+    break;
+  }
 }

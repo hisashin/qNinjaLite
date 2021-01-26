@@ -55,7 +55,7 @@ NinjaLAMP will get following benefits from this upgrade.
 * Upload **"File > Examples > 01.Basics > Blink"** to NinjaLAMP. Orange LED next to USB connector will start blinking.
 * Go to **Sketch-> Include Library-> Manage Libraries**, search "ssd1306" and install Alexey Dynda's **[ssd1306 library](https://github.com/lexus2k/ssd1306)**.
 
-* Add "NinjaLAMPCore" library to the build environment. Choose Sketch > Add .ZIP Library... and select arduino/lib/NinjaLAMPCore.zip.
+* Add "NinjaLAMPCore" library to the build environment. Choose **Sketch > Add .ZIP Library...** and select **NinjaLAMP/arduino/lib/NinjaLAMPCore.zip**.
 
 <img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/ssd1306.png" alt="ssd1306" width="500">
 
