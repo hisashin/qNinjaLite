@@ -65,6 +65,7 @@ int NinjaLAMPRunCyclePage::loopUI (int state) {
           case SEL_RUNNING:
             break;
           case SEL_CANCEL:
+            core->stop();
             state = STATE_RUN_MENU;
             break;
           default:
