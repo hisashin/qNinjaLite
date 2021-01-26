@@ -1,3 +1,5 @@
+#ifndef __NINJA_LAMP_MENU__
+#define __NINJA_LAMP_MENU__
 #include "Arduino.h"
 #include "lcdgfx.h"
 #include "lcdgfx_gui.h"
@@ -22,3 +24,4 @@ class NinjaLAMPMenu {
     int selectedMenuItem;
 
 };
+#endif /* __NINJA_LAMP_MENU__ */

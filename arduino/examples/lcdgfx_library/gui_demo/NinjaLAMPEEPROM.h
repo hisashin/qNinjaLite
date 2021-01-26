@@ -1,5 +1,5 @@
-#ifndef ___ADC_ARDUINO___
-#define ___ADC_ARDUINO___
+#ifndef ___NINJA_LAMP_EEPROM___
+#define ___NINJA_LAMP_EEPROM___
 #include "Arduino.h"
 #include <Wire.h>
 
@@ -15,4 +15,4 @@ class NinjaLAMPEEPROM {
     void writeI2CByte(byte data_addr, byte data);
     byte readI2CByte(byte data_addr);
 };
-#endif /* ___ADC_ARDUINO___ */
+#endif /* ___NINJA_LAMP_EEPROM___ */

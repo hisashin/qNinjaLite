@@ -1,3 +1,5 @@
+#ifndef __NINJA_LAMP_SETUP_CYCLE_PAGE__
+#define __NINJA_LAMP_SETUP_CYCLE_PAGE__
 #include "Arduino.h"
 
 #define SEL_AMP_C 1
@@ -31,3 +33,4 @@ class NinjaLAMPSetupCyclePage {
     void saveCycle();
     void addCycle();
 };
+#endif /* __NINJA_LAMP_SETUP_CYCLE_PAGE__ */

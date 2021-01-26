@@ -1,3 +1,6 @@
+#ifndef __NINJA_LAMP_TOP_MENU__
+#define __NINJA_LAMP_TOP_MENU__
+
 #include "lcdgfx.h"
 
 class NinjaLAMPTopMenu {
@@ -12,3 +15,4 @@ class NinjaLAMPTopMenu {
     int pinMoveDown = 0;  // move down
     void swapBtnFocus();
 };
+#endif /* __NINJA_LAMP_TOP_MENU__ */

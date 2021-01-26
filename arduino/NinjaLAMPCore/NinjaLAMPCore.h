@@ -3,7 +3,6 @@
 
 #include "Arduino.h"
 #include <PID_v1.h>
-#include "adc.h"
 
 #define TARGET_TEMP 63 /* Typical temp for LAMP */
 
@@ -38,6 +37,13 @@ struct Thermistor {
   int switchingPin;
 };
 
+class ADCCustom {
+  public:
+    virtual void initADC() = 0;
+    virtual double getWellADCValue() = 0;
+    virtual double getAirADCValue() = 0;
+};
+
 class NinjaLAMPCore {
   public:
     NinjaLAMPCore(Thermistor *wellThermistorConf, Thermistor *airThermistorConf, 
@@ -47,10 +53,13 @@ class NinjaLAMPCore {
     void enableSampleTempSimulation (double heatResistanceRatio, double sampleHeatCapacity);
     void disableSampleTempSimulation ();
     void loop();
+    void loopWithoutBlocking();
     // Called by interfaces
     void start(double temp);
     void setTargetTemp(double temp);
     void stop();
+    
+    void debug();
     
     // Getters
     double getWellTemp(); /* Well temperature (Celsius) */
@@ -76,9 +85,13 @@ class NinjaLAMPCore {
     double estimatedSampleTemp;
     
     unsigned long lastTimestamp;
+    unsigned long lastWellTimestamp;
+    unsigned long lastAirTimestamp;
     unsigned long totalElapsedTime; /* msec */
     unsigned long stageElapsedTime; /* msec */
     
+    void loopWell();
+    void loopAir();
     void controlTemp();
     void setupPID();
     double readWellTemp ();

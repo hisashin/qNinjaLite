@@ -24,7 +24,6 @@ NinjaLAMPCore::NinjaLAMPCore (Thermistor *wellThermistorConf, Thermistor *airThe
   this->heaterPWMPin = heaterPWM;
 }
 void NinjaLAMPCore::setup () {
-  Serial.println("NinjaLAMPCore::startup");
   calcVoltageLimits(wellThermistor);
   calcVoltageLimits(airThermistor);
   pinMode(heaterPWMPin, OUTPUT);
@@ -59,11 +58,14 @@ void NinjaLAMPCore::start (double temp) {
   for (int i=0; i<TEMP_BUFF_SIZE; i++) {
     wellTempBuff[i] = input;
   }
+  lastWellTimestamp = millis();
   delay(INTERVAL_MSEC/2);
   // To switch ADC channel
   readAirTemp();
   started = true;
-  lastTimestamp = millis();
+  lastTimestamp =  millis();
+  lastAirTimestamp = lastTimestamp;
+  lastWellTimestamp = lastTimestamp;
 }
 void NinjaLAMPCore::setTargetTemp(double temp) {
   targetTemp = temp;
@@ -79,6 +81,9 @@ void NinjaLAMPCore::stop () {
   targetTemp = airTemp;
   setpoint = airTemp;
   stageElapsedTime = 0;
+}
+void NinjaLAMPCore::debug () {
+  Serial.println("NinjaLAMPCore::debug");
 }
 /* Getter */
 double NinjaLAMPCore::getWellTemp() {
@@ -102,7 +107,7 @@ unsigned long NinjaLAMPCore::getTotalElapsedTime() {
 unsigned long NinjaLAMPCore::getStageElapsedTime() {
   return stageElapsedTime;
 }
-void NinjaLAMPCore::loop () {
+void NinjaLAMPCore::loopWell () {
   // Well temp
   double wellTempRaw = readWellTemp();
   wellTempBuff[wellTempBuffIndex] = wellTempRaw;
@@ -113,8 +118,9 @@ void NinjaLAMPCore::loop () {
   if (started) {
     controlTemp();
   }
-  delay(INTERVAL_MSEC/2);
-
+  lastWellTimestamp = millis();
+}
+void NinjaLAMPCore::loopAir () {
   // Air temp
   airTemp = readAirTemp();
   if (isSampleTempSimulationEnabled) {
@@ -133,8 +139,7 @@ void NinjaLAMPCore::loop () {
   }
   if (!isHolding && abs(estimatedSampleTemp - targetTemp) < HOLDING_TEMP_TOLERANCE) {
     isHolding = true;
-  } 
-  delay(INTERVAL_MSEC/2);
+  }
   unsigned long timestamp = millis();
   unsigned long elapsed;
   if (timestamp > lastTimestamp) {
@@ -148,6 +153,32 @@ void NinjaLAMPCore::loop () {
     stageElapsedTime += elapsed;
   }
   lastTimestamp = timestamp;
+  lastAirTimestamp = timestamp;
+}
+
+/* This loop blocks for 250msec */
+void NinjaLAMPCore::loop () {
+  loopWell();
+  delay(INTERVAL_MSEC/2);
+  loopAir();
+  delay(INTERVAL_MSEC/2);
+}
+/* This loop doesn't block */
+void NinjaLAMPCore::loopWithoutBlocking () {
+  unsigned long timestamp = millis();
+  if (timestamp  > lastTimestamp) {
+    if (timestamp  > lastTimestamp + INTERVAL_MSEC) {
+      // Exec Air 
+      loopAir();
+    }
+    if (timestamp  > lastTimestamp + INTERVAL_MSEC/2 && lastTimestamp >= lastWellTimestamp) {
+      loopWell();
+    }
+  } else {
+    // In case of overflow
+    lastTimestamp = timestamp;
+    lastWellTimestamp = timestamp;
+  }
 }
 
 /* Private functions */

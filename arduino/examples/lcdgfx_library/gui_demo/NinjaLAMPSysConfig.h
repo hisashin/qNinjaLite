@@ -1,6 +1,7 @@
+#ifndef __NINJA_LAMP_SYS_CONFIG__
+#define __NINJA_LAMP_SYS_CONFIG__
+
 #include "Arduino.h"
-
-
 
 struct Cycle {
   int amplifyTemp;
@@ -25,3 +26,4 @@ class NinjaLAMPSysConfig {
   private:
     void set_cycles();
 };
+#endif /* __NINJA_LAMP_SYS_CONFIG__ */

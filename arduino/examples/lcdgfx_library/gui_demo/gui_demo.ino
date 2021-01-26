@@ -1,10 +1,14 @@
-
 #include "NinjaLAMPGui.h"
 #include "NinjaLAMPDefs.h"
+
+#include "ADCArduino.h"
+#include <NinjaLAMPCore.h>
+#include "HardwareConf.h"
 
 #define DEBUG 1
 
 NinjaLAMPGui gui;
+NinjaLAMPCore *core = HardwareConf::initLCDModel();
 
 // Values defined in NinjaLAMPStates.h
 int state = STATE_TOP_MENU;
@@ -16,7 +20,7 @@ void setup()
   delay(2000);  // this is needed to assure that the serial communication is established.
   Serial.println("gui_demo setup");
   #endif
-  
+  gui.setCore(core);
   gui.setup();
 }
 

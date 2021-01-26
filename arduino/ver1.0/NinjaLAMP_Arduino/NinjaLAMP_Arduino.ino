@@ -1,5 +1,5 @@
 #include "ADCArduino.h"
-#include "NinjaLAMPCore.h"
+#include <NinjaLAMPCore.h>
 #include "HardwareConf.h"
 
 /*

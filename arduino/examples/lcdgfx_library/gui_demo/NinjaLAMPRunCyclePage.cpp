@@ -1,7 +1,6 @@
 #include "lcdgfx.h"
 #include "lcdgfx_gui.h"
 #include "NinjaLAMPRunCyclePage.h"
-#include "NinjaLAMPSysConfig.h"
 #include "NinjaLAMPDefs.h"
 
 #define DEBUG_RUN_CYCLE_PAGE 1
@@ -35,12 +34,16 @@ void NinjaLAMPRunCyclePage::setup (int moveUp, int ok, int moveDown) {
  */
 
 int NinjaLAMPRunCyclePage::loop(int state) {
+  loopThermalCycler();
+  return loopUI(state);
+}
+int NinjaLAMPRunCyclePage::loopUI (int state) {
   
   if(digitalRead(pinMoveUp) == HIGH) {
     if(pinMoveUpLow){
       pinMoveUpLow = false;
       if(mode == MODE_NAVIGATION){
-        /* Move the cursor to the previous itrm or wrap around */
+        /* Move the cursor to the previous item or wrap around */
         if(selection == 1){
           selection = SEL_MAX;
         }else{
@@ -60,7 +63,6 @@ int NinjaLAMPRunCyclePage::loop(int state) {
       if(mode == MODE_NAVIGATION){
         switch(selection){
           case SEL_RUNNING:
-
             break;
           case SEL_CANCEL:
             state = STATE_RUN_MENU;
@@ -81,7 +83,7 @@ int NinjaLAMPRunCyclePage::loop(int state) {
     if(pinMoveDownLow){
       pinMoveDownLow = false;
       if(mode == MODE_NAVIGATION){
-        /* Move the cursor to thr next itrm or wrap around */
+        /* Move the cursor to the next item or wrap around */
         if(selection == SEL_MAX){
           selection = 1;
         }else{
@@ -94,12 +96,38 @@ int NinjaLAMPRunCyclePage::loop(int state) {
   } else {
     pinMoveDownLow = true;
   }
-
   drawPage();
   return state;
 }
+int NinjaLAMPRunCyclePage::loopThermalCycler() {
+  
+  core->loopWithoutBlocking();
+  /*
+  
+  if (!isFinished && stages[stageIndex].duration > 0 && 
+    stages[stageIndex].duration < core->getStageElapsedTime()) {
+    stageIndex += 1;
+    if (stageIndex >= stagesCount) {
+      // Last stage
+      isFinished = true;
+      core->stop();
+    } else {
+      // Next stage
+      core->setTargetTemp(stages[stageIndex].targetTemp);
+    }
+  }
+  */
+  /*
+  Serial.print(core->getStageElapsedTime());
+  Serial.print("\t");
+  Serial.print(core->getAirTemp());
+  Serial.print("\t");
+  Serial.println(core->getWellTemp());
+  */
+}
 
-void NinjaLAMPRunCyclePage::initPage(int _cyclesIdx){
+void NinjaLAMPRunCyclePage::initPage(int _cyclesIdx, NinjaLAMPCore *core){
+  this->core = core;
   #ifdef DEBUG_RUN_CYCLE_PAGE
     Serial.print("NinjaLAMPSetupCyclePage::initPage _cyclesIdx: ");
     Serial.println(_cyclesIdx);
@@ -108,8 +136,9 @@ void NinjaLAMPRunCyclePage::initPage(int _cyclesIdx){
   // Check for valid cyclesIdx, it could be -1
   
   // TODO: start the cycle
-
-
+  if (cyclesIdx >= 0) {
+    core->start(sysConfig.cycles[cyclesIdx].amplifyTemp);
+  }
   display.clear();
   selection = SEL_RUNNING;
   mode = MODE_NAVIGATION;

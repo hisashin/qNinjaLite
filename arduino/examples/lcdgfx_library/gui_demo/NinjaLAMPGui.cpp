@@ -7,6 +7,7 @@
 #include "NinjaLAMPSetupCyclePage.h"
 #include "NinjaLAMPRunCyclePage.h"
 
+#define DEBUG
 #define DEBUG_GUI 1
 // #define RESET_EEPROM 1
 
@@ -20,13 +21,16 @@ DisplaySSD1306_128x64_I2C display(-1);
 
 // Constructor
 NinjaLAMPGui::NinjaLAMPGui () {
-
 }
-
+void NinjaLAMPGui::setCore (NinjaLAMPCore *core) {
+  this->core = core;
+}
 void NinjaLAMPGui::setup () {
   #ifdef DEBUG
     Serial.println("NinjaLAMPGui::setup");
+    this->core->debug();
   #endif
+  core->setup();
   // Initialize the display
   // NOTE: The display starts in right handed mode.  We should consider to quicklt read the 
   //       orientation from EEPROM and set it right away so we don't show the initial message 
@@ -278,5 +282,5 @@ void NinjaLAMPGui::initRunPage(int selectedMenuItem){
       Serial.println(buff);
     #endif
   }
-  runPage.initPage(cyclesIdx);
+  runPage.initPage(cyclesIdx, this->core);
 }  
