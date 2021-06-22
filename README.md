@@ -1,5 +1,7 @@
 # NinjaLAMP
 
+<img src="https://raw.githubusercontent.com/hisashin/NinjaLAMP/master/images/versions.png" alt="versions" width="600">
+
 **Most precise GPL v3 Open source [LAMP (Loop-mediated isothermal amplification)](https://en.wikipedia.org/wiki/Loop-mediated_isothermal_amplification) machine based on Arduino**. Less than 0.3 degree celsius accuracy can be expected after calibration.
 
 ![Header](https://github.com/hisashin/NinjaLAMP/blob/master/images/header.png "header")
