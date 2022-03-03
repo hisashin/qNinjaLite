@@ -394,7 +394,7 @@
     "last_paths": {
       "gencad": "",
       "idf": "",
-      "netlist": "qPCR-main.net",
+      "netlist": "qLAMP-main.net",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""

@@ -1,4 +1,4 @@
-21771799372731245
+21771799382866741
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -59442,7 +59442,7 @@ ALI_USB
 
 0
 10
-7
+10
 Ninja-qPCR
 AOZ2264QI-19
 
@@ -59654,6 +59654,13 @@ IND_VLS5045EX-4R7M
 2
 2
 Ninja-qPCR
+LITE_LCD
+
+
+0
+12
+12
+Ninja-qPCR
 LM7705MMX-NOPB
 
 
@@ -59765,13 +59772,6 @@ PushPin
 0
 1
 1
-Ninja-qPCR
-QLAMP_LCD
-
-
-0
-0
-0
 Ninja-qPCR
 RPI_LCD_TOUCH_7INCH
 
