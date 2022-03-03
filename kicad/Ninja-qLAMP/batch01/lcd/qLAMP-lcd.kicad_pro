@@ -362,7 +362,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "qPCR-main.kicad_pro",
+    "filename": "qLAMP-lcd.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -394,7 +394,7 @@
     "last_paths": {
       "gencad": "",
       "idf": "",
-      "netlist": "qPCR-main.net",
+      "netlist": "qLAMP-lcd.net",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""
@@ -441,44 +441,8 @@
   },
   "sheets": [
     [
-      "86ad0555-08b3-4dde-9a3e-c1e5e29b6615",
+      "465cc4cf-f644-47a9-835a-84620837bc74",
       ""
-    ],
-    [
-      "00000000-0000-0000-0000-0000614a3cbb",
-      "Photo"
-    ],
-    [
-      "00000000-0000-0000-0000-0000614a4588",
-      "PhotoLED"
-    ],
-    [
-      "00000000-0000-0000-0000-00006154fc7e",
-      "PhotoMUX"
-    ],
-    [
-      "00000000-0000-0000-0000-0000614a49f9",
-      "PhotoThermistors"
-    ],
-    [
-      "00000000-0000-0000-0000-0000614a0ea3",
-      "5V_UPS"
-    ],
-    [
-      "00000000-0000-0000-0000-0000614dadca",
-      "12V_UPS"
-    ],
-    [
-      "00000000-0000-0000-0000-0000614fdc7a",
-      "3V3"
-    ],
-    [
-      "00000000-0000-0000-0000-0000614a3d56",
-      "-1V"
-    ],
-    [
-      "00000000-0000-0000-0000-0000618ea4aa",
-      "SheetPeltier"
     ]
   ],
   "text_variables": {}

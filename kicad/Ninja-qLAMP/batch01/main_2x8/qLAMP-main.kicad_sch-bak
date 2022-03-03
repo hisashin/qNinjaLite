@@ -1569,10 +1569,6 @@
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid a48f5fff-52e4-4ae8-8faa-7084c7ae8a28)
   )
-  (wire (pts (xy 196.85 160.02) (xy 204.47 160.02))
-    (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid ae8bb5ae-95ee-4e2d-8a0c-ae5b6149b4e3)
-  )
   (wire (pts (xy 132.08 162.56) (xy 135.89 162.56))
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid b1cf53b0-cc9d-492b-98fd-ecbb190073fe)
@@ -1707,13 +1703,6 @@
       (effects (font (size 1.27 1.27)) hide)
     )
   )
-  (global_label "5V" (shape input) (at 196.85 160.02 180) (fields_autoplaced)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid 82204892-ec79-4d38-a593-52fb9a9b4b87)
-    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 192.2277 159.9406 0)
-      (effects (font (size 1.27 1.27)) (justify right) hide)
-    )
-  )
   (global_label "ADC_DRDY" (shape input) (at 96.52 19.05 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 824eb860-b790-4fb4-9756-3c97186182dd)
@@ -1781,13 +1770,6 @@
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid d05faa1f-5f69-41bf-86d3-2cd224432e1b)
     (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 13.97 -15.24 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-  )
-  (global_label "VCC_LED" (shape input) (at 204.47 160.02 0) (fields_autoplaced)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid da862bae-4511-4bb9-b18d-fa60a2737feb)
-    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 49.53 -22.86 0)
       (effects (font (size 1.27 1.27)) hide)
     )
   )
@@ -2783,52 +2765,52 @@
       (reference "D7") (unit 1) (value "LED_GBAR") (footprint "LED_THT:LED_D5.0mm-4_RGB")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/50a59d61-97df-44bc-a6e9-277879ce252f"
-      (reference "D9A?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D9A1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/1901d5a3-2fe8-43ce-aae2-7c103a489852"
-      (reference "D9B?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D9B1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/ee7df33b-c8d0-4065-a56b-27a098e17ff1"
-      (reference "D10A?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D10A1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/7e3ca010-a748-436a-95f8-ba457ea78350"
-      (reference "D10B?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D10B1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/1ef59b67-6709-46d8-9605-2ba2452a0831"
-      (reference "D11A?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D11A1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/3a57a7db-fa38-4167-a302-b0751e2c5ce7"
-      (reference "D11B?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D11B1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/9983b102-b017-4bae-9d9f-40a7ba6ab580"
-      (reference "D12A?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D12A1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/d4dbc6ac-9ff4-45f5-9e2b-5b6c13d8ec05"
-      (reference "D12B?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D12B1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/84f389f1-fabf-47ed-95ac-b65c8d4d551a"
-      (reference "D13A?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D13A1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/ca62d553-cfe2-435c-ab4e-02c7fac14602"
-      (reference "D13B?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D13B1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/42dd85f6-b79c-442a-8660-735c001599d4"
-      (reference "D14A?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D14A1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/6e5a53e8-3462-4506-8a33-f76ded51a5bd"
-      (reference "D14B?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D14B1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/8fd47072-325a-4826-9117-aa6afea70445"
-      (reference "D15A?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D15A1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/4220e35e-7146-49f2-aad1-678671ae1a67"
-      (reference "D15B?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D15B1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/471bf6d9-1d95-4d26-b66d-aaaccc7ed055"
-      (reference "D16A?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D16A1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/954d2782-6d40-416f-b7c1-e8aa0b53fa6a/e2b9d5b8-08c3-4e68-9270-6466ed6f43c5"
-      (reference "D16B?") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
+      (reference "D16B1") (unit 1) (value "D_Photo") (footprint "Diodes_SMD:D_1206")
     )
     (path "/00000000-0000-0000-0000-000060baf2c5"
       (reference "HLID1") (unit 1) (value "Screw_Terminal_01x02") (footprint "Ninja-qPCR:TB_SeeedOPL_320110028")
@@ -2883,6 +2865,12 @@
     )
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/8a616461-457c-4d92-8556-aee68b5d99b0"
       (reference "J?") (unit 1) (value "Barrel_Jack_Switch") (footprint "Connector_BarrelJack:BarrelJack_Horizontal")
+    )
+    (path "/00000000-0000-0000-0000-0000614a4588/d4eae4fa-5601-4840-8a38-af376cef163b"
+      (reference "JJLS1") (unit 1) (value "Conn_01x10_Male") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-0000614a4588/892f7ae3-c5e4-46e9-8532-89e8b2103473"
+      (reference "JLN1") (unit 1) (value "Conn_01x10_Male") (footprint "")
     )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbb8f"
       (reference "JP1") (unit 1) (value "SolderJumper_2_Bridged") (footprint "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm")
