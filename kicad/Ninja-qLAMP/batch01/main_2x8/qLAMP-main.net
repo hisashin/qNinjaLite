@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "/Users/shingo/github/Ninja-qLAMP/kicad/Ninja-qLAMP/batch01/main_2x8/qLAMP-main.kicad_sch")
-    (date "2022 March 03, Thursday 17:29:07")
+    (date "2022 March 03, Thursday 17:32:27")
     (tool "Eeschema (6.0.1-0)")
     (sheet (number "1") (name "/") (tstamps "/")
       (title_block
