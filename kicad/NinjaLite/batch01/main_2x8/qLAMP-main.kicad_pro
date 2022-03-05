@@ -33,9 +33,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.4,
-          "height": 0.6,
-          "width": 0.6
+          "drill": 0.65,
+          "height": 1.0,
+          "width": 1.0
         },
         "silk_line_width": 0.15,
         "silk_text_italic": false,
@@ -453,16 +453,12 @@
       "PhotoLED"
     ],
     [
-      "00000000-0000-0000-0000-00006154fc7e",
-      "PhotoMUX"
-    ],
-    [
       "00000000-0000-0000-0000-0000614a49f9",
       "PhotoThermistors"
     ],
     [
-      "954d2782-6d40-416f-b7c1-e8aa0b53fa6a",
-      "PhotoDiodes"
+      "00000000-0000-0000-0000-00006154fc7e",
+      "PhotoMUX"
     ],
     [
       "075cac76-e418-4f93-a881-ee3b6a1c33db",
