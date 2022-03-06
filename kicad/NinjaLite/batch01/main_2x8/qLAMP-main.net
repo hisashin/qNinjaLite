@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "/Users/shingo/github/NinjaLite/kicad/NinjaLite/batch01/main_2x8/qLAMP-main.kicad_sch")
-    (date "2022 March 06, Sunday 06:29:33")
+    (date "2022 March 07, Monday 04:12:03")
     (tool "Eeschema (6.0.1-0)")
     (sheet (number "1") (name "/") (tstamps "/")
       (title_block
@@ -2132,7 +2132,7 @@
       (node (ref "U5") (pin "35") (pinfunction "TXD0/IO1") (pintype "bidirectional")))
     (net (code "53") (name "/WELL_HEATER")
       (node (ref "R7") (pin "2") (pintype "passive"))
-      (node (ref "U5") (pin "8") (pinfunction "IO32") (pintype "bidirectional")))
+      (node (ref "U5") (pin "6") (pinfunction "IO34") (pintype "input")))
     (net (code "54") (name "3V3A")
       (node (ref "C3") (pin "1") (pintype "passive"))
       (node (ref "C33") (pin "1") (pintype "passive"))
@@ -2557,7 +2557,7 @@
     (net (code "129") (name "VIN_SENSE")
       (node (ref "R19") (pin "2") (pintype "passive"))
       (node (ref "R20") (pin "1") (pintype "passive"))
-      (node (ref "U5") (pin "6") (pinfunction "IO34") (pintype "input")))
+      (node (ref "U5") (pin "8") (pinfunction "IO32") (pintype "bidirectional")))
     (net (code "130") (name "unconnected-(J3-Pad4)")
       (node (ref "J3") (pin "4") (pinfunction "Pin_4") (pintype "passive+no_connect")))
     (net (code "131") (name "unconnected-(U1-Pad2)")
