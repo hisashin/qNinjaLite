@@ -1122,11 +1122,6 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 336f5167-54f0-4876-aab8-8cffa2fa14ab)
   )
-  (text "TODO : Add simple ADC for 1x8 nonQ\nTODO : Correct SERIAL pin assign if needed\nTODO : Amp can choose -1V/AGND"
-    (at 38.1 29.21 0)
-    (effects (font (size 1.27 1.27)) (justify left bottom))
-    (uuid 63889b5b-319a-4ec7-9d88-38746b1ff624)
-  )
   (text "NOT IN USE YET" (at 69.85 96.52 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid f13bda27-132c-4572-823e-2b0e1fcca6b0)
@@ -1325,10 +1320,10 @@
       (effects (font (size 1.27 1.27)) hide)
     )
   )
-  (global_label "LED_SPI_MISO" (shape input) (at 67.31 92.71 0) (fields_autoplaced)
+  (global_label "LED_BLANK" (shape input) (at 67.31 92.71 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid b2280c48-cf8c-4f76-a0b4-3c85c23d734b)
-    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 82.6971 92.6306 0)
+    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 80.0361 92.6306 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
@@ -2069,12 +2064,6 @@
     (path "/c905ca79-2117-4bca-b7a7-b1bc2e60da41"
       (reference "#PWR0140") (unit 1) (value "GND") (footprint "")
     )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbacb"
-      (reference "C1") (unit 1) (value "4.7uF") (footprint "Capacitor_SMD:C_0805_2012Metric")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dba38"
-      (reference "C2") (unit 1) (value "4.7uF") (footprint "Capacitor_SMD:C_0805_2012Metric")
-    )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbb4f"
       (reference "C3") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0603_1608Metric")
     )
@@ -2086,9 +2075,6 @@
     )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dba64"
       (reference "C6") (unit 1) (value "DNP(<1pF)") (footprint "Capacitor_SMD:C_0603_1608Metric")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbb6e"
-      (reference "C7") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0603_1608Metric")
     )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dba47"
       (reference "C8") (unit 1) (value "0.1uF") (footprint "Capacitor_SMD:C_0603_1608Metric")
@@ -2279,29 +2265,11 @@
     (path "/3749c97f-6be7-4ba4-ab6f-a185f183ecb6"
       (reference "J3") (unit 1) (value "Conn_01x06_Male") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical")
     )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/66821bac-ceac-4e07-bdbb-fae6fd06f7e3"
-      (reference "J12") (unit 1) (value "Conn_01x06_Male") (footprint "Connector_PinSocket_1.27mm:PinSocket_1x06_P1.27mm_Vertical")
-    )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614d4c2b"
       (reference "J13") (unit 1) (value "Conn_01x01_Male") (footprint "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical")
     )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbf83"
-      (reference "J14") (unit 1) (value "Conn_01x01_Male") (footprint "Connector_PinSocket_1.27mm:PinSocket_1x01_P1.27mm_Vertical")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbf8d"
-      (reference "J15") (unit 1) (value "Conn_01x01_Male") (footprint "Connector_PinSocket_1.27mm:PinSocket_1x01_P1.27mm_Vertical")
-    )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbf97"
       (reference "J16") (unit 1) (value "Conn_01x01_Male") (footprint "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/15fc4742-c05d-4909-8ccc-131495d3c9a4"
-      (reference "J20") (unit 1) (value "Conn_01x01_Male") (footprint "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/9a543a2e-86c3-4108-85d1-8e2c4568cbd6"
-      (reference "J21") (unit 1) (value "Conn_01x05_Male") (footprint "Connector_PinSocket_1.27mm:PinSocket_1x05_P1.27mm_Vertical")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/ea5a8138-5eb3-4611-9809-24d80e896ac9"
-      (reference "J22") (unit 1) (value "Conn_01x02_Male") (footprint "Connector_PinHeader_1.27mm:PinHeader_1x02_P1.27mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-0000614a3cbb/1c65221c-4387-40e1-bbb0-eaa0ba27fc81"
       (reference "J23") (unit 1) (value "Conn_01x01_Male") (footprint "Connector_PinHeader_1.27mm:PinHeader_1x01_P1.27mm_Vertical")
@@ -2327,20 +2295,11 @@
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbb8f"
       (reference "JP1") (unit 1) (value "SolderJumper_2_Bridged") (footprint "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm")
     )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/1253062f-f3f3-480c-8cf5-3fdf8d5db879"
-      (reference "JP4") (unit 1) (value "Jumper_3_Open") (footprint "Jumper:SolderJumper-3_P2.0mm_Open_TrianglePad1.0x1.5mm")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/dde1685d-a50f-4597-bea9-ea5983cf3bb3"
-      (reference "JP5") (unit 1) (value "Jumper_3_Open") (footprint "Jumper:SolderJumper-3_P2.0mm_Open_TrianglePad1.0x1.5mm")
-    )
     (path "/00000000-0000-0000-0000-0000614a3cbb/fb27d171-195e-4df8-bf0b-5d81c103b4e0"
       (reference "JP6") (unit 1) (value "Jumper_3_Open") (footprint "Jumper:SolderJumper-3_P2.0mm_Open_TrianglePad1.0x1.5mm")
     )
     (path "/00000000-0000-0000-0000-0000614a3cbb/b3ca8053-4348-4418-8963-2a8b0109af0c"
       (reference "JP7") (unit 1) (value "Jumper_3_Open") (footprint "Jumper:SolderJumper-3_P2.0mm_Open_TrianglePad1.0x1.5mm")
-    )
-    (path "/00000000-0000-0000-0000-0000614a4588/f839f9b4-56f9-453e-a5f8-71d0a615b36d"
-      (reference "JP8") (unit 1) (value "Jumper_3_Open") (footprint "Jumper:SolderJumper-3_P2.0mm_Open_TrianglePad1.0x1.5mm")
     )
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/e000ddc2-7cf1-4f68-adc8-fbbf96cee261"
       (reference "JP9") (unit 1) (value "Jumper_3_Open") (footprint "Jumper:SolderJumper-3_P2.0mm_Open_TrianglePad1.0x1.5mm")
@@ -2387,20 +2346,11 @@
     (path "/00000000-0000-0000-0000-000060af8372"
       (reference "R9") (unit 1) (value "47k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dba23"
-      (reference "R10") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dba1d"
-      (reference "R11") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
-    )
     (path "/00000000-0000-0000-0000-0000614a3cbb/a0591aa1-5841-4228-bc0b-076bb2626f42"
       (reference "R12") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dba5e"
       (reference "R13") (unit 1) (value "10M") (footprint "Resistor_SMD:R_0603_1608Metric")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbaa7"
-      (reference "R14") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/34ede68d-d0d2-4ade-a010-d9d2e08a5984"
       (reference "R15") (unit 1) (value "150k") (footprint "Resistor_SMD:R_0603_1608Metric")
@@ -2447,23 +2397,17 @@
     (path "/00000000-0000-0000-0000-0000614a49f9/00000000-0000-0000-0000-000060e2ab80"
       (reference "TWELL1") (unit 1) (value "Conn_01x02_Male") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dba17"
-      (reference "U1") (unit 1) (value "ADA2200ARUZ") (footprint "Ninja-qPCR:ADA2200ARUZ")
+    (path "/00000000-0000-0000-0000-0000614a3cbb/49a7e85a-e6be-4104-9f79-767aec79442b"
+      (reference "U1") (unit 1) (value "MCP3426") (footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
     )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbb03"
       (reference "U2") (unit 1) (value "ADS1219IPWR") (footprint "Ninja-qPCR:ADS122C04IPWR")
-    )
-    (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbb80"
-      (reference "U3") (unit 1) (value "COM1305-0.032768-EXT-T-TR") (footprint "Ninja-qPCR:ASDK-32.768KHZ-LRT")
     )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbb45"
       (reference "U4") (unit 1) (value "LMP7717MF_NOPB") (footprint "Package_TO_SOT_SMD:SOT-23-5")
     )
     (path "/7fce36ad-62cd-40bf-9108-e3ee10417b2c"
       (reference "U5") (unit 1) (value "ESP32-WROOM-32") (footprint "RF_Module:ESP32-WROOM-32")
-    )
-    (path "/00000000-0000-0000-0000-0000614a4588/58ad9e6b-87fb-406b-9e91-c79663704b5d"
-      (reference "U7") (unit 1) (value "SN74LVC1GU04DCKR") (footprint "Ninja-qPCR:SN74LVC1GU04DBVR")
     )
     (path "/00000000-0000-0000-0000-0000614a49f9/00000000-0000-0000-0000-000060c7338a"
       (reference "U8") (unit 1) (value "TS12A12511DCNR") (footprint "Package_TO_SOT_SMD:SOT-23-8")
