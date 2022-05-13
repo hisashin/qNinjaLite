@@ -1668,7 +1668,7 @@
     (uuid 7f1ae94a-6efa-44d9-baeb-70b779540721)
     (property "Reference" "U1" (id 0) (at 95.885 90.805 0))
     (property "Value" "NAU7802" (id 1) (at 95.25 121.285 0))
-    (property "Footprint" "" (id 2) (at 95.25 97.155 0)
+    (property "Footprint" "Package_DIP:DIP-16_W7.62mm" (id 2) (at 95.25 97.155 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "" (id 3) (at 95.25 97.155 0)
