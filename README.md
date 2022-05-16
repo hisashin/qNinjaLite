@@ -1,4 +1,7 @@
-# Ninja qLAMP
+# Ninja Lite
+
+![Image](https://raw.githubusercontent.com/hisashin/NinjaLite/master/images/photo/LiteOpen.jpg)
+
 
 **2022Feb25 : [Ninja qPCR](https://github.com/hisashin/Ninja-qPCR) is almost done. We're importing its optical unit to NinjaLAMP to make Ninja qLAMP.**
 
