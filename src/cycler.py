@@ -2,7 +2,7 @@ import micropython
 from machine import Timer
 from scheduler import Scheduler, Schedule
 micropython.alloc_emergency_exception_buf(100)
-
+from ws import WebSocketServer
 import time
 
 TEMP_CONTROL_INTERVAL_MSEC = 1000
@@ -93,7 +93,11 @@ class PCR:
         # Pick stage if none (set target temp and rate)
         # If ramping, compare target temp
         # If holding, check elapsed time
-        print(self.temp_control.temp)
+        print(["sending",self.temp_control.temp])
+        msg = server.read()
+        if msg:
+            print(msg)
+        server.send("Temp={temp}".format(temp=self.temp_control.temp))
         
 
 temp_control = TempControl()
@@ -118,7 +122,10 @@ stage_b = ThermalProtocolStage(target_temp=80, hold_sec=20, ramp_rate=5)
 protocol.add_stage(stage_a)
 protocol.add_stage(stage_b)
 
+print("Init WebSocketServer")
+server = WebSocketServer()
 pcr.start(protocol)
+server.start()
 
 while True:
     scheduler.loop()
