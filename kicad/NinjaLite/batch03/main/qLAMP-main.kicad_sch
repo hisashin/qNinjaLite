@@ -2363,6 +2363,9 @@
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/e2f02849-5c69-41d6-aabb-13464e568005"
       (reference "R4") (unit 1) (value "5.1k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
+    (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/92c3e685-c462-4732-8229-0029ad205954"
+      (reference "R5") (unit 1) (value "100k") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
     (path "/00000000-0000-0000-0000-000060af8351"
       (reference "R6") (unit 1) (value "150") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
