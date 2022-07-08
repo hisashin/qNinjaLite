@@ -29,8 +29,10 @@ def connect ():
     # Scan
     print("Scanning...")
     aps = wlan.scan()
-    for preferred in preferred_aps:
-        for found in aps:
+    # (ssid, bssid, channel, RSSI, security, hidden)
+    sorted_ap = sorted(aps, key=lambda x: x[3], reverse=True)
+    for found in sorted_ap:
+        for preferred in preferred_aps:
             # Compare
             if (preferred[0] == found[0].decode("utf-8") ):
                 result = try_connection(found, preferred)
@@ -41,3 +43,4 @@ def connect ():
 
 wlan.disconnect()
 connect()
+
