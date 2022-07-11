@@ -118,6 +118,28 @@ class MQTTProtocol:
                 result['qos'] = packet[4]
         return result
 
+        
+    def _decode_length (self, bytes, offset):
+        i = 0
+        val = 0
+        has_next = True
+        while (has_next):
+            b = bytes[offset+i]
+            val += (b & 0x7F) << (i * 7)
+            i += 1
+            has_next = b & 0x80
+        return (val, i)
+
+    def _encode_length (self, length):
+        bytes = []
+        while length > 0:
+            v = 0x7F & length
+            if length >= 0x80:
+                v |= 0x80
+            bytes.append(v)
+            length = length >> 7
+        return bytearray(bytes)
+
     def publish(self, topic, message, dup=False, qos=0, retain=False, packet_identifier=0):
         header0 = 0x03 << 4
         packet_identifier_to_send = 0
@@ -131,19 +153,22 @@ class MQTTProtocol:
         header0 |= (qos & 0x03) << 1
         if retain:
             header0 |= (0x01 << 0)
-        header = bytearray([header0, 0x00])
+        header = bytearray([header0])
         body = bytearray("")
         body += self._int_to_bytes(len(topic), 2)
         body += topic # UTF-8 encoded string
         if qos > 0:
             body += self._int_to_bytes(packet_identifier_to_send, 2)
         body += message
-        header[1] = len(body) & 0xFF
+        header += self._encode_length(len(body))
         packet = header + body
         return packet
 
     def publish_read(self, packet):
-        valid = len(packet) >= 2 and packet[0] >> 4 == 0x03 and packet[1] == len(packet) - 2
+        (body_length, length_byte_count) = self._decode_length(packet, 1)
+        print("publish_read")
+        print([body_length, length_byte_count], len(packet))
+        valid = len(packet) >= 2 and packet[0] >> 4 == 0x03 and body_length == len(packet) - length_byte_count - 1
         result = {
             'valid': valid, #  Validity of the packet
             'qos': 0,
@@ -158,16 +183,16 @@ class MQTTProtocol:
             result['retain'] = (packet[0]>> 0) & 0x01 == 0x01
             qos = 0x03 & packet[0] >> 1
             result['qos'] = qos
-            body_length = packet[1]
-            offset = 2
+            offset = 1 + length_byte_count
             topic_length = self._bytes_to_int(packet[offset:offset+2])
             offset += 2
             result['topic'] = packet[offset:offset+topic_length].decode("utf-8")
+            print(result['topic'])
             offset += topic_length
             if qos > 0:
                 result['packet_identifier'] = self._bytes_to_int(packet[offset:offset+2])
                 offset += 2
-            result['message'] = packet[offset:body_length+2].decode("utf-8")
+            result['message'] = packet[offset:len(packet)].decode("utf-8")
         return result
 
     def puback(self, message_identifier):

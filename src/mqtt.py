@@ -22,7 +22,6 @@ class MQTTClient:
         self.last_ping = self._time_ms()
 
     def connect(self):
-        # packet = mqtt.connect(keep_alive=self.keep_alive, will_topic="bye", will_payload="Goodbye", will_retain=True, will_qos=0)
         packet = mqtt.connect(keep_alive=self.keep_alive)
         print("Connecting 1")
         self._write(packet)
@@ -40,7 +39,7 @@ class MQTTClient:
         packet = mqtt.subscribe(topic_filter, requested_qos=requested_qos)
         try:
             self._write(packet)
-            resp = bytearray(self._recv(1024))
+            resp = bytearray(self._recv(4096))
         except Exception as e:
             print(e)
 
@@ -51,7 +50,7 @@ class MQTTClient:
         try:
             packet = mqtt.pingreq()
             self._write(packet)
-            resp = self._recv(1024)
+            resp = self._recv(4096)
             res = mqtt.pingres_read(bytearray(resp))
             self.debug(res)
         except:
@@ -59,10 +58,8 @@ class MQTTClient:
 
     #  Returns True when expecting server response
     def _process_response(self, res_raw):
-        print("process")
         if res_raw == None or len(res_raw) < 1:
             return False
-        print("process 1")
         res = bytearray(res_raw)
         packet_type = res[0] >> 4
         if packet_type == MQTTProtocol.CONNACK:
@@ -116,7 +113,7 @@ class MQTTClient:
         while next:
             next = False
             try:
-                resp = self._recv(1024)
+                resp = self._recv(4096)
                 try:
                     next = self._process_response(resp)
                     if (next):

@@ -2,9 +2,10 @@ import micropython
 from machine import Timer
 from scheduler import Scheduler, Schedule
 micropython.alloc_emergency_exception_buf(100)
-from ws import WebSocketServer
 import time
 import random
+
+# The main logic of thermal and optical units
 
 TEMP_CONTROL_INTERVAL_MSEC = 1000
 DEFAULT_TEMP = 25
@@ -61,25 +62,6 @@ class Optics:
            self.callback(self.measurement)
         self.well_index += 1
 
-class Communicator:
-    def __init__(self, server):
-        self.server = server
-    def start(self):
-        self.server.start()
-    def on_progress(self, temp):
-        print("Temp={temp}".format(temp=temp))
-        self.server.send("Temp={temp}".format(temp=temp))
-    def on_transition(self):
-        pass
-    def on_measure(self):
-        pass
-    def loop(self):
-        msg = self.server.read()
-        if msg:
-            # Received message
-            print(msg)
-# Message format? 
-
 class Cycler:
     def __init__(self, temp_control, optics, communicator):
         self.schedule = scheduler.add_schedule()
@@ -108,6 +90,7 @@ class Cycler:
         self.current_step.start(self.temperature)
         self.temp_control.set_target_temp(self.current_step.target_temp)
         self.last_measurement = None
+        self.communicator.on_transition({"TODO":"TODO"})
 
     def progress(self):
         self.temp_control.control()
@@ -120,22 +103,16 @@ class Cycler:
         tick = time.ticks_ms()
         if self.current_step.min_measurement_interval != None:
             if self.last_measurement == None or (tick - self.last_measurement) > self.current_step.min_measurement_interval * 1000:
-                if optics.measure_all(self.optics_on_measure):
+                if self.optics.measure_all(self.optics_on_measure):
                     # Optics.measure_all returns False if it has ongoing measurement
                     self.last_measurement = tick
-        self.communicator.on_progress(self.temperature)
+        self.communicator.on_progress({"well":self.temperature})
         self.communicator.loop()
 
     def optics_on_measure(self, data):
-        print(data)
-        pass
-        
+        self.communicator.on_measure({"v":data})
 
-temp_control = TempControl()
-optics = Optics()
-server = WebSocketServer()
-communicator = Communicator(server)
-pcr = Cycler(temp_control, optics, communicator)
+TEMP_TOLERANCE = 0.5        
 
 class ThermalProtocol:
     def __init__(self):
@@ -143,7 +120,6 @@ class ThermalProtocol:
     def add_step(self, stage):
         self.steps.append(stage)
 
-TEMP_TOLERANCE = 0.
 class StepRamp:
     def __init__(self, target_temp):
         self.target_temp = target_temp
@@ -182,22 +158,3 @@ class StepFinish:
         return False # Never ends
     def start(self, measured_temp):
         pass
-
-protocol = ThermalProtocol()
-protocol.add_step(StepRamp(target_temp=50))
-protocol.add_step(StepHold(target_temp=50, hold_sec=20, min_measurement_interval=5))
-protocol.add_step(StepRamp(target_temp=60))
-protocol.add_step(StepHold(target_temp=60, hold_sec=20, min_measurement_interval=4))
-protocol.add_step(StepFinish())
-
-print("Init WebSocketServer")
-debug_count = 0
-
-while True:
-    scheduler.loop()
-    time.sleep(0.01)
-    debug_count += 1
-    if debug_count == 400:
-        pcr.start(protocol)
-
-
