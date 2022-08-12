@@ -1129,11 +1129,11 @@
     (uuid 29d80872-8024-41ca-a403-7cd7089b0d06)
   )
 
-  (global_label "GNDA" (shape input) (at 196.85 138.43 0) (fields_autoplaced)
+  (global_label "VCC" (shape input) (at 196.85 138.43 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 04f8a486-1977-4e0e-b2ae-84c43dfc10a9)
-    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 10.16 12.7 0)
-      (effects (font (size 1.27 1.27)) hide)
+    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 202.8028 138.3506 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
   (global_label "MUX_S0" (shape input) (at 29.21 55.88 180) (fields_autoplaced)
@@ -1164,11 +1164,11 @@
       (effects (font (size 1.27 1.27)) hide)
     )
   )
-  (global_label "GNDA" (shape input) (at 275.59 138.43 0) (fields_autoplaced)
+  (global_label "VCC" (shape input) (at 275.59 138.43 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid 76c51e02-9916-43df-bf7d-16654cf5c626)
-    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 10.16 12.7 0)
-      (effects (font (size 1.27 1.27)) hide)
+    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 281.5428 138.3506 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
   (global_label "PD_MUX_OUT" (shape input) (at 102.87 104.14 0) (fields_autoplaced)
@@ -1185,18 +1185,18 @@
       (effects (font (size 1.27 1.27)) hide)
     )
   )
-  (global_label "-1V" (shape input) (at 102.87 55.88 0) (fields_autoplaced)
+  (global_label "GNDA" (shape input) (at 102.87 55.88 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid e053ab8f-bcbf-4cd6-8382-0a70bbf62582)
-    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 185.42 167.64 0)
-      (effects (font (size 1.27 1.27)) hide)
+    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 110.1532 55.8006 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
-  (global_label "-1V" (shape input) (at 26.67 135.89 180) (fields_autoplaced)
+  (global_label "GNDA" (shape input) (at 26.67 135.89 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid fc329e60-968a-4f61-ba77-53d29ff8c1c7)
-    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at -55.88 24.13 0)
-      (effects (font (size 1.27 1.27)) hide)
+    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 19.3868 135.8106 0)
+      (effects (font (size 1.27 1.27)) (justify right) hide)
     )
   )
 
@@ -1411,7 +1411,7 @@
     (pin "24" (uuid 9939da83-47f8-4ff4-a838-1e90d735b276))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 266.7 67.31 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 264.16 67.31 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 0d780dd7-740d-420e-ae2e-2ba1964a1b1c)
     (property "Reference" "D13B1" (id 0) (at 265.43 61.7982 0))
@@ -1426,7 +1426,7 @@
     (pin "2" (uuid a504ee0d-df4e-4f39-b14d-d96f6db61a48))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 187.96 57.15 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 185.42 57.15 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 1bafb8d0-a457-4587-9c15-2b483243d29c)
     (property "Reference" "D5A1" (id 0) (at 186.69 51.6382 0))
@@ -1441,7 +1441,7 @@
     (pin "2" (uuid 829feb57-1f8c-42a0-9b4e-a84d56215ce8))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 152.4 128.27 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 149.86 128.27 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 1f362744-6bcb-43dc-8bb7-273e4f48b0bc)
     (property "Reference" "D4B1" (id 0) (at 151.13 122.7582 0))
@@ -1456,7 +1456,7 @@
     (pin "2" (uuid b1953ed5-10d9-40b2-8d82-80ef190f7716))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 152.4 107.95 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 149.86 107.95 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 21b60558-71a1-405b-b9ad-10af11ac3958)
     (property "Reference" "D3B1" (id 0) (at 151.13 102.4382 0))
@@ -1471,7 +1471,7 @@
     (pin "2" (uuid d0ac44e5-672c-4ee6-8b6a-203634052fe7))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 231.14 57.15 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 228.6 57.15 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 2b41f6dd-431c-4221-9260-71d7fb7ef479)
     (property "Reference" "D9A1" (id 0) (at 229.87 51.6382 0))
@@ -1486,7 +1486,7 @@
     (pin "2" (uuid 612bd6fb-af32-4d8e-8d68-3449b302c68f))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 231.14 128.27 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 228.6 128.27 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 2f3c1e20-ee02-4faa-af14-d1a86f621507)
     (property "Reference" "D12B1" (id 0) (at 229.87 122.7582 0))
@@ -1501,7 +1501,7 @@
     (pin "2" (uuid c6eda672-c994-4d6e-8e95-be39086c7066))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 266.7 128.27 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 264.16 128.27 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 40b1db3e-2ff3-465d-9afe-5262a4c04451)
     (property "Reference" "D16B1" (id 0) (at 265.43 122.7582 0))
@@ -1516,7 +1516,7 @@
     (pin "2" (uuid 1da2b871-827e-4f7c-a43c-8a7a22886917))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 152.4 97.79 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 149.86 97.79 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 43b4300f-b7d9-4366-ae79-1953a6ab6973)
     (property "Reference" "D3A1" (id 0) (at 151.13 92.2782 0))
@@ -1531,7 +1531,7 @@
     (pin "2" (uuid fd791cb5-8395-4c06-bb3d-7ad9ba6f916f))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 266.7 97.79 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 264.16 97.79 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 44a802c1-b641-4e8d-9e38-377241f066c7)
     (property "Reference" "D15A1" (id 0) (at 265.43 92.2782 0))
@@ -1546,7 +1546,7 @@
     (pin "2" (uuid 80db1749-d1e2-4361-905c-4ca1936fffff))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 152.4 57.15 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 149.86 57.15 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 44c504af-91ab-45d6-a156-3b4276dfb85a)
     (property "Reference" "D1A1" (id 0) (at 151.13 51.6382 0))
@@ -1561,7 +1561,7 @@
     (pin "2" (uuid ed5488f1-b04a-466f-a9e7-943d8a40d9cb))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 231.14 118.11 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 228.6 118.11 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 44c6c175-b5e1-4e33-9ae5-5ef438ac1dc7)
     (property "Reference" "D12A1" (id 0) (at 229.87 112.5982 0))
@@ -1576,7 +1576,7 @@
     (pin "2" (uuid f1ec7cdc-25a7-4f88-86f9-2240db98a892))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 266.7 57.15 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 264.16 57.15 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 57aa8fb5-7cf5-4ce9-b130-94efe140804b)
     (property "Reference" "D13A1" (id 0) (at 265.43 51.6382 0))
@@ -1607,7 +1607,7 @@
     (pin "1" (uuid 3f55a88c-aae5-4961-a801-a8b6e9ef2bfa))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 231.14 97.79 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 228.6 97.79 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 6a341a27-ef47-467f-8f82-31bd955935a4)
     (property "Reference" "D11A1" (id 0) (at 229.87 92.2782 0))
@@ -1622,7 +1622,7 @@
     (pin "2" (uuid 2950a700-86a5-466a-a7e5-74b2524e316b))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 152.4 87.63 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 149.86 87.63 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 6bcabfa1-109b-4581-b2e9-f250adcc8b6c)
     (property "Reference" "D2B1" (id 0) (at 151.13 82.1182 0))
@@ -1637,7 +1637,7 @@
     (pin "2" (uuid 8a913946-47d9-4665-87a0-770b1048ef1d))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 187.96 87.63 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 185.42 87.63 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 6d8c80c1-b8f5-4e72-b0da-e6249aa9eae7)
     (property "Reference" "D6B1" (id 0) (at 186.69 82.1182 0))
@@ -1652,7 +1652,7 @@
     (pin "2" (uuid 6fb20741-52e3-4966-9932-8d47519c3d95))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 187.96 67.31 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 185.42 67.31 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 7a492a89-09dc-4abf-807d-63ef52536ce2)
     (property "Reference" "D5B1" (id 0) (at 186.69 61.7982 0))
@@ -1667,7 +1667,7 @@
     (pin "2" (uuid 10a86675-1bbb-4505-9309-38c8b9f54ade))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 231.14 77.47 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 228.6 77.47 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 8121ee39-409c-4099-8e26-7fc697aa9fcc)
     (property "Reference" "D10A1" (id 0) (at 229.87 71.9582 0))
@@ -1682,7 +1682,7 @@
     (pin "2" (uuid dcf3f5e2-825e-48f7-bab1-e7b594f1b4b0))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 152.4 118.11 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 149.86 118.11 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 9218d176-4736-4b91-a167-29c596073916)
     (property "Reference" "D4A1" (id 0) (at 151.13 112.5982 0))
@@ -1697,7 +1697,7 @@
     (pin "2" (uuid 528a80a3-2c8a-4c33-9f78-d5f9f6d5e519))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 152.4 67.31 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 149.86 67.31 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 969c180b-43e4-443d-a4f9-cf571fffd782)
     (property "Reference" "D1B1" (id 0) (at 151.13 61.7982 0))
@@ -1712,7 +1712,7 @@
     (pin "2" (uuid 880bb251-454e-4be7-9e78-30e54bd98b24))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 266.7 87.63 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 264.16 87.63 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 9e17086d-b88c-4117-bf79-7b757587fbe8)
     (property "Reference" "D14B1" (id 0) (at 265.43 82.1182 0))
@@ -1743,7 +1743,7 @@
     (pin "1" (uuid 9b073738-3b72-41e6-bdfa-bfb83b9d81d1))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 266.7 77.47 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 264.16 77.47 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid a49ae7ce-6238-470a-b5bf-a1bbaa8504aa)
     (property "Reference" "D14A1" (id 0) (at 265.43 71.9582 0))
@@ -1758,7 +1758,7 @@
     (pin "2" (uuid 7bffad02-d20a-4761-a404-72045c0455e5))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 187.96 128.27 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 185.42 128.27 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid a5539939-1213-431b-8f2d-be766e045338)
     (property "Reference" "D8B1" (id 0) (at 186.69 122.7582 0))
@@ -1773,7 +1773,7 @@
     (pin "2" (uuid 2c7d3fe6-289f-4da6-a093-d8830a14a129))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 187.96 107.95 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 185.42 107.95 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid b825f4cc-817e-43f4-9be4-0c6159161969)
     (property "Reference" "D7B1" (id 0) (at 186.69 102.4382 0))
@@ -1788,7 +1788,7 @@
     (pin "2" (uuid e932eb21-9a7b-4911-b32d-cc36af05bb10))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 231.14 87.63 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 228.6 87.63 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid c8a8724f-54f0-431f-9c26-0b2c206c469d)
     (property "Reference" "D10B1" (id 0) (at 229.87 82.1182 0))
@@ -1803,7 +1803,7 @@
     (pin "2" (uuid 9977c423-a1be-4596-b06e-436e6bab8514))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 266.7 107.95 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 264.16 107.95 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid cc8e9ca5-afc5-4a98-944f-9a461b022a4b)
     (property "Reference" "D15B1" (id 0) (at 265.43 102.4382 0))
@@ -1818,7 +1818,7 @@
     (pin "2" (uuid a1a87ad8-4fae-4368-84e7-a1bdb97cce78))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 231.14 107.95 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 228.6 107.95 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid cd4238de-90e3-4860-a952-6452e2d357ea)
     (property "Reference" "D11B1" (id 0) (at 229.87 102.4382 0))
@@ -1833,7 +1833,7 @@
     (pin "2" (uuid 65136bbe-aee9-47f1-b33e-7066db81f2ba))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 152.4 77.47 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 149.86 77.47 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid d57bfae3-9227-4fa5-b33b-d3f2c771b820)
     (property "Reference" "D2A1" (id 0) (at 151.13 71.9582 0))
@@ -1848,7 +1848,7 @@
     (pin "2" (uuid e0bb3ba7-3586-4ee3-a69e-6afdf7fad873))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 187.96 77.47 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 185.42 77.47 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid d5a2471d-3ec7-4d90-9709-5671789beab9)
     (property "Reference" "D6A1" (id 0) (at 186.69 71.9582 0))
@@ -1863,7 +1863,7 @@
     (pin "2" (uuid 543d3481-43d6-4bf8-9af1-d3f09463a3b3))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 187.96 97.79 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 185.42 97.79 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid d9fbec56-3458-4f1a-8b6b-99a222798c4a)
     (property "Reference" "D7A1" (id 0) (at 186.69 92.2782 0))
@@ -1878,7 +1878,7 @@
     (pin "2" (uuid 7cfba33c-af25-4e30-9e9f-8cc785e31569))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 266.7 118.11 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 264.16 118.11 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid e5a57f71-0253-4070-9f3f-702197caba46)
     (property "Reference" "D16A1" (id 0) (at 265.43 112.5982 0))
@@ -1893,7 +1893,7 @@
     (pin "2" (uuid 313062ee-8585-4b15-a875-9b3f03d5e387))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 231.14 67.31 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 228.6 67.31 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid eeb10b63-4696-4db3-8ecb-6637743aa6da)
     (property "Reference" "D9B1" (id 0) (at 229.87 61.7982 0))
@@ -1908,7 +1908,7 @@
     (pin "2" (uuid c356fb5b-e070-41e4-92e6-cfd0fd744ce2))
   )
 
-  (symbol (lib_id "Device:D_Photo") (at 187.96 118.11 0) (mirror x) (unit 1)
+  (symbol (lib_id "Device:D_Photo") (at 185.42 118.11 180) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid fc099226-c357-441c-9977-974521a296f9)
     (property "Reference" "D8A1" (id 0) (at 186.69 112.5982 0))

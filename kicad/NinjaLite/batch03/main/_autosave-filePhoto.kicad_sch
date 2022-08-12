@@ -1580,7 +1580,7 @@
   (symbol (lib_id "Device:R") (at 173.99 50.292 90) (mirror x) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid b2e95c59-7a82-4f88-a1c9-674b28ca267d)
-    (property "Reference" "R?" (id 0) (at 173.99 45.0342 90))
+    (property "Reference" "R5" (id 0) (at 173.99 45.0342 90))
     (property "Value" "10M" (id 1) (at 173.99 47.3456 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 173.99 48.514 90)
       (effects (font (size 1.27 1.27)) hide)
