@@ -2377,6 +2377,33 @@
     (path "/00000000-0000-0000-0000-00006154fc7e/c5d54ec5-e7c3-49c3-9291-f907b72a3f7f"
       (reference "JP13") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
     )
+    (path "/00000000-0000-0000-0000-00006154fc7e/71dd393d-e3d6-4cd9-bc2d-4902de03b189"
+      (reference "JP14") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
+    )
+    (path "/00000000-0000-0000-0000-00006154fc7e/1e706175-e41a-4d1b-ad29-b6a42a690bfb"
+      (reference "JP15") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
+    )
+    (path "/00000000-0000-0000-0000-00006154fc7e/c12dc4bd-9e6a-417b-bf2e-7c577770a9f7"
+      (reference "JP16") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
+    )
+    (path "/00000000-0000-0000-0000-00006154fc7e/3bc94926-702d-4df4-b91c-d2e578e05849"
+      (reference "JP17") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
+    )
+    (path "/00000000-0000-0000-0000-00006154fc7e/56fc16f6-6022-44e1-b05e-db527da1bc02"
+      (reference "JP18") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
+    )
+    (path "/00000000-0000-0000-0000-00006154fc7e/44e2cd6c-f232-4179-a763-2133cb52afe9"
+      (reference "JP19") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
+    )
+    (path "/00000000-0000-0000-0000-00006154fc7e/d03f3e1f-67f3-4d0c-9099-e88383346414"
+      (reference "JP20") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
+    )
+    (path "/00000000-0000-0000-0000-00006154fc7e/03c117f5-089a-4635-b06d-0d94d2bfa8cc"
+      (reference "JP21") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
+    )
+    (path "/00000000-0000-0000-0000-00006154fc7e/4498eebb-adda-4117-a30a-8fb650a09046"
+      (reference "JP22") (unit 1) (value "Jumper_2_Open") (footprint "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm")
+    )
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/a32e8df7-ebbd-4b75-b89c-6ca0b9d0c245"
       (reference "Q1") (unit 1) (value "Q_NMOS_GSD") (footprint "Ninja-qPCR:SOT95P240X112-3N")
     )
