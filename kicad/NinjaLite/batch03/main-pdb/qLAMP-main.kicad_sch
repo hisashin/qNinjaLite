@@ -2065,6 +2065,9 @@
     (path "/10301c79-bdc5-42b1-b4e6-bc35f782819e"
       (reference "#PWR0101") (unit 1) (value "GND") (footprint "")
     )
+    (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/1b877058-86b7-42bb-80c9-60f39a3d6d47"
+      (reference "#PWR0102") (unit 1) (value "GND") (footprint "")
+    )
     (path "/da3b0caf-e7a9-4910-9699-556e62149269"
       (reference "#PWR0103") (unit 1) (value "GND") (footprint "")
     )
@@ -2073,6 +2076,9 @@
     )
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/cf06d70c-22de-49a8-89f6-9b9a11696740"
       (reference "#PWR0105") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/a845df83-b770-4918-9ca9-34c81f4e44fc"
+      (reference "#PWR0106") (unit 1) (value "GND") (footprint "")
     )
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/b4956260-255c-47f3-bcf2-df9a9dded0c9"
       (reference "#PWR0109") (unit 1) (value "GND") (footprint "")
@@ -2479,6 +2485,9 @@
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/04aebed6-c14e-4b43-81ae-316e8e1a17ac"
       (reference "U6") (unit 1) (value "BA178M05FP-E2") (footprint "Ninja-qPCR:REG_TO252-3")
     )
+    (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/bcb9af64-637e-4019-bb5e-365349dbb3bf"
+      (reference "U7") (unit 1) (value "LD1086DTTR") (footprint "Package_TO_SOT_SMD:SOT-223")
+    )
     (path "/00000000-0000-0000-0000-0000614a49f9/00000000-0000-0000-0000-000060c7338a"
       (reference "U8") (unit 1) (value "TS12A12511DCNR") (footprint "Package_TO_SOT_SMD:SOT-23-8")
     )
@@ -2493,6 +2502,9 @@
     )
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/9593a29d-f5ad-4da1-a7a2-504c8e7ddc35"
       (reference "U11") (unit 1) (value "IP2721") (footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm")
+    )
+    (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/fe624d37-07f4-4cf3-9486-027c576bb02e"
+      (reference "U12") (unit 1) (value "LD1086DTTR") (footprint "Package_TO_SOT_SMD:SOT-223")
     )
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/3be1b119-b30d-4232-9f2e-684635fe394a"
       (reference "U14") (unit 1) (value "TCR3DF33,LM(CT") (footprint "Package_TO_SOT_SMD:SOT-23-5")
