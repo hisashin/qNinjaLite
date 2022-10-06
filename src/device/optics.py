@@ -1,5 +1,5 @@
 from adc_ADS1219IPWR import ADS1219
-import led_driver_TLC5929_old as led
+from led_driver_TLC5929 import TLC5929
 from machine import Pin, SoftI2C, SoftSPI, SPI
 import time
 print("pcr.py")
@@ -9,6 +9,20 @@ i2c = SoftI2C(Pin(18, Pin.OUT, Pin.PULL_UP), Pin(5, Pin.OUT, Pin.PULL_UP), freq=
 adc = ADS1219(i2c, adc_device_address, Pin(17, Pin.IN, Pin.PULL_UP))
 print("calling test_adc.start()")
 adc.start()
+
+# SCLK=12, MOSI=13, MISO=15, LAT=14
+sclk=Pin(12, Pin.OUT)
+mosi=Pin(13, Pin.OUT)
+blank=Pin(15, Pin.OUT)
+latch=Pin(14,Pin.OUT)
+sclk.off()
+mosi.off()
+latch.off()
+blank.off()
+print("Init SPI...")
+spi = SoftSPI(baudrate=10000, polarity=0, phase=0, firstbit=SPI.MSB, sck=sclk, mosi=mosi, miso=Pin(16))
+print("Init SPI done")
+led = TLC5929(spi, latch, blank)
 
 # S0=19, S1=21, S2=22, S3=23
 mux_s0 = Pin(19, Pin.OUT)
@@ -20,7 +34,7 @@ print("therm_switch")
 therm_switch.value(0)
 
 selected_well = 0
-brightness = 0x00 #0x7F
+brightness = 0x7F
 well_count = 8
 led_channels = [15, 14, 13, 12, 8, 9, 10, 11, 15, 14, 13, 12, 8, 9, 10, 11]
 mux_channels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
@@ -41,7 +55,7 @@ print ("PCR 2022/05/17 13:15")
 param_a = 0.05
 param_b = 0.05
 param_c = 5
-param_d = 10
+param_d = 5
 
 
 while True:
@@ -73,7 +87,7 @@ while True:
     # print(v)
     # print(voff)
     print(vdiff)
-    selected_well = (selected_well + 1) % well_count
-    brightness += 4
-    if brightness > 0x7f:
-        brightness = 0
+    # selected_well = (selected_well + 1) % well_count
+    # brightness += 4
+    # if brightness > 0x7f:
+    #    brightness = 0

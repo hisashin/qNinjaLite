@@ -82,21 +82,25 @@ class NAU7802:
         self.update_reg(REG_ADDR_CTRL2, val, REG_MASK_CONVERSION_RATE)
 
     def update_reg (self, reg_address, value, mask):
-        current_val = self.reg_address(reg_address)
+        current_val = self.read_reg(reg_address)
         new_val = (~mask & current_val) | (mask & value)
         self.i2c.writeto(self.device_address, bytearray([reg_address, new_val]))
 
     def read_conversion_data (self):
         self.update_reg(REG_ADDR_PU_CTRL, CYCLE_START, REG_MASK_CYCLE_START)
-        while self.read_reg(REG_ADDR_PU_CTRL) & REG_MASK_CYCLE_READY == 0:
+        count = 0
+        while self.read_reg(REG_ADDR_PU_CTRL) & self.read_reg(REG_MASK_CYCLE_READY) == 0:
             time.sleep_ms(1)
+            count += 1
+        # print(["count", count])
+        time.sleep_ms(10)
         #[23:16][15:8][7:0]
         data = self.read_reg_burst(REG_ADDR_ADCO_B2, 3)
         val = (data[0] << 16) | (data[1] << 8) | data[2]
         if val & 0x800000:
             val = ~val + 1
             val = -(val & 0xFFFFFF)
-        return val / (1.0 * 0x800000) # -1 to 1
+        return ((val / (1.0 * 0x800000)) + 1) / 2 # 0 to 1
 
     def reset (self):
         self.update_reg(REG_ADDR_PU_CTRL, 1, REG_MASK_RESET_REG)

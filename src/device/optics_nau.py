@@ -1,12 +1,13 @@
-from adc_ADS1219IPWR import ADS1219
+from adc_NAU7802 import NAU7802
 from led_driver_TLC5929 import TLC5929
 from machine import Pin, SoftI2C, SoftSPI, SPI
 import time
-print("pcr.py")
 adc_device_address = 64
 
 i2c = SoftI2C(Pin(18, Pin.OUT, Pin.PULL_UP), Pin(5, Pin.OUT, Pin.PULL_UP), freq=80000)
-adc = ADS1219(i2c, adc_device_address, Pin(17, Pin.IN, Pin.PULL_UP))
+# adc = ADS1219(i2c, adc_device_address, Pin(17, Pin.IN, Pin.PULL_UP))
+
+adc = NAU7802(i2c, None, 42)
 print("calling test_adc.start()")
 adc.start()
 
@@ -32,14 +33,13 @@ mux_s3 = Pin(23, Pin.OUT)
 therm_switch = Pin(27, Pin.OUT)
 print("therm_switch")
 therm_switch.value(0)
-
-selected_well = 0
-brightness = 0x00 #0x7F
-well_count = 8
-led_channels = [15, 14, 13, 12, 8, 9, 10, 11, 15, 14, 13, 12, 8, 9, 10, 11]
+well_offset = 12
+selected_well = well_offset
+well_count = 16
+led_channels = [15, 14, 13, 12, 11,10,9,8, 0,1,2,3,4,5,6,7]
 mux_channels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-adc.select_single_end_channel(1)
 
+adc.select_conversion_rate(330)
 
 def select_mux (ch): 
     val0 = 0x01 & (ch >> 0)
@@ -52,18 +52,26 @@ def select_mux (ch):
     mux_s3.value(val3)
 
 print ("PCR 2022/05/17 13:15")
-param_a = 0.05
-param_b = 0.05
-param_c = 5
-param_d = 10
+param_a = 0.01
+param_b = 0.01
+param_c = 20 # Repeat
+param_d = 20 # Blink interval
 
+for n in range(5):
+    time.sleep(0.5)
+    adc.read_conversion_data()
 
+num = 0
+print("------------------------")
+br = 2
+brightness = 1 # 0x7F
 while True:
-    print(["brightness", brightness])
+    brightness = br - 1
+    # print(["brightness", brightness])
     led.set_brightness(brightness)
     time.sleep(param_a)
-    adc.select_diff_channels(2, 3) # Optics
-    # adc.select_single_end_channel(1) # Thermistors
+    adc.select_analog_input_channel(2) # Optics
+    # adc.select_analog_input_channel(1) # Thermistors
     time.sleep(param_b)
     # led.select_led(led_channels[0])
     led.select_led(led_channels[selected_well])
@@ -75,19 +83,24 @@ while True:
     for x in range(param_c):
         led.on()
         time.sleep_ms(param_d)
-        val_on = adc.read_conversion_data() * (-1000)
+        val_on = adc.read_conversion_data()
         v.append(val_on)
-        # adc.read_conversion_data()
         led.off()
         time.sleep_ms(param_d)
-        val_off = adc.read_conversion_data() * (-1000)
+        val_off = adc.read_conversion_data()
         voff.append(val_off)
         vdiff.append(val_on - val_off)
-    print(["Well", selected_well])
+    # print(["Well", selected_well, "x", num])
     # print(v)
     # print(voff)
-    print(vdiff)
-    selected_well = (selected_well + 1) % well_count
-    brightness += 4
-    if brightness > 0x7f:
-        brightness = 0
+    print(["FLUO", selected_well, brightness, voff, v, vdiff])
+    num = num + 1
+    if num == 4:
+        num = 0
+        br *= 2
+        if br > 0x80:
+            print("------------------------")
+            br = 2
+
+    selected_well = num + well_offset
+    # selected_well = (selected_well + 1) % well_count

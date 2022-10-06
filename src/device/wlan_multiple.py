@@ -1,17 +1,17 @@
 import time
 import network
+
 from wifi_config import preferred_aps
 
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 
-connection_interval = 0.1
+connection_interval = 0.5
 connection_timeout = 5.0
 
-
-def try_connection (target, config):
+def try_to_connect (target, config):
     delay = 0
-    print("Trying to connect.")
+    print("Trying to connect...")
     print(target)
     wlan.connect(config[0], config[1]) # SSID, password
     while not wlan.isconnected() :
@@ -24,16 +24,17 @@ def try_connection (target, config):
     # Return wlan config
     return wlan.ifconfig()
 
-
 def connect ():
     # Scan
     print("Scanning...")
     aps = wlan.scan()
-    for preferred in preferred_aps:
-        for found in aps:
+    # (ssid, bssid, channel, RSSI, security, hidden)
+    sorted_ap = sorted(aps, key=lambda x: x[3], reverse=True)
+    for found in sorted_ap:
+        for preferred in preferred_aps:
             # Compare
-            if (preferred[0] == found[0].decode("utf-8") ):
-                result = try_connection(found, preferred)
+            if preferred[0] == found[0].decode("utf-8"):
+                result = try_to_connect(found, preferred)
                 if result is not None:
                     print("Connected.")
                     print(result)
@@ -41,3 +42,4 @@ def connect ():
 
 wlan.disconnect()
 connect()
+
