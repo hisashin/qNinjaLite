@@ -99,7 +99,6 @@ while True:
     temp_air = thermistors[mux_ch_air].to_temp(adc.read_conversion_data())
     sim.update(temp_air=temp_air, temp_well=temp_well)
     temp_sample = sim.simulate(interval=interval)
-    # print("%dch %.2fV, %.2fC" % (mux_ch, v*3.3, temp))
     pid.set_value(temp_well)
     
     output = pid.get_output()

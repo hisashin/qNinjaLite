@@ -1,6 +1,5 @@
 import micropython
 from machine import Timer
-from scheduler import Scheduler, Schedule
 micropython.alloc_emergency_exception_buf(100)
 import time
 import random
@@ -31,10 +30,9 @@ class DeviceState:
         }
 TEMP_CONTROL_INTERVAL_MSEC = 1000
 DEFAULT_TEMP = 25
-scheduler = Scheduler()
 MAX_TEMP_RATE = 2.0
-class TempControl:
-    def __init__(self):
+class TempControlSimulator:
+    def __init__(self, scheduler):
         self.schedule = scheduler.add_schedule()
         self.temp = DEFAULT_TEMP
         self.target_temp = DEFAULT_TEMP
@@ -65,7 +63,7 @@ CHANNEL_COUNT = 2
 WELL_COUNT = 8
 
 class Optics:
-    def __init__(self):
+    def __init__(self, scheduler):
         self.schedule = scheduler.add_schedule()
         self.is_measuring = False
         self.channel_index = 0
@@ -106,7 +104,7 @@ STATE_AUTO_PAUSED = DeviceState("auto_paused", hasExperiment=True, resumeAvailab
 STATE_COMPLETE = DeviceState("complete", hasExperiment=True, cancelAvailable=True, finishAvailable=True)
 
 class Cycler:
-    def __init__(self, temp_control, optics, communicator):
+    def __init__(self, temp_control, optics, communicator, scheduler):
         self.schedule = scheduler.add_schedule()
         self.temp_control = temp_control
         self.optics = optics
