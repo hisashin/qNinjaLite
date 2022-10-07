@@ -2421,13 +2421,13 @@
       (reference "TAIR1") (unit 1) (value "Conn_01x02_Male") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-0000614a49f9/00000000-0000-0000-0000-000060e1fb7c"
-      (reference "TEXT1") (unit 1) (value "Conn_01x02_Male") (footprint "Pin_Headers:Pin_Header_Straight_1x02_Pitch1.27mm")
+      (reference "TEXT1") (unit 1) (value "Conn_01x02_Male") (footprint "Pin_Headers:Pin_Header_Straight_1x02_Pitch2.54mm")
     )
     (path "/00000000-0000-0000-0000-0000614a49f9/00000000-0000-0000-0000-000060e1fb8e"
-      (reference "TEXT2") (unit 1) (value "Conn_01x02_Male") (footprint "Pin_Headers:Pin_Header_Straight_1x02_Pitch1.27mm")
+      (reference "TEXT2") (unit 1) (value "Conn_01x02_Male") (footprint "Pin_Headers:Pin_Header_Straight_1x02_Pitch2.54mm")
     )
     (path "/00000000-0000-0000-0000-0000614a49f9/00000000-0000-0000-0000-000060e2b42c"
-      (reference "TEXT3") (unit 1) (value "Conn_01x02_Male") (footprint "Pin_Headers:Pin_Header_Straight_1x02_Pitch1.27mm")
+      (reference "TEXT3") (unit 1) (value "Conn_01x02_Male") (footprint "Pin_Headers:Pin_Header_Straight_1x02_Pitch2.54mm")
     )
     (path "/00000000-0000-0000-0000-0000614a49f9/00000000-0000-0000-0000-000060e1fb82"
       (reference "TLID1") (unit 1) (value "Conn_01x02_Male") (footprint "Pin_Headers:Pin_Header_Straight_1x02_Pitch2.54mm")
@@ -2454,7 +2454,7 @@
       (reference "U6") (unit 1) (value "BA178M05FP-E2") (footprint "Ninja-qPCR:REG_TO252-3")
     )
     (path "/00000000-0000-0000-0000-0000614a49f9/00000000-0000-0000-0000-000060c7338a"
-      (reference "U8") (unit 1) (value "TS12A12511DCNR") (footprint "Package_TO_SOT_SMD:SOT-23-8")
+      (reference "U8") (unit 1) (value "TS12A12511DCNR") (footprint "Ninja-qPCR:SOT-23-8-8.3mil")
     )
     (path "/00000000-0000-0000-0000-0000614a49f9/ed39a255-87a4-4df4-965c-086f2c5d28b0"
       (reference "U9") (unit 1) (value "SN74LV4051A") (footprint "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm")
@@ -2475,10 +2475,10 @@
       (reference "U17") (unit 1) (value "LITE_LCD") (footprint "Ninja-qPCR:LITE_LCD")
     )
     (path "/00000000-0000-0000-0000-00006154fc7e/00000000-0000-0000-0000-000060b0d5a6"
-      (reference "U19") (unit 1) (value "CD74HC4067M96") (footprint "Package_SO:SSOP-24_5.3x8.2mm_P0.65mm")
+      (reference "U19") (unit 1) (value "CD74HC4067M96") (footprint "Ninja-qPCR:SSOP-24_5.3x8.2mm_P0.65mm-0.83mil")
     )
     (path "/00000000-0000-0000-0000-00006154fc7e/00000000-0000-0000-0000-000060b0d59f"
-      (reference "U19") (unit 2) (value "CD74HC4067M96") (footprint "Package_SO:SSOP-24_5.3x8.2mm_P0.65mm")
+      (reference "U19") (unit 2) (value "CD74HC4067M96") (footprint "Ninja-qPCR:SSOP-24_5.3x8.2mm_P0.65mm-0.83mil")
     )
   )
 )
