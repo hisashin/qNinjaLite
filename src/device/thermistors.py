@@ -64,22 +64,20 @@ therm_switch.value(switch_val)
 # 4ch 3.30V, -84.64C (NONE) ext2                                                                                                                               
 # 5ch 2.15V, 27.74C (NX 穴あけ接着) ext3
 
-thermistor_ali = Thermistor(counter_r, 3950, 100, 25)
-thermistor_nx = Thermistor(counter_r, 4311, 100, 25)
-thermistor_aki = Thermistor(counter_r, 4250, 100, 25)
-thermistor_none = Thermistor(counter_r, 4250, 100, 25)
+thermistor_ali = Thermistor(3950, 100, 25)
+thermistor_nx = Thermistor(4311, 100, 25)
+thermistor_aki = Thermistor(4250, 100, 25)
+thermistor_none = Thermistor(4250, 100, 25)
 # well, air, lid, ext1, ext2, ext3
 thermistors = [thermistor_ali, thermistor_aki, thermistor_none, thermistor_nx, thermistor_none, thermistor_nx ]
 
-targetTemp = 100
 adc.read_conversion_data()
 
 if True:
     well_heater_pin = Pin(25, Pin.OUT)
     well_heater_pin.value(0)
     well_heater = PWM(well_heater_pin)
-    # well_heater.freq(500)
-    well_heater.duty(80) #1023 all on
+    well_heater.duty(182) #1023 all on
 
 time_zero = time.ticks_ms()
 
@@ -88,10 +86,22 @@ while True:
         select_mux(mux_ch)
         time.sleep(0.125)
         v = adc.read_conversion_data() # (adc.read_conversion_data() + 1) / 2
-        temp = thermistors[mux_ch].to_temp(v)
+        temp = thermistors[mux_ch].to_temp(v, counter_r)
         print("%dch %.2fV, %.2fC" % (mux_ch, v * 3.3, temp))
         # print(switch_val, counter_r)
         time.sleep(0.375)
+
+        if mux_ch == 0:
+            if switch_val == 0 and temp > 60:
+                print("To High Temp Mode")
+                counter_r = 10
+                switch_val = 1
+            if switch_val == 1 and temp < 50:
+                print("To Low Temp Mode")
+                counter_r = 47
+                switch_val = 0
+            therm_switch.value(switch_val)
+            time.sleep(0.25)
         mux_ch = (mux_ch+1)%2
     except Exception as e: 
         print(e)

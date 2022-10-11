@@ -26,10 +26,10 @@ well_heater_pin.value(0)
 well_heater = PWM(well_heater_pin)
 
 counter_r = 47
-thermistor_ali = Thermistor(counter_r, 3950, 100, 25)
-thermistor_nx = Thermistor(counter_r, 4311, 100, 25)
-thermistor_aki = Thermistor(counter_r, 4250, 100, 25)
-thermistor_none = Thermistor(counter_r, 4250, 100, 25)
+thermistor_ali = Thermistor(3950, 100, 25)
+thermistor_nx = Thermistor(4311, 100, 25)
+thermistor_aki = Thermistor(4250, 100, 25)
+thermistor_none = Thermistor(4250, 100, 25)
 # well, air, lid, ext1, ext2, ext3
 thermistors = [thermistor_ali, thermistor_aki, thermistor_none, thermistor_nx, thermistor_none, thermistor_nx ]
 
@@ -71,11 +71,6 @@ reg = 0b00000000
 started = False
 KELVIN = 273.15
 
-resistance = 47
-r0 = 100
-baseTemp = 25
-targetTemp = 100
-
 range_low = PIDRange(kp=0.40, ki=0.035, kd=0.005, min_value=None, max_value=55)
 range_mid = PIDRange(kp=0.40, ki=0.035, kd=0.005, min_value=55, max_value=80)
 range_high = PIDRange(kp=0.4, ki=0.035, kd=0.005, min_value=80, max_value=None)
@@ -90,9 +85,9 @@ time_zero = time.ticks_ms()
 
 while True:
     select_mux(mux_ch_well)
-    temp_well = thermistors[mux_ch_well].to_temp(adc.read_conversion_data())
+    temp_well = thermistors[mux_ch_well].to_temp(adc.read_conversion_data(), counter_r)
     select_mux(mux_ch_air)
-    temp_air = thermistors[mux_ch_air].to_temp(adc.read_conversion_data())
+    temp_air = thermistors[mux_ch_air].to_temp(adc.read_conversion_data(), counter_r)
     sim.update(temp_air=temp_air, temp_well=temp_well)
     temp_sample = sim.simulate(interval=interval)
     # print("%dch %.2fV, %.2fC" % (mux_ch, v*3.3, temp))

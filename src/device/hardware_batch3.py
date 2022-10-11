@@ -1,7 +1,9 @@
-#from adc_ADS1219IPWR import ADS1219
+# Hardware control for batch3 board
+# - Temp control
+# - Optics unit control
+
 from adc_NAU7802 import NAU7802
 from machine import Pin, PWM, SoftI2C, SoftSPI, SPI, Timer
-from scheduler import Scheduler
 from led_driver_TLC5929 import TLC5929
 import time
 from pid import PIDRange, PID
@@ -18,20 +20,17 @@ adc.select_conversion_rate(330)
 
 # Thermal control
 KELVIN = 273.15
-resistance = 47
-r0 = 100
-baseTemp = 25
 targetTemp = 100
 counter_r = 47
 temp_switch_val = 0
-thermistor_ali = Thermistor(counter_r, 3950, 100, 25)
-thermistor_nx = Thermistor(counter_r, 4311, 100, 25)
-thermistor_aki = Thermistor(counter_r, 4250, 100, 25)
-thermistor_none = Thermistor(counter_r, 4250, 100, 25)
+thermistor_ali = Thermistor(3950, 100, 25)
+thermistor_nx = Thermistor(4311, 100, 25)
+thermistor_aki = Thermistor(4250, 100, 25)
+thermistor_none = Thermistor(4250, 100, 25)
 well_heater_pin = Pin(25, Pin.OUT)
 well_heater_pin.value(0)
 well_heater = PWM(well_heater_pin)
-well_heater.duty(0)
+well_heater.duty(0) # Heater off.
 therm_switch = Pin(27, Pin.OUT)
 therm_switch.value(temp_switch_val)
 # well, air, lid, ext1, ext2, ext3
@@ -60,14 +59,10 @@ param_b = 0.35
 param_c = 15
 param_d = 4
 
-
 CONTROL_INTERVAL_MSEC = 1000
 CONTROL_INTERVAL_SEC = CONTROL_INTERVAL_MSEC/1000.0
-interval = CONTROL_INTERVAL_SEC
-TARGET_TEMP = 94
 CHANNEL_COUNT = 1
 WELL_COUNT = 8
-
 DEFAULT_TEMP = 25
 
 # LED Driver
@@ -88,11 +83,12 @@ led_channels = [15, 14, 13, 12, 11,10,9,8, 0,1,2,3,4,5,6,7]
 mux_channels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 brightness = 0x7F
 class Optics:
-    def __init__(self, scheduler):
+    def __init__(self, scheduler, measure_interval_ms=200):
         self.schedule = scheduler.add_schedule()
         self.is_measuring = False
         self.channel_index = 0
         self.well_index = 0
+        self.measure_interval_ms = measure_interval_ms
     def measure_all(self, callback):
         print("measure_all")
         if self.is_measuring:
@@ -104,20 +100,18 @@ class Optics:
         self.measurement = []
         for i in range(CHANNEL_COUNT):
             self.measurement.append([0] * WELL_COUNT)
-        self.schedule.init_timer(200, Timer.PERIODIC, self.measure_next)
+        self.schedule.init_timer(self.measure_interval_ms, Timer.PERIODIC, self.measure_next)
         return True # Accepted
     def measure_next (self):
         led.select_led(led_channels[self.well_index])
         led.set_brightness(brightness)
-        select_mux(mux_channels[self.well_index])
-        time.sleep(0.01)
-        adc.select_analog_input_channel(2) 
-        time.sleep(0.01)
         led.off()
-        time.sleep(0.03)
+        select_mux(mux_channels[self.well_index])
+        adc.select_analog_input_channel(2) # Optics channel
+        time.sleep(0.02)
         voff = adc.read_conversion_data()
         led.on()
-        time.sleep(0.03)
+        time.sleep(0.02)
         von = adc.read_conversion_data()
         v = voff - von
         try:
@@ -137,45 +131,70 @@ class Optics:
         except:
             print(["Except???", self.channel_index, self.well_index])
 
+# Switch value
+RESISTOR_SWITCH_LOW = 0
+RESISTOR_SWITCH_HIGH = 1
+# Resistor value
+RESISTOR_LOW = 47 # kOhm
+RESISTOR_HIGH = 10 # kOhm
+# Switching temperature
+RESISTOR_TEMP_LIMIT_HIGH = 50
+RESISTOR_TEMP_LIMIT_LOW = 45
+class TempUnit:
+    def __init__ (self, mux_index, thermistor, label, resistor_switch):
+        self.mux_index = mux_index
+        self.thermistor = thermistor
+        self.label = label
+        self.resistor_switch = resistor_switch
+        self.temp = 25
+        self.resistor = RESISTOR_LOW
+
 class TempControl:
-    def __init__(self, scheduler):
+    def __init__(self, scheduler, measure_interval_ms=100, pid_interval_ms=1000):
         self.schedule = scheduler.add_schedule()
-        self.temp = DEFAULT_TEMP
         self.target_temp = DEFAULT_TEMP
         self.sim = TempSimulation(temp_air=25, temp_well=25)
-        self.temp_units = [
-            # MUX index, Thermistor, temp, label
-            [0, thermistor_ali, DEFAULT_TEMP, "Well"],
-            [1, thermistor_aki, DEFAULT_TEMP, "Air"]
-        ]
-        range_low = PIDRange(kp=0.40, ki=0.035, kd=0.005, min_value=None, max_value=55)
-        range_mid = PIDRange(kp=0.40, ki=0.035, kd=0.005, min_value=55, max_value=80)
-        range_high = PIDRange(kp=0.4, ki=0.035, kd=0.005, min_value=80, max_value=None)
+        self.measure_interval_ms = measure_interval_ms
+        self.pid_interval_ms = pid_interval_ms
+        self.temp_unit_well = TempUnit(0, thermistor_ali, "Well", RESISTOR_SWITCH_LOW)
+        self.temp_unit_air = TempUnit(1, thermistor_aki, "Air", RESISTOR_SWITCH_LOW)
+        self.temp_units = [ self.temp_unit_well, self.temp_unit_air ]
+        range_low = PIDRange(kp=0.25, ki=0.035, kd=0.01, min_value=None, max_value=55)
+        range_mid = PIDRange(kp=0.30, ki=0.035, kd=0.01, min_value=55, max_value=80)
+        range_high = PIDRange(kp=0.40, ki=0.035, kd=0.01, min_value=80, max_value=None)
         ranges = [range_low, range_mid, range_high]
         pid = PID(ranges)
         pid.set_interval(CONTROL_INTERVAL_SEC)
         pid.set_output_range(0, 1.0)
         self.pid = pid
+    def get_temp(self):
+        return self.temp_unit_well.temp
     def control (self):
-        print("control")
         self.termistor_index = 0
         self.schedule.init_timer(200, Timer.PERIODIC, self.measure_next)
-        well = self.temp_units[0]
-        air = self.temp_units[1]
-        self.pid.set_value(well[2])
+        self.pid.set_value(self.temp_unit_well.temp)
         output = self.pid.get_output()
-        duty = int(256.0 * output)
+        # duty = int(256.0 * output)
+        duty = int(128.0 * output)
         # duty = 0
-        print("W=%.2f\tA=%.2f\tO=%.2f" % (well[2], air[2], output)) # Print timestamp
+        print("W=%.2f\tA=%.2f\tO=%.2f" % (self.temp_unit_well.temp, self.temp_unit_air.temp, output)) # Print timestamp
         well_heater.duty(duty)
     def measure_next (self):
-        adc.select_analog_input_channel(1)
+        adc.select_analog_input_channel(1) # Optics channel
         temp_unit = self.temp_units[self.termistor_index]
-        select_mux(temp_unit[0])
-        thermistor = temp_unit[1]
+        therm_switch.value(temp_unit.resistor_switch)
+        select_mux(temp_unit.mux_index)
         time.sleep(0.05)
-        temp_unit[2] = thermistor.to_temp(adc.read_conversion_data())
-        print("measure_next", self.termistor_index, temp_unit[2])
+        temp_unit.temp = temp_unit.thermistor.to_temp(adc.read_conversion_data(), temp_unit.resistor)
+        print("measure_next", self.termistor_index, temp_unit.resistor_switch, temp_unit.temp)
+        if temp_unit.resistor_switch == RESISTOR_SWITCH_LOW and temp_unit.temp > RESISTOR_TEMP_LIMIT_HIGH:
+            print("To High Temp Mode")
+            temp_unit.resistor_switch = RESISTOR_SWITCH_HIGH
+            temp_unit.resistor = RESISTOR_HIGH
+        if temp_unit.resistor_switch == RESISTOR_SWITCH_HIGH and temp_unit.temp < RESISTOR_TEMP_LIMIT_LOW:
+            print("To Low Temp Mode")
+            temp_unit.resistor_switch = RESISTOR_SWITCH_LOW
+            temp_unit.resistor = RESISTOR_LOW
             
         if self.termistor_index == 1:
             self.schedule.cancel_timer()
@@ -185,28 +204,12 @@ class TempControl:
         self.pid.set_setpoint(temp)
         print("setTargetTemp", self.target_temp)
 
-count = 0
-scheduler = Scheduler()
-temp_control = TempControl(scheduler)
-temp_control.set_target_temp(TARGET_TEMP)
-optics = Optics(scheduler)
-
-def optics_on_measure(values):
-    print(values)
-def progress ():
-    global count
-    temp_control.control()
-    count += 1
-    if count == 10:
-        optics.measure_all(optics_on_measure)
-        count = 0
-
-control_schedule = scheduler.add_schedule()
-control_schedule.init_timer(CONTROL_INTERVAL_MSEC, Timer.PERIODIC, progress)
-
-for n in range(5):
-    time.sleep(0.5)
-    adc.read_conversion_data()
-while True:
-    scheduler.loop()
-    time.sleep(0.01)
+def init_hardware():
+    adc.select_conversion_rate(330)
+    adc.select_analog_input_channel(1)
+    print("init_hardware start.")
+    for i in range(5):
+        adc.read_conversion_data()
+        time.sleep(0.1)
+    print("init_hardware end.")
+    

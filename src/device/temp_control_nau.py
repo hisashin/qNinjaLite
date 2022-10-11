@@ -29,10 +29,10 @@ well_heater = PWM(well_heater_pin)
 
 counter_r = 47
 switch_val = 0
-thermistor_ali = Thermistor(counter_r, 3950, 100, 25)
-thermistor_nx = Thermistor(counter_r, 4311, 100, 25)
-thermistor_aki = Thermistor(counter_r, 4250, 100, 25)
-thermistor_none = Thermistor(counter_r, 4250, 100, 25)
+thermistor_ali = Thermistor(3950, 100, 25)
+thermistor_nx = Thermistor(4311, 100, 25)
+thermistor_aki = Thermistor(4250, 100, 25)
+thermistor_none = Thermistor(4250, 100, 25)
 # well, air, lid, ext1, ext2, ext3
 thermistors = [thermistor_ali, thermistor_aki, thermistor_none, thermistor_nx, thermistor_none, thermistor_nx ]
 
@@ -93,10 +93,10 @@ time_zero = time.ticks_ms()
 while True:
     # Measure well temp
     select_mux(mux_ch_well)
-    temp_well = thermistors[mux_ch_well].to_temp(adc.read_conversion_data())
+    temp_well = thermistors[mux_ch_well].to_temp(adc.read_conversion_data(), counter_r)
     # Measure air temp
     select_mux(mux_ch_air)
-    temp_air = thermistors[mux_ch_air].to_temp(adc.read_conversion_data())
+    temp_air = thermistors[mux_ch_air].to_temp(adc.read_conversion_data(), counter_r)
     sim.update(temp_air=temp_air, temp_well=temp_well)
     temp_sample = sim.simulate(interval=interval)
     pid.set_value(temp_well)
