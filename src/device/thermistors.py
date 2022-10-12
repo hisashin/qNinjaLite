@@ -76,7 +76,7 @@ adc.read_conversion_data()
 if True:
     well_heater_pin = Pin(25, Pin.OUT)
     well_heater_pin.value(0)
-    well_heater = PWM(well_heater_pin)
+    well_heater = PWM(well_heater_pin, duty=0)
     well_heater.duty(182) #1023 all on
 
 time_zero = time.ticks_ms()

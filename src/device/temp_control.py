@@ -23,7 +23,7 @@ mux_s2 = Pin(22, Pin.OUT)
 mux_s3 = Pin(23, Pin.OUT)
 well_heater_pin = Pin(26, Pin.OUT)
 well_heater_pin.value(0)
-well_heater = PWM(well_heater_pin)
+well_heater = PWM(well_heater_pin, duty=0)
 
 counter_r = 47
 thermistor_ali = Thermistor(3950, 100, 25)

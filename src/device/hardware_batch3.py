@@ -19,18 +19,21 @@ adc.start()
 adc.select_conversion_rate(330)
 
 # Thermal control
+
 KELVIN = 273.15
 targetTemp = 100
 counter_r = 47
 temp_switch_val = 0
+
 thermistor_ali = Thermistor(3950, 100, 25)
 thermistor_nx = Thermistor(4311, 100, 25)
 thermistor_aki = Thermistor(4250, 100, 25)
 thermistor_none = Thermistor(4250, 100, 25)
+
 well_heater_pin = Pin(25, Pin.OUT)
 well_heater_pin.value(0)
-well_heater = PWM(well_heater_pin)
-well_heater.duty(0) # Heater off.
+well_heater = PWM(well_heater_pin, duty=0)
+
 therm_switch = Pin(27, Pin.OUT)
 therm_switch.value(temp_switch_val)
 # well, air, lid, ext1, ext2, ext3
@@ -52,7 +55,6 @@ def select_mux (ch):
     mux_s1.value(val1)
     mux_s2.value(val2)
     mux_s3.value(val3)
-print ("PCR 2022/05/25 11:07")
 
 param_a = 0.35
 param_b = 0.35
@@ -174,9 +176,8 @@ class TempControl:
         self.schedule.init_timer(200, Timer.PERIODIC, self.measure_next)
         self.pid.set_value(self.temp_unit_well.temp)
         output = self.pid.get_output()
-        # duty = int(256.0 * output)
-        duty = int(128.0 * output)
-        # duty = 0
+        # duty = int(128.0 * output)
+        duty = 0
         print("W=%.2f\tA=%.2f\tO=%.2f" % (self.temp_unit_well.temp, self.temp_unit_air.temp, output)) # Print timestamp
         well_heater.duty(duty)
     def measure_next (self):
@@ -205,6 +206,7 @@ class TempControl:
         print("setTargetTemp", self.target_temp)
 
 def init_hardware():
+    well_heater.duty(0) # Heater off.
     adc.select_conversion_rate(330)
     adc.select_analog_input_channel(1)
     print("init_hardware start.")

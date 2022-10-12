@@ -59,7 +59,6 @@ class TempControlSimulator:
     def set_target_temp(self, temp):
         self.target_temp = temp
         print("setTargetTemp", self.target_temp)
-        # TODO use PID object
 
 CHANNEL_COUNT = 2
 WELL_COUNT = 8

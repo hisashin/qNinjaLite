@@ -1,5 +1,5 @@
 import time
-from machine import Pin, PWM
+from machine import Pin
 
 
 duty = 255
@@ -7,7 +7,6 @@ mux_s0 = Pin(14, Pin.OUT)
 mux_s1 = Pin(12, Pin.OUT)
 mux_s2 = Pin(22, Pin.OUT)
 mux_s3 = Pin(23, Pin.OUT)
-pwm = PWM(Pin(25,Pin.OUT), freq=1000)
 
 def select_mux (ch): 
     val0 = 0x01 & (ch >> 0)
@@ -23,9 +22,5 @@ def select_mux (ch):
 num = 0
 while True:
     time.sleep(1)
-    pwm.duty(512)
-    duty -= 256
-    if (duty < 0):
-        duty = 1023
     select_mux(num)
     num = (num + 1) % 4
