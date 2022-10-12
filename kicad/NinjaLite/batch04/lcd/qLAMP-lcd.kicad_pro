@@ -33,9 +33,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.6,
-          "height": 1.4,
-          "width": 0.9
+          "drill": 1.0,
+          "height": 1.7,
+          "width": 1.7
         },
         "silk_line_width": 0.15,
         "silk_text_italic": false,
@@ -114,7 +114,7 @@
         "min_microvia_drill": 0.09999999999999999,
         "min_silk_clearance": 0.0,
         "min_through_hole_diameter": 0.3,
-        "min_track_width": 0.21081999999999998,
+        "min_track_width": 0.2032,
         "min_via_annular_width": 0.049999999999999996,
         "min_via_diameter": 0.39999999999999997,
         "use_height_for_length_calcs": true
@@ -362,7 +362,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "qLAMP-main.kicad_pro",
+    "filename": "qLAMP-lcd.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -394,7 +394,7 @@
     "last_paths": {
       "gencad": "",
       "idf": "",
-      "netlist": "qLAMP-main.net",
+      "netlist": "qLAMP-lcd.net",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""
@@ -441,28 +441,8 @@
   },
   "sheets": [
     [
-      "86ad0555-08b3-4dde-9a3e-c1e5e29b6615",
+      "465cc4cf-f644-47a9-835a-84620837bc74",
       ""
-    ],
-    [
-      "00000000-0000-0000-0000-0000614a3cbb",
-      "Photo"
-    ],
-    [
-      "00000000-0000-0000-0000-0000614a4588",
-      "PhotoLED"
-    ],
-    [
-      "00000000-0000-0000-0000-0000614a49f9",
-      "PhotoThermistors"
-    ],
-    [
-      "00000000-0000-0000-0000-00006154fc7e",
-      "PhotoMUX"
-    ],
-    [
-      "075cac76-e418-4f93-a881-ee3b6a1c33db",
-      "Power"
     ]
   ],
   "text_variables": {}
