@@ -29,4 +29,5 @@ class Schedule ():
         self.has_task = False
         self.main_callback()
     def cancel_timer(self):
+        self.has_task = False
         self.timer.deinit()

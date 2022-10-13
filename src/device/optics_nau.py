@@ -33,7 +33,7 @@ mux_s3 = Pin(23, Pin.OUT)
 therm_switch = Pin(27, Pin.OUT)
 print("therm_switch")
 therm_switch.value(0)
-well_offset = 12
+well_offset = 0
 selected_well = well_offset
 well_count = 16
 led_channels = [15, 14, 13, 12, 11,10,9,8, 0,1,2,3,4,5,6,7]

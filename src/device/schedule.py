@@ -7,7 +7,7 @@ import time
 
 scheduler = Scheduler()
 
-class TempControl:
+class TempControlSimulator:
     def __init__(self):
         self.schedule = scheduler.add_schedule()
     def control (self):
@@ -32,7 +32,7 @@ class PCR:
     def start(self):
         self.schedule.init_timer(4000, Timer.PERIODIC, self.temp_control.control)
 
-temp_control = TempControl()
+temp_control = TempControlSimulator()
 optics = Optics()
 pcr = PCR(temp_control, optics)
 pcr.start()

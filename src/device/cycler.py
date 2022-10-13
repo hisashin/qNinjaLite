@@ -1,6 +1,5 @@
 import micropython
 from machine import Timer
-from scheduler import Scheduler, Schedule
 micropython.alloc_emergency_exception_buf(100)
 import time
 import random
@@ -31,16 +30,17 @@ class DeviceState:
         }
 TEMP_CONTROL_INTERVAL_MSEC = 1000
 DEFAULT_TEMP = 25
-scheduler = Scheduler()
 MAX_TEMP_RATE = 2.0
-class TempControl:
-    def __init__(self):
+class TempControlSimulator:
+    def __init__(self, scheduler):
         self.schedule = scheduler.add_schedule()
         self.temp = DEFAULT_TEMP
         self.target_temp = DEFAULT_TEMP
     def control (self):
         self.termistor_index = 0
         self.schedule.init_timer(200, Timer.PERIODIC, self.measure_next)
+    def get_temp(self):
+        return self.temp
     def measure_next (self):
         # print(["measure", self.termistor_index])
         # Simulation
@@ -59,13 +59,12 @@ class TempControl:
     def set_target_temp(self, temp):
         self.target_temp = temp
         print("setTargetTemp", self.target_temp)
-        # TODO use PID object
 
 CHANNEL_COUNT = 2
 WELL_COUNT = 8
 
-class Optics:
-    def __init__(self):
+class OpticsSimulator:
+    def __init__(self, scheduler):
         self.schedule = scheduler.add_schedule()
         self.is_measuring = False
         self.channel_index = 0
@@ -106,7 +105,7 @@ STATE_AUTO_PAUSED = DeviceState("auto_paused", hasExperiment=True, resumeAvailab
 STATE_COMPLETE = DeviceState("complete", hasExperiment=True, cancelAvailable=True, finishAvailable=True)
 
 class Cycler:
-    def __init__(self, temp_control, optics, communicator):
+    def __init__(self, temp_control, optics, communicator, scheduler):
         self.schedule = scheduler.add_schedule()
         self.temp_control = temp_control
         self.optics = optics
@@ -206,7 +205,7 @@ class Cycler:
         self._publish_state()
 
     def next_stage (self):
-        print("next_stage")
+        print("###### next_stage ######")
         self.step_timestamp_ms = 0
         data = {}
 
@@ -229,7 +228,7 @@ class Cycler:
     def progress(self):
         self._timestamp_update()
         self.temp_control.control()
-        temp = self.temp_control.temp
+        temp = self.temp_control.get_temp()
         self.temperature = temp
         if self.started == False:
             return
@@ -241,10 +240,13 @@ class Cycler:
                     # Optics.measure_all returns False if it has ongoing measurement
                     self.last_measurement = self.timestamp_ms
         state = {"state":self.current_step.label}
-        self.communicator.on_progress({"elapsed":self.timestamp_ms,"step_elapsed":self.step_timestamp_ms,
-            "remaining":0, "step_remaining":0, "step":self.current_step.obj(),
+        self.communicator.on_progress({
+            "elapsed":self.timestamp_ms,
+            "step_elapsed":self.step_timestamp_ms,
+            "step":self.current_step.obj(),
             "target":self.current_step.target_temp,
-            "plate":self.temperature, "state":state})
+            "plate":self.temperature, "state":state
+        })
         self.communicator.loop()
 
     def optics_on_measure(self, data):
