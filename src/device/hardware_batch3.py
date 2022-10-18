@@ -61,7 +61,7 @@ param_b = 0.35
 param_c = 15
 param_d = 4
 
-CONTROL_INTERVAL_MSEC = 1000
+CONTROL_INTERVAL_MSEC = 500
 CONTROL_INTERVAL_SEC = CONTROL_INTERVAL_MSEC/1000.0
 CHANNEL_COUNT = 1
 WELL_COUNT = 8
@@ -92,7 +92,7 @@ class Optics:
         self.well_index = 0
         self.measure_interval_ms = measure_interval_ms
     def measure_all(self, callback):
-        print("measure_all")
+        print("OptAll")
         if self.is_measuring:
             return False # Rejected (busy)
         self.callback = callback
@@ -142,6 +142,13 @@ RESISTOR_HIGH = 10 # kOhm
 # Switching temperature
 RESISTOR_TEMP_LIMIT_HIGH = 50
 RESISTOR_TEMP_LIMIT_LOW = 45
+
+# Default PID ranges
+
+PID_RANGES_DEFAULT = [
+    PIDRange(kp=0.073, ki=0.06, kd=0.02, min_value=None, max_value=75), 
+    PIDRange(kp=0.11, ki=0.08, kd=0.025, min_value=75, max_value=None)
+    ]
 class TempUnit:
     def __init__ (self, mux_index, thermistor, label, resistor_switch):
         self.mux_index = mux_index
@@ -152,7 +159,7 @@ class TempUnit:
         self.resistor = RESISTOR_LOW
 
 class TempControl:
-    def __init__(self, scheduler, measure_interval_ms=100, pid_interval_ms=1000):
+    def __init__(self, scheduler, measure_interval_ms=100, pid_interval_ms=500):
         self.schedule = scheduler.add_schedule()
         self.target_temp = DEFAULT_TEMP
         self.sim = TempSimulation(temp_air=25, temp_well=25)
@@ -161,24 +168,33 @@ class TempControl:
         self.temp_unit_well = TempUnit(0, thermistor_ali, "Well", RESISTOR_SWITCH_LOW)
         self.temp_unit_air = TempUnit(1, thermistor_aki, "Air", RESISTOR_SWITCH_LOW)
         self.temp_units = [ self.temp_unit_well, self.temp_unit_air ]
-        range_low = PIDRange(kp=0.25, ki=0.035, kd=0.01, min_value=None, max_value=55)
-        range_mid = PIDRange(kp=0.30, ki=0.035, kd=0.01, min_value=55, max_value=80)
-        range_high = PIDRange(kp=0.40, ki=0.035, kd=0.01, min_value=80, max_value=None)
-        ranges = [range_low, range_mid, range_high]
+        self.config_pid(PID_RANGES_DEFAULT)
+    def config_pid(self, ranges):
+        print("config_pid")
         pid = PID(ranges)
-        pid.set_interval(CONTROL_INTERVAL_SEC)
+        pid.set_interval(self.pid_interval_ms/1000.0)
         pid.set_output_range(0, 1.0)
         self.pid = pid
+    def set_pid_constants(self, ranges):
+        pid_ranges = []
+        for range in ranges:
+            print("set_pid_constants",range["kp"], range["ki"],range["kd"], range.get("min_value", None), range.get("max_value", None))
+            pid_ranges.append(PIDRange(kp=range["kp"], ki=range["ki"], kd=range["kd"], 
+                min_value=range.get("min_value", None), max_value=range.get("max_value", None)))
+        self.config_pid(pid_ranges)
+        
+
     def get_temp(self):
         return self.temp_unit_well.temp
     def control (self):
+        print("TmpCtrl")
         self.termistor_index = 0
-        self.schedule.init_timer(200, Timer.PERIODIC, self.measure_next)
+        self.schedule.init_timer(150, Timer.PERIODIC, self.measure_next)
         self.pid.set_value(self.temp_unit_well.temp)
         output = self.pid.get_output()
-        # duty = int(128.0 * output)
-        duty = 0
-        print("W=%.2f\tA=%.2f\tO=%.2f" % (self.temp_unit_well.temp, self.temp_unit_air.temp, output)) # Print timestamp
+        duty = int(512.0 * output)
+        # duty = 0
+        # print("W=%.2f\tA=%.2f\tO=%.2f" % (self.temp_unit_well.temp, self.temp_unit_air.temp, output)) # Print timestamp
         well_heater.duty(duty)
     def measure_next (self):
         adc.select_analog_input_channel(1) # Optics channel
@@ -187,7 +203,6 @@ class TempControl:
         select_mux(temp_unit.mux_index)
         time.sleep(0.05)
         temp_unit.temp = temp_unit.thermistor.to_temp(adc.read_conversion_data(), temp_unit.resistor)
-        print("measure_next", self.termistor_index, temp_unit.resistor_switch, temp_unit.temp)
         if temp_unit.resistor_switch == RESISTOR_SWITCH_LOW and temp_unit.temp > RESISTOR_TEMP_LIMIT_HIGH:
             print("To High Temp Mode")
             temp_unit.resistor_switch = RESISTOR_SWITCH_HIGH

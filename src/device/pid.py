@@ -1,7 +1,7 @@
 # pid control library
 
 class PIDRange:
-    def __init__(self, kp, ki, kd, min_value, max_value):
+    def __init__(self, kp, ki, kd, min_value=None, max_value=None):
         self.kp = kp
         self.ki = ki
         self.kd = kd

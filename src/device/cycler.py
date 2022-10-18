@@ -28,7 +28,7 @@ class DeviceState:
             "cancelAvailable":self.cancelAvailable,
             "finishAvailable":self.finishAvailable
         }
-TEMP_CONTROL_INTERVAL_MSEC = 1000
+TEMP_CONTROL_INTERVAL_MSEC = 500
 DEFAULT_TEMP = 25
 MAX_TEMP_RATE = 2.0
 class TempControlSimulator:
