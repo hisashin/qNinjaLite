@@ -9,7 +9,7 @@
           @click.stop="editProtocol">
           Edit Protocol
         </b-button>
-        <b-button class="mr-1 btn-sm"
+        <b-button class="mr-1 btn-sm" :disabled="!(deviceState && deviceState.start_available)"
           @click.stop="startExperiment">
           Run Default Experiment
         </b-button>
@@ -18,6 +18,7 @@
         <textarea v-model="pid_config" cols="80" rows="6"></textarea>
         <br/>
         <b-button class="mr-1 btn-sm"
+          :disabled="!connectionStatus.device.connected"
           @click.stop="confPID">
           Set PID Constants
         </b-button>
@@ -37,9 +38,7 @@ const DEFAULT_PID_CONF = [
   ]
   */
 
-const DEFAULT_PID_CONF = [
-    {"kp":0.3, "ki":0, "kd":0}
-  ]
+const DEFAULT_PID_CONF = [{"kp":0.19,"ki":0.013,"kd":0.02}]
   
 const DEFAULT_PROTOCOL = {name:"Default Protocol","steps":[
   {"temp":72,"duration":120.0,"data_collection":1,"data_collection_interval":5},
@@ -54,10 +53,18 @@ export default {
   },
   data() {
     return {
-      pid_config:JSON.stringify(DEFAULT_PID_CONF)
+      connectionStatus: device.Connection.DISCONNECTED,
+      pid_config:JSON.stringify(DEFAULT_PID_CONF),
+      deviceState:{}
     }
   },
   created: function () {
+    device.network.connectionStatus.observe((status)=>{
+      this.connectionStatus = status;
+    });
+    device.deviceState.observe((state)=>{
+      this.deviceState = state;
+    });
   },
   methods: {
     onAppear () {

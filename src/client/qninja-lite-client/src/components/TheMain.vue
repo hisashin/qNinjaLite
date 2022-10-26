@@ -15,7 +15,6 @@
           <!-- Network -->
           <button
             v-show="!connectionStatus.server.connected"
-            
             class="btn btn-link"
             @click="reConnect"
           >

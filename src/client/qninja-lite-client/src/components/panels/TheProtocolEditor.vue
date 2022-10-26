@@ -75,7 +75,7 @@
           <b-button variant="primary" class="ml-1" @click="save()">
             Save
           </b-button>
-          <b-button variant="primary" class="ml-1" @click="saveAndRun()">
+          <b-button :disabled="!(deviceState && deviceState.start_available)" variant="primary" class="ml-1" @click="saveAndRun()">
             Save and Run
           </b-button>
         </div>
@@ -120,11 +120,15 @@ export default {
       protocol: DEFAULT_PROTOCOL,
       trueValue: 1,
       falseValue: 0,
+      deviceState:{},
     };
   },
   mounted: function () {},
   created: function () {
     console.log("TheExperimentMonitor.created");
+    device.deviceState.observe((state)=>{
+      this.deviceState = state;
+    });
   },
   methods: {
     subscribe(topic, handler) {
