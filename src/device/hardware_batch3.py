@@ -92,8 +92,9 @@ class Optics:
         self.well_index = 0
         self.measure_interval_ms = measure_interval_ms
     def measure_all(self, callback):
-        print("OptAll")
+        # print("OptAll", time.ticks_ms()%100000)
         if self.is_measuring:
+            print("OptAll BUSY")
             return False # Rejected (busy)
         self.callback = callback
         self.channel_index = 0
@@ -105,15 +106,17 @@ class Optics:
         self.schedule.init_timer(self.measure_interval_ms, Timer.PERIODIC, self.measure_next)
         return True # Accepted
     def measure_next (self):
+        # print("opt", time.ticks_ms()%100000, self.well_index)
+        
         led.select_led(led_channels[self.well_index])
         led.set_brightness(brightness)
         led.off()
         select_mux(mux_channels[self.well_index])
         adc.select_analog_input_channel(2) # Optics channel
-        time.sleep(0.02)
+        time.sleep_ms(20)
         voff = adc.read_conversion_data()
         led.on()
-        time.sleep(0.02)
+        time.sleep_ms(20)
         von = adc.read_conversion_data()
         v = voff - von
         try:
@@ -183,25 +186,32 @@ class TempControl:
                 min_value=range.get("min_value", None), max_value=range.get("max_value", None)))
         self.config_pid(pid_ranges)
         
-
     def get_temp(self):
         return self.temp_unit_well.temp
+    def get_well_temp(self):
+        return self.temp_unit_well.temp
+    # TODO
+    def get_sample_temp(self):
+        return self.temp_unit_well.temp
+    def get_air_temp(self):
+        return self.temp_unit_air.temp
     def control (self):
-        print("TmpCtrl")
+        # print("TmpAll", time.ticks_ms()%100000)
         self.termistor_index = 0
         self.schedule.init_timer(150, Timer.PERIODIC, self.measure_next)
         self.pid.set_value(self.temp_unit_well.temp)
         output = self.pid.get_output()
+        # duty = int(1023.0 * output)
         duty = int(512.0 * output)
-        # duty = 0
         # print("W=%.2f\tA=%.2f\tO=%.2f" % (self.temp_unit_well.temp, self.temp_unit_air.temp, output)) # Print timestamp
         well_heater.duty(duty)
     def measure_next (self):
+        # print("tmp", time.ticks_ms()%100000)
         adc.select_analog_input_channel(1) # Optics channel
         temp_unit = self.temp_units[self.termistor_index]
         therm_switch.value(temp_unit.resistor_switch)
         select_mux(temp_unit.mux_index)
-        time.sleep(0.05)
+        time.sleep_ms(50)
         temp_unit.temp = temp_unit.thermistor.to_temp(adc.read_conversion_data(), temp_unit.resistor)
         if temp_unit.resistor_switch == RESISTOR_SWITCH_LOW and temp_unit.temp > RESISTOR_TEMP_LIMIT_HIGH:
             print("To High Temp Mode")

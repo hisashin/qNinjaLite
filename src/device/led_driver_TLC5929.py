@@ -8,7 +8,7 @@ class TLC5929:
 
     def _latch (self):
         self.latch.on()
-        time.sleep(0.0001)
+        # time.sleep(0.0001)
         self.latch.off()
 
     def _read (self):
@@ -21,11 +21,11 @@ class TLC5929:
         self.spi.readinto(rxdata, 0x00) 
 
     def _send (self, msg):
-        time.sleep(0.25)
+        # time.sleep(0.025)
         self._latch()
         self.spi.write(msg)
         self._latch()
-        time.sleep(0.25)
+        # time.sleep(0.025)
 
     def set_brightness (self, brightness) :
         self._send(bytearray([0x01, 0x00, 0xFF & brightness]))
