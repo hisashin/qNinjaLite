@@ -8,27 +8,27 @@ import json
 # The main logic of thermal and optical units
 
 class DeviceState:
-    def __init__(self, label, hasExperiment=False, startAvailable=False, 
-    resumeAvailable=False, pauseAvailable=False, cancelAvailable=False, finishAvailable=False):
+    def __init__(self, label, has_experiment=False, start_available=False, 
+    resume_available=False, pause_available=False, cancel_available=False, finish_available=False):
         self.label = label
-        self.hasExperiment = hasExperiment
-        self.startAvailable = startAvailable
-        self.resumeAvailable = resumeAvailable
-        self.pauseAvailable = pauseAvailable
-        self.cancelAvailable = cancelAvailable
-        self.finishAvailable = finishAvailable
+        self.has_experiment = has_experiment
+        self.start_available = start_available
+        self.resume_available = resume_available
+        self.pause_available = pause_available
+        self.cancel_available = cancel_available
+        self.finish_available = finish_available
     def data(self):
         print("DeviceState.data()")
         return {
             "label":self.label,
-            "hasExperiment":self.hasExperiment,
-            "startAvailable":self.startAvailable,
-            "resumeAvailable":self.resumeAvailable,
-            "pauseAvailable":self.pauseAvailable,
-            "cancelAvailable":self.cancelAvailable,
-            "finishAvailable":self.finishAvailable
+            "has_experiment":self.has_experiment,
+            "start_available":self.start_available,
+            "resume_available":self.resume_available,
+            "pause_available":self.pause_available,
+            "cancel_available":self.cancel_available,
+            "finish_available":self.finish_available
         }
-TEMP_CONTROL_INTERVAL_MSEC = 1000
+TEMP_CONTROL_INTERVAL_MSEC = 500
 DEFAULT_TEMP = 25
 MAX_TEMP_RATE = 2.0
 class TempControlSimulator:
@@ -41,6 +41,12 @@ class TempControlSimulator:
         self.schedule.init_timer(200, Timer.PERIODIC, self.measure_next)
     def get_temp(self):
         return self.temp
+    def get_well_temp(self):
+        return self.temp
+    def get_sample_temp(self):
+        return self.temp - 0.8
+    def get_air_temp(self):
+        return 25
     def measure_next (self):
         # print(["measure", self.termistor_index])
         # Simulation
@@ -98,11 +104,10 @@ class OpticsSimulator:
             # Next well
             self.well_index += 1
 
-STATE_IDLE = DeviceState("idle", startAvailable=True)
-STATE_RUNNING = DeviceState("running", hasExperiment=True, pauseAvailable=True, cancelAvailable=True)
-STATE_PAUSED = DeviceState("paused", hasExperiment=True, resumeAvailable=True, cancelAvailable=True)
-STATE_AUTO_PAUSED = DeviceState("auto_paused", hasExperiment=True, resumeAvailable=True, cancelAvailable=True)
-STATE_COMPLETE = DeviceState("complete", hasExperiment=True, cancelAvailable=True, finishAvailable=True)
+STATE_IDLE = DeviceState("idle", start_available=True)
+STATE_RUNNING = DeviceState("running", has_experiment=True, pause_available=True, cancel_available=True)
+STATE_PAUSED = DeviceState("paused", has_experiment=True, resume_available=True, cancel_available=True)
+STATE_COMPLETE = DeviceState("complete", has_experiment=True, cancel_available=True, finish_available=True)
 
 class Cycler:
     def __init__(self, temp_control, optics, communicator, scheduler):
@@ -125,7 +130,7 @@ class Cycler:
         self.experiment_id = experiment_id
         if self.protocol != None:
             self.communicator.on_error("Already started")
-            return
+            return False
         self._timestamp_init()
         self.protocol = protocol
         self.started = True
@@ -133,7 +138,9 @@ class Cycler:
         self.schedule.init_timer(TEMP_CONTROL_INTERVAL_MSEC, Timer.PERIODIC, self.progress)
         self.state = STATE_RUNNING
         self.next_stage()
+        self.communicator.on_event("start")
         self._publish_state()
+        return True
 
     # stopwatch
     def _timestamp_init (self):
@@ -154,63 +161,71 @@ class Cycler:
     def resume (self):
         if self.protocol == None:
             self.communicator.on_error("No experiment")
-            return
+            return False
         if self.paused == False:
             self.communicator.on_error("Still running")
-            return
+            return False
         # Resume heating or cooling
         self.temp_control.set_target_temp(self.current_step.target_temp)
         self.paused = False
         self.communicator.on_event("resume")
         self.state = STATE_RUNNING
         self._publish_state()
+        return True
 
     def cancel (self):
         if self.protocol == None:
             self.communicator.on_error("No experiment")
-            return
+            return False
         self.schedule.cancel_timer()
         self.temp_control.set_target_temp(None)
         self.protocol = None
         self.communicator.on_event("cancel")
         self.state = STATE_IDLE
         self._publish_state()
+        return True
     
     def finish (self):
+        print("Finish 0")
         if self.protocol == None:
+            print("Finish 01")
             self.communicator.on_error("No experiment")
-            return
+            return False
         if self.current_step.is_finished() == False:
+            print("Finish 02")
             self.communicator.on_error("Still running")
-            return
+            return False
+        print("Finish 1")
         self.schedule.cancel_timer()
+        print("Finish 3")
         self.temp_control.set_target_temp(None)
+        print("Finish 4")
         self.protocol = None
         self.communicator.on_event("finish")
+        print("Finish 5")
         self.state = STATE_IDLE
         self._publish_state()
+        print("Finish 6")
+        return True
 
     def pause (self):
         # Keep current temperature
         if self.protocol == None:
             self.communicator.on_error("No experiment")
-            return
+            return False
         if self.paused == True:
             self.communicator.on_error("Already paused")
-            return
+            return False
         self.temp_control.set_target_temp(self.temperature)
         self.paused = True
         self.communicator.on_event("pause")
         self.state = STATE_PAUSED
         self._publish_state()
+        return True
 
     def next_stage (self):
         print("###### next_stage ######")
         self.step_timestamp_ms = 0
-        data = {}
-
-        if self.current_step != None:
-            data["from"] = self.current_step.obj()
         if self.step_index == None:
             self.step_index = 0
         else:
@@ -219,9 +234,9 @@ class Cycler:
         self.current_step.start(self.temperature, self.timestamp_ms)
         self.temp_control.set_target_temp(self.current_step.target_temp)
         self.last_measurement = None
-        data["to"] = self.current_step.obj()
-        self.communicator.on_transition(data)
+
         if self.current_step.is_finished():
+            self.communicator.on_event("complete")
             self.state = STATE_COMPLETE
             self._publish_state()
 
@@ -243,14 +258,15 @@ class Cycler:
         self.communicator.on_progress({
             "elapsed":self.timestamp_ms,
             "step_elapsed":self.step_timestamp_ms,
-            "step":self.current_step.obj(),
-            "target":self.current_step.target_temp,
-            "plate":self.temperature, "state":state
+            "step": self.current_step.index,
+            "step_label": self.current_step.label,
+            "plate": self.temperature, 
+            "air": self.temp_control.get_air_temp(),
+            "sample":self.temp_control.get_sample_temp()
         })
-        self.communicator.loop()
 
     def optics_on_measure(self, data):
-        self.communicator.on_measure({"elapsed":self.timestamp_ms,"step_elapsed":self.step_timestamp_ms,"v":data})
+        self.communicator.on_measure({"elapsed":self.timestamp_ms,"step": self.current_step.index,"step_elapsed":self.step_timestamp_ms,"v":data})
 
     def request_state(self):
         self._publish_state()
@@ -279,7 +295,7 @@ class ExperimentProtocol:
                     else:
                         self.add_step(StepHold(target_temp=temp, hold_sec=duration, index=index))
                     index += 1
-                self.add_step(StepFinalHold(target_temp=profile["final_hold_temp"]))
+                self.add_step(StepFinalHold(target_temp=profile["final_hold_temp"], index=index))
             except Exception as e:
                 print(e)
                 raise Exception("Malformed protocol string")
@@ -327,10 +343,11 @@ class StepHold:
         return {"label":"hold","index":self.index}
 
 class StepFinalHold:
-    def __init__(self, target_temp=None):
+    def __init__(self, target_temp=None, index=0):
         self.target_temp = target_temp
         self.label = "final_hold"
         self.min_measurement_interval = None
+        self.index = index
     def is_done(self, measured_temp, timestamp_ms):
         return False # Never ends
     def start(self, measured_temp, timestamp_ms):
@@ -338,4 +355,4 @@ class StepFinalHold:
     def is_finished(self):
         return True
     def obj (self):
-        return {"label":"final_hold","index":0}
+        return {"label":"final_hold","index":self.index}
