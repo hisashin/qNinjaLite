@@ -3,19 +3,26 @@
     <div class="panel__menu">
     </div>
     <section class="section section--dashboard-protocols">
-      <h2>qNinjaLITE</h2>
+      <h2>Experiment</h2>
       <div>
-        <b-button class="mr-1 btn-sm"
-          @click.stop="editProtocol">
-          Edit Protocol
+        <select v-model="protocolIndex" :disabled="!protocols || protocols.length==0">
+            <option v-for="(protocol, index) in protocols" :key="index" :value="index">
+              {{ protocol.name }}
+            </option>
+        </select>
+        <b-button class="ml-1 btn-sm" :disabled="!protocols || protocols.length==0"
+          @click.stop="selectProtocol">
+          Select Protocol
         </b-button>
-        <b-button class="mr-1 btn-sm" :disabled="!(deviceState && deviceState.start_available)"
-          @click.stop="startExperiment">
-          Run Default Experiment
+        <b-button class="ml-1 btn-sm"
+          @click.stop="newProtocol">
+          New Protocol
         </b-button>
+
       </div>
+      <h2>Config</h2>
       <div>
-        <textarea v-model="pid_config" cols="80" rows="6"></textarea>
+        <textarea v-model="pid_config" cols="60" rows="4"></textarea>
         <br/>
         <b-button class="mr-1 btn-sm"
           :disabled="!connectionStatus.device.connected"
@@ -40,10 +47,15 @@ const DEFAULT_PID_CONF = [
 
 const DEFAULT_PID_CONF = [{"kp":0.19,"ki":0.013,"kd":0.02}]
   
-const DEFAULT_PROTOCOL = {name:"Default Protocol","steps":[
-  {"temp":72,"duration":120.0,"data_collection":1,"data_collection_interval":5},
-  {"temp":84,"duration":30.0,"data_collection":1,"data_collection_interval":5}
-  ],"final_hold_temp":20};
+const DEFAULT_PROTOCOL = 
+{
+  name:"Default Protocol",
+  "steps":[
+    { "temp":72, "duration":120.0, "data_collection":1, "data_collection_interval":5 },
+    { "temp":84, "duration":30.0, "data_collection":1, "data_collection_interval":5 }
+  ],
+  "final_hold_temp":20
+};
 // const DEFAULT_PROTOCOL = {name:"Default Protocol","steps":[{"temp":50,"duration":10.0,"data_collection":1,"data_collection_interval":5}],"final_hold_temp":20};
 export default {
   name: 'TheDashboard',
@@ -55,7 +67,9 @@ export default {
     return {
       connectionStatus: device.Connection.DISCONNECTED,
       pid_config:JSON.stringify(DEFAULT_PID_CONF),
-      deviceState:{}
+      deviceState:{},
+      protocols:[],
+      protocolIndex:0
     }
   },
   created: function () {
@@ -64,29 +78,29 @@ export default {
     });
     device.deviceState.observe((state)=>{
       this.deviceState = state;
+      appState.loadProtocols((protocols)=>{
+        console.log(protocols.map(p=>p.name).join(","))
+        this.protocols = protocols;
+      }, ()=>{
+        // onError
+        appState.toast(this, "Error", "Failed to load protocols.");
+      });
     });
   },
   methods: {
     onAppear () {
       console.log("TheDashboard.onAppear")
     },
-    startExperiment () {
-      console.log("TheDashboard.startExperiment")
-      const protocol = DEFAULT_PROTOCOL;
-      device.start(protocol, ()=>{
-        console.log("TheProtocolEditor.saveAndRun cb");
-        device.protocol.set(protocol);
-        appState.pushPanel(appState.PANELS.EXPERIMENT_MONITOR);
-      });
+    selectProtocol () {
+      appState.pushPanel(appState.PANELS.PROTOCOL_EDITOR, {protocol:this.protocols[this.protocolIndex]});
     },
-    editProtocol () {
-      console.log("TheDashboard.editProtocol")
-      appState.pushPanel(appState.PANELS.PROTOCOL_EDITOR);
+    newProtocol () {
+      appState.pushPanel(appState.PANELS.PROTOCOL_EDITOR, {protocol:appState.protocolTemplate()});
     },
     confPID () {
       console.log(this.pid_config);
       device.confPID(JSON.parse(this.pid_config), ()=>{
-        alert("PID config changed.")
+        appState.toast(this, "PID Config", "PID constants have changed.");
       })
     },
     title () { return "Dashboard" }

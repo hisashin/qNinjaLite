@@ -172,6 +172,8 @@ class TempControl:
         self.temp_unit_air = TempUnit(1, thermistor_aki, "Air", RESISTOR_SWITCH_LOW)
         self.temp_units = [ self.temp_unit_well, self.temp_unit_air ]
         self.config_pid(PID_RANGES_DEFAULT)
+    def reset (self):
+        self.pid.reset()
     def config_pid(self, ranges):
         print("config_pid")
         pid = PID(ranges)

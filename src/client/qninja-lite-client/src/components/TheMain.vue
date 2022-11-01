@@ -10,20 +10,44 @@
           <span>
             Server:{{ connectionStatus.server.message }}
             Device:{{ connectionStatus.device.message }}
-            Well {{ wellTemp }}℃
+            <a v-if="!connectionStatus.server.connected" @click="openLogin()">Connect</a>
           </span>
           <!-- Network -->
-          <button
-            v-show="!connectionStatus.server.connected"
-            class="btn btn-link"
-            @click="reConnect"
-          >
-            Connect
-          </button>
         </div>
       </div>
     </header>
     <main class="main">
+      <!-- To dialog -->
+      
+      <b-modal
+        id="login-modal"
+        title="Login"
+        hide-footer
+      >
+        <div>
+        username <input
+          v-model="username"
+          type="text"
+        />
+        </div>
+        <div>
+        password<input
+          v-model="password"
+          type="text"
+        />
+        </div>
+        <div>
+        <label>
+        <input type="checkbox" v-model="autologin" />
+        Automatic login
+        </label>
+        </div>
+        <div>
+          <b-button variant="secondary" class="ml-1" @click="login()">
+            Login
+          </b-button>
+        </div>
+      </b-modal>
       <!--<TheDeviceSummary v-show="selectedPanel!=panels.EXPERIMENT_MONITOR"/>-->
       <nav 
         v-if="panelTitle && selectedPanel!=panels.DASHBOARD"
@@ -50,6 +74,7 @@ import TheProtocolEditor from './panels/TheProtocolEditor.vue'
 import BackButton from './BackButton.vue';
 import device from "../lib/Device.js";
 import appState from "../lib/AppState.js";
+import login from "../lib/Login.js";
 
 const DEVICE_STATUS_IDLE = 1;
 const DEVICE_STATUS_RUNNING = 2;
@@ -74,7 +99,10 @@ export default {
       panelTitle: "",
       connectionStatus: device.Connection.DISCONNECTED,
       wellTemp: "-",
-      initialState:null
+      initialState:null,
+      username:"",
+      password:"",
+      autologin:false
     }
   },
   created: function () {
@@ -115,16 +143,24 @@ export default {
       this.backEnabled = (panelStack.length > 1);
     
     });
+    // Connection check
+    const loginInfo = login.getLoginInfo();
+    this.username = loginInfo.username;
+    this.password = loginInfo.password;
+    this.autologin = loginInfo.autologin;
+    if (login.isFilled() && loginInfo.autologin) {
+      device.connect(loginInfo);
+    } else {
+      this.$nextTick(()=>{
+        this.$bvModal.show('login-modal');
+      });
+    }
   },
   mounted: function () {
     appState.setViews(this.$refs);
   
   },
   methods: {
-    reConnect: function () {
-      console.log("reConnect");
-      device.connect();
-    },
     presentPanel(panel, toPanel) {
       this.selectedPanel = panel;
       this.panelTitle = (toPanel.title) ? toPanel.title() : "N/A";
@@ -138,6 +174,23 @@ export default {
     },
     revealDetailLatestExperiment () {
       appState.revealDetailLatestExperiment(this);
+    },
+    openLogin () {
+        this.$bvModal.show('login-modal');
+
+    },
+    login () {
+      console.log("login")
+      const loginInfo = {
+        username: this.username,
+        password: this.password,
+        autologin: this.autologin,
+      };
+      login.setLoginInfo(loginInfo);
+      if (login.isFilled()) {
+        device.connect(loginInfo);
+        this.$bvModal.show('login-modal');
+      }
     }
   }
 }

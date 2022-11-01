@@ -1,4 +1,5 @@
 "use strict";
+const AWS_HOST = "wss://a2n3d0j9ie2pgn-ats.iot.ap-northeast-1.amazonaws.com:443/mqtt?x-amz-customauthorizer-name=iot_custom_authorizer";
 // const TopicManager = require("/Users/maripo/git/Ninja-qPCR/src/qpcr/lib/topic_manager.js");
 const TopicManager = require("../lib/topic_manager.js");
 const Util = require("../lib/Util.js");
@@ -54,7 +55,7 @@ class NetworkWebsocket {
     this.onerror = null;
     this.onmessage = null;
   }
-  connect() {
+  connect(connectionInfo) {
     console.log("NetworkWebsocket.connect");
     this.ws = new WebSocket(this._apiEndpoint());
     this.ws.onmessage = (e) => {
@@ -85,10 +86,6 @@ class NetworkWebsocket {
     this.ws.send(JSON.stringify(data));
   }
 }
-const MQTT_USER_NAME = "maripo"
-const MQTT_USER_PASSWORD = "hogehoge"
-const MQTT_CLIENT_ID = "maripogoda";//new Date().getTime()
-const AWS_HOST = "wss://a2n3d0j9ie2pgn-ats.iot.ap-northeast-1.amazonaws.com:443/mqtt?x-amz-customauthorizer-name=iot_custom_authorizer";
 class NetworkAWSMQTT {
   constructor(thingId) {
     this.ws = null;
@@ -118,22 +115,20 @@ class NetworkAWSMQTT {
   _commandTopic() {
     return "cmd/qninjalite/" + this.thingId;
   }
-  connect() {
+  connect(connectionInfo) {
     console.log("### NetworkAWSMQTT.connect");
     let host = AWS_HOST;
     let options = {
       rejectUnauthorized: false,
-      username: MQTT_USER_NAME,
-      password: MQTT_USER_PASSWORD,
-      clientId: MQTT_CLIENT_ID
+      username: connectionInfo.username,
+      password: connectionInfo.password,
+      clientId: connectionInfo.username + "_" + new Date().getTime()%10000
     };
     this.client = mqtt.connect(host, options);
-
     this.client.on('error', (e) => {
       console.log("### NetworkAWSMQTT.client.error")
       this.onerror(e);
     });
-
     this.client.on('connect', (e) => {
       this.retryInterval = 1;
       this.connectionStatus.set(Connection.SERVER_CONNECTED);
@@ -159,38 +154,23 @@ class NetworkAWSMQTT {
     this.client.on('close', (e) => {
       // Called in case of disconnection.
       console.log("this.client.on.close")
-      if (this.connectionStatus.get()==Connection.DISCONNECTED) {
-        console.log("?????");
-        return;
-      }
       this.connectionStatus.set(Connection.DISCONNECTED);
-      console.log("### NetworkAWSMQTT.client.close");
       this.lastMessage = null;
-      console.log("Calling this.client.end()")
       this.client.end()
       this.client = null;
       if (this.onclose) {
         this.onclose();
       }
-      setTimeout (()=>{
-        this.connect();
-      }, this.retryInterval * 1000);
-      console.log("Reconnecting in %d s", this.retryInterval * 1000)
-      if (this.retryInterval < MAX_RETRY_INTERVAL) {
-        this.retryInterval = this.retryInterval + 1;
-      }
     });
     this.client.on('disconnect', (e) => {
       // Not called in case of getting offline.
       console.log("### NetworkAWSMQTT.client.disconnect");
-
     });
     
     this.client.on('message', (topic, message) => {
       try {
         const obj = JSON.parse(message.toString());
         if (obj.sender == SENDER_ID) {
-          console.log("My message.");
           return;
         }
         this.lastMessage = new Date();
@@ -210,7 +190,7 @@ class NetworkAWSMQTT {
         }
         this.onmessage(topic, obj);
       } catch (e) {
-        console.log("### NetworkAWSMQTT.client.message Malformed message");
+        console.error("NetworkAWSMQTT.client.message Malformed message");
         console.error(e);
       }
     });
@@ -249,8 +229,7 @@ class NetworkAWSMQTT {
 }
 class Device {
   constructor() {
-    console.log("Device.constructor()")
-    this.network = new NetworkAWSMQTT(this._thing_id()); //
+    this.network = new NetworkAWSMQTT(this._thing_id());
     // this.network = new NetworkWebsocket(); // WebSocket object
 
     this.topicManager = new TopicManager();
@@ -262,7 +241,6 @@ class Device {
     this.reqIdMap = {};
     this.maxReqId = 0;
     this.experimentId = "0";
-
   }
   init(config) {
     this.config = config;
@@ -276,6 +254,44 @@ class Device {
       console.log(data)
       this.deviceState.set(data);
     });
+    this.network.onopen = () => {
+      console.log('network.onopen');
+      device.publish(device.device_command_topic("req-state"), {}, (res) => {
+        console.log("Received req-state response.");
+        console.log(res.data)
+        this.deviceState.set(res.data);
+      });
+    };
+    this.network.onmessage = (topic, data) => {
+      // Process response to cmd
+      if (data.req_id) {
+        if (this.reqIdMap[data.req_id]) {
+          try {
+            this.reqIdMap[data.req_id](data);
+          } catch (e) {
+            console.error(e)
+          } finally {
+            delete this.reqIdMap[data.req_id];
+          }
+        }
+      }
+      // Call subscribers
+      const targets = this.topicManager.find(topic);
+      targets.forEach((subscriber) => {
+        try {
+          subscriber.handler(topic, data);
+        } catch (e) {
+          console.log(e);
+          console.trace();
+        }
+      });
+    };
+    this.network.onclose = (e) => {
+      //
+    };
+    this.network.onerror = (e) => {
+      // console.error(e);
+    };
   }
   _thing_id() {
     return "qninja_1662866929700"
@@ -337,50 +353,10 @@ class Device {
   }
 
   /* API */
-  connect() {
-    // TODO connect & reconnect
-    this.network.onopen = () => {
-      console.log('Network Client Connected');
-      device.publish(device.device_command_topic("req-state"), {}, (res) => {
-        console.log("Received req-state response.");
-        console.log("data=");
-        console.log(res.data)
-        this.deviceState.set(res.data);
-      });
-    };
-    this.network.onmessage = (topic, data) => {
-      // Process response to cmd
-      if (data.req_id) {
-        if (this.reqIdMap[data.req_id]) {
-          try {
-            this.reqIdMap[data.req_id](data);
-          } catch (e) {
-            console.error(e)
-          } finally {
-            delete this.reqIdMap[data.req_id];
-          }
-        }
-      }
-      // Call subscribers
-      const targets = this.topicManager.find(topic);
-      targets.forEach((subscriber) => {
-        try {
-          subscriber.handler(topic, data);
-        } catch (e) {
-          console.log(e);
-          console.trace();
-        }
-      });
-    };
-    this.network.onclose = (e) => {
-      //
-    };
-    this.network.onerror = (e) => {
-      // console.error(e);
-    };
+  connect(connectionInfo) {
+    console.log("Device.connect()")
     try {
-      console.log("Connecting...");
-      this.network.connect();
+      this.network.connect(connectionInfo);
     } catch (ex) {
       return;
     }

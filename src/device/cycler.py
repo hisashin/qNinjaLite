@@ -36,6 +36,8 @@ class TempControlSimulator:
         self.schedule = scheduler.add_schedule()
         self.temp = DEFAULT_TEMP
         self.target_temp = DEFAULT_TEMP
+    def reset (self):
+        pass
     def control (self):
         self.termistor_index = 0
         self.schedule.init_timer(200, Timer.PERIODIC, self.measure_next)
@@ -131,6 +133,7 @@ class Cycler:
         if self.protocol != None:
             self.communicator.on_error("Already started")
             return False
+        self.temp_control.reset()
         self._timestamp_init()
         self.protocol = protocol
         self.started = True

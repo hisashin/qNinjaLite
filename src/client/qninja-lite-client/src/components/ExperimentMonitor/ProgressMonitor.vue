@@ -154,12 +154,11 @@ export default {
       this.applyProgress(data);
     });
     device.protocol.observe((protocol)=>{
-      console.log("ProgressMonitor.protocol set.")
+      console.log("ProgressMonitor.protocol set.");
+      console.log(protocol)
       this.protocol = protocol;
     });
-    console.log("Observe device.deviceState");
     device.deviceState.observe((state)=>{
-      console.log("device.deviceState")
       this.closeModals(); 
       if (this.deviceState && state)
         console.log([this.deviceState.label, state.label, 

@@ -111,7 +111,7 @@ class PID:
         return self.output
 
     def reset(self):
-        print("pid reset")
+        print("pid.reset")
         self.p = 0
         self.i = 0
         self.d = 0

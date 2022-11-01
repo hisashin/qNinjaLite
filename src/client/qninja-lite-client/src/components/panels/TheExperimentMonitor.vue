@@ -84,6 +84,9 @@ export default {
         this.$refs.amplificationChart.setAppearanceConf(this.getAppearanceConf());
         this.ampChartReady = true;
       }
+      console.log("TheExperimentMonitor CLEAR!!!");
+      this.$refs.amplificationChart.clear();
+      this.$refs.temperatureChart.clear();
       this.subscribe(device.experiment_data_topic("progress"), (topic, progress)=>{
         if (!(progress.step_label == 'final_hold')) {
           this.$refs.temperatureChart.add(progress.elapsed, progress.plate);

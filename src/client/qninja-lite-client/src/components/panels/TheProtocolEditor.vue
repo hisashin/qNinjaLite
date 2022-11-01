@@ -87,24 +87,6 @@
 import appState from "../../lib/AppState.js";
 import device from "../../lib/Device.js";
 
-const DEFAULT_PROTOCOL = {
-  name: "Default Protocol",
-  steps: [
-    {
-      temp: 60,
-      duration: 20.0,
-      data_collection: 0,
-      data_collection_interval: 5,
-    },
-    {
-      temp: 72,
-      duration: 20.0,
-      data_collection: 1,
-      data_collection_interval: 5,
-    },
-  ],
-  final_hold_temp: 20,
-};
 const DEFAULT_STEP = {
   temp: 42,
   duration: 42.0,
@@ -117,7 +99,7 @@ export default {
   props: {},
   data() {
     return {
-      protocol: DEFAULT_PROTOCOL,
+      protocol: appState.protocolTemplate(),
       trueValue: 1,
       falseValue: 0,
       deviceState:{},
@@ -134,7 +116,14 @@ export default {
     subscribe(topic, handler) {
       this.subs.push(device.subscribe(topic, handler));
     },
-    onAppear(message) {},
+    onAppear(message) {
+      console.log(message)
+      if (message && message.protocol) {
+        console.log("Edit protocol")
+        console.log(message.protocol)
+        this.protocol = message.protocol;
+      }
+    },
     back() {
       appState.backPanel();
     },

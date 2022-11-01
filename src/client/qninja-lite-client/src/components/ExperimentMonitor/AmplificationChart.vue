@@ -78,8 +78,9 @@ export default {
     
   },
   methods: {
-    clear () {
+    clear: function() {
       console.log("TODO AmplificationChart.clear()");
+      this.graph.clearData();
     },
     // Well iterator
     eachSeries (func /* function(channel, well, dataIndex) */ ) {
@@ -125,7 +126,7 @@ export default {
         const channel = this.graph.addChannel({label:label, index:i});
         this.graphChannels.push(channel);
         this.subChannelsData.push(channel.addSubChannel({type:"line"}));
-        this.subChannelsPoints.push(channel.addSubChannel({type:"dots"}));
+        this.subChannelsPoints.push(channel.addSubChannel({type:"line-dots"}));
         this.subChannelsBaselines.push(channel.addSubChannel({type:"hline"}));
         this.subChannelsThresholds.push(channel.addSubChannel({type:"hline"}));
       });
@@ -188,7 +189,14 @@ export default {
     },
     add: function (data) {
       this.eachSeries((c, w, i)=>{
-        this.subChannelsPoints[i].addData({y:data.v[c][w], x:data.step_elapsed/1000});
+        try {
+          this.subChannelsPoints[i].addData({y:data.v[c][w], x:data.step_elapsed/1000});
+        } catch (e) {
+          console.log(e);
+          console.log(this.subChannelsPoints)
+          console.log(data)
+          console.log(c, w, i)
+        }
       });
       this.graph.update();
     },
