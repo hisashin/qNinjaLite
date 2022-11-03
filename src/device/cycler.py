@@ -38,6 +38,8 @@ class TempControlSimulator:
         self.target_temp = DEFAULT_TEMP
     def reset (self):
         pass
+    def off (self):
+        print("TempControlSimulator.OFF")
     def control (self):
         self.termistor_index = 0
         self.schedule.init_timer(200, Timer.PERIODIC, self.measure_next)

@@ -31,11 +31,13 @@
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
                     type="number"
+                    :min="minTemp" :max="maxTemp"
                   />℃ Duration:<input
                     v-model.number="step.duration"
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
                     type="number"
+                    min="0"
                   />s 
                   <label>Data collection:
                   <input
@@ -51,6 +53,7 @@
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
                     type="number"
+                    min="5"
                   />s
                 </div>
                 <div>
@@ -102,6 +105,8 @@ export default {
       protocol: appState.protocolTemplate(),
       trueValue: 1,
       falseValue: 0,
+      minTemp: 4,
+      maxTemp:98,
       deviceState:{},
     };
   },

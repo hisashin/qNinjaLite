@@ -73,13 +73,11 @@ class MQTTClient:
             if result["valid"]:
                 self.on_message(result)
                 if result["qos"] == 1:
-                    self.debug("Sending PUBACK.")
                     packet = mqtt.puback(message_identifier=result["packet_identifier"])
                     self._write(packet)
                     self.debug("PUBACK sent.")
                     return False
                 if result["qos"] == 2:
-                    self.debug("Sending PUBREC.")
                     packet = mqtt.pubrec(message_identifier=result["packet_identifier"])
                     self._write(packet)
                     self.debug("PUBREC sent.")
@@ -90,7 +88,6 @@ class MQTTClient:
         # PUBREC -> PUBREL
         if packet_type == MQTTProtocol.PUBREC:
             result = mqtt.pubrec_read(res)
-            self.debug("Sending PUBREL.")
             packet = mqtt.pubrel(message_identifier=result["packet_identifier"])
             self._write(packet)
             self.debug("PUBREL sent.")

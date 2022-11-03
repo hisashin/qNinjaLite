@@ -2,6 +2,7 @@ from cycler import *
 from mqtt import MQTTClient
 from scheduler import Scheduler
 import machine
+import sys
 
 import socket
 import json
@@ -17,7 +18,6 @@ import ssl
 keyfile = "certs/thing_private.pem.key"
 certfile = "certs/thing_certificate.pem.crt"
 ca_certs = "certs/CA1.cer"
-
 
 class NetworkMQTTClient:
     def __init__(self):
@@ -191,15 +191,22 @@ print("Init MQTT Server")
 
 count = 0
 while True:
-    if count % 1000 == 0:
-        print("1000 loops A")
-    scheduler.loop()
-    time.sleep(0.005)
-    if count % 1000 == 0:
-        print("1000 loops B")
-    communicator.loop()
-    time.sleep(0.005)
-    if count % 1000 == 0:
-        print("1000 loops C")
-    count += 1
-    wdt.feed()
+    try:
+        if count % 1000 == 0:
+            print("1000 loops A")
+        scheduler.loop()
+        time.sleep(0.005)
+        if count % 1000 == 0:
+            print("1000 loops B")
+        communicator.loop()
+        time.sleep(0.005)
+        if count % 1000 == 0:
+            print("1000 loops C")
+        count += 1
+        wdt.feed()
+    except KeyboardInterrupt as e:
+        print("Interrupt!")
+        temp_control.off()
+        sys.exit()
+
+
