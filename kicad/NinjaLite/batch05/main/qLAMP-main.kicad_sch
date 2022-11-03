@@ -2099,6 +2099,9 @@
     (path "/10301c79-bdc5-42b1-b4e6-bc35f782819e"
       (reference "#PWR0101") (unit 1) (value "GND") (footprint "")
     )
+    (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/9f968e38-532d-416d-9ea9-8ccc43aebd41"
+      (reference "#PWR0102") (unit 1) (value "GND") (footprint "")
+    )
     (path "/da3b0caf-e7a9-4910-9699-556e62149269"
       (reference "#PWR0103") (unit 1) (value "GND") (footprint "")
     )
@@ -2452,6 +2455,9 @@
     )
     (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/04aebed6-c14e-4b43-81ae-316e8e1a17ac"
       (reference "U6") (unit 1) (value "BA178M05FP-E2") (footprint "Ninja-qPCR:REG_TO252-3")
+    )
+    (path "/075cac76-e418-4f93-a881-ee3b6a1c33db/d3a03450-76e6-47e6-9c50-5c2d718e82e1"
+      (reference "U7") (unit 1) (value "BD433M5FP-CE2") (footprint "Ninja-qPCR:REG_TO252-3-INV")
     )
     (path "/00000000-0000-0000-0000-0000614a49f9/00000000-0000-0000-0000-000060c7338a"
       (reference "U8") (unit 1) (value "TS12A12511DCNR") (footprint "Ninja-qPCR:SOT-23-8-8.3mil")
