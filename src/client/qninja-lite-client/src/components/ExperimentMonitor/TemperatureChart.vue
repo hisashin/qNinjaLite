@@ -72,10 +72,11 @@ export default {
     this.graph = graph;
   },
   methods: {
-    clear () {
+    clear: function () {
       console.log("TODO TemperatureChart.clear()");
       this.dataRange = {};
       this.dataRangePrev = {};
+      this.graph.clearData();
     },
     
     updateGraphRange: function () {

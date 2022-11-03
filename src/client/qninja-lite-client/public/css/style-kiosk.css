@@ -502,8 +502,6 @@ html
 }
 .panel-nav__back {
   display: inline-block;
-  background-image: url(../img/back.svg);
-  background-repeat: no-repeat;
   width: 20px;
   height: 27px;
   border: none;

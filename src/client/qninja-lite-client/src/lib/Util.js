@@ -25,12 +25,13 @@ const Util = {
     return tokens.join(" ");
   },
   apiEndpoint () {
-    return "http://" + location.hostname + ":" + API_PORT + "/";
+    // return "http://" + location.hostname + ":" + API_PORT + "/";
+    return "/";
   },
   requestData (path, data, method, onSuccess, onError) {
     const xmlhttp = new XMLHttpRequest();
     const url = Util.apiEndpoint() + path;
-    console.log("AppState._requestData %s %s", method, url);
+    console.log("!AppState._requestData %s %s", method, url);
     xmlhttp.onreadystatechange = ()=>{
       if (xmlhttp.readyState == 4) {
         if (xmlhttp.status == 200) {
