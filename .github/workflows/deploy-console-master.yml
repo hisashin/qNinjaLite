@@ -1,5 +1,5 @@
 #test
-name: Deploy qNinja Console
+name: Deploy qNinjaLite Console
 
 on:
   push:
@@ -8,11 +8,11 @@ on:
       - console/**
 
 env:
-  SERVICE_NAME: qNinja
+  SERVICE_NAME: qNinjaLite
   AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN_CF_DEPLOY }}
   CF_DISTRIBUTION_ID: ${{ secrets.CF_DISTRIBUTION_ID_MASTER }}
   SLACK_WEBHOOK: ${{ secrets.SLACK_URL }}
-  SLACK_USERNAME: qNinja
+  SLACK_USERNAME: qNinjaLite
   SLACK_CHANNEL: pcr
 
 permissions:
