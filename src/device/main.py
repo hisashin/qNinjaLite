@@ -1,12 +1,13 @@
 import time
 import network
-from wifi_config import preferred_aps
+from wifi_config import preferred_aps, network_state
 
 print("HEATER ZERO")
 from machine import Pin
 Pin(25, Pin.OUT).value(0)
 
 wlan = network.WLAN(network.STA_IF)
+network_state["wlan"] = wlan
 wlan.active(True)
 
 connection_interval = 0.1
@@ -50,4 +51,4 @@ def connect ():
 connect()
 
 print("Importing cycler_mqtt")
-import cycler_mqtt
+# import cycler_mqtt

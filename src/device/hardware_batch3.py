@@ -1,7 +1,7 @@
 # Hardware control for batch3 board
 # - Temp control
 # - Optics unit control
-
+import micropython
 from adc_NAU7802 import NAU7802
 from machine import Pin, PWM, SoftI2C, SoftSPI, SPI, Timer
 from led_driver_TLC5929 import TLC5929
@@ -9,17 +9,51 @@ import time
 from pid import PIDRange, PID
 from thermistor import Thermistor
 from sample_temp_simulation import TempSimulation
+from wifi_config import network_state
+print("Mem 0")
+micropython.mem_info(0)
+import ssd1306 #LCD
+print("Mem 1")
+micropython.mem_info(0)
+# from uQR import QRCode
+matrix = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,1,1,1,1,1,1,1,0,0,1,1,1,0,0,0,1,0,0,1,1,1,1,1,1,1,0,0,0,0],[0,0,0,0,1,0,0,0,0,0,1,0,1,1,1,0,1,0,0,1,1,0,1,0,0,0,0,0,1,0,0,0,0],[0,0,0,0,1,0,1,1,1,0,1,0,0,1,0,0,1,0,0,0,1,0,1,0,1,1,1,0,1,0,0,0,0],[0,0,0,0,1,0,1,1,1,0,1,0,0,1,1,1,0,0,1,0,0,0,1,0,1,1,1,0,1,0,0,0,0],[0,0,0,0,1,0,1,1,1,0,1,0,1,0,1,1,1,0,1,1,0,0,1,0,1,1,1,0,1,0,0,0,0],[0,0,0,0,1,0,0,0,0,0,1,0,0,1,1,1,1,1,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0],[0,0,0,0,1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,1,0,1,0,1,0,1,0,0,1,0,1,0,1,1,1,1,0,0,0,1,0,0,1,0,0,0,0,0],[0,0,0,0,1,1,0,0,0,1,0,1,1,0,1,0,1,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0],[0,0,0,0,0,1,1,1,0,1,1,0,0,0,0,1,1,1,0,0,1,1,0,1,1,0,1,1,1,0,0,0,0],[0,0,0,0,1,1,0,0,1,0,0,1,1,0,1,0,1,1,0,0,1,1,1,1,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,0,1,1,0,0,1,1,1,1,0,1,1,1,1,1,0,1,0,1,1,0,0,0,0],[0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,1,1,0,0,1,0,0,1,0,0,0,0],[0,0,0,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0],[0,0,0,0,0,1,1,1,1,1,0,1,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0],[0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,0],[0,0,0,0,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,1,1,0,1,0,1,1,0,1,1,0,0,0,0],[0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,1,1,0,1,0,0,0,1,1,0,0,1,0,0,0,0],[0,0,0,0,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,0,1,1,1,1,1,1,0,1,1,0,0,0,0],[0,0,0,0,1,0,1,1,1,0,1,0,0,1,1,1,0,1,1,1,1,0,0,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0],[0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,1,0,1,1,0,1,0,1,1,0,1,0,0,0,0,0],[0,0,0,0,1,1,1,1,1,1,1,0,1,0,0,0,1,1,1,1,1,0,0,1,0,0,0,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+
+print("Mem 2 matrix")
+micropython.mem_info(0)
+
+wlan = network_state["wlan"]
 
 adc_device_address = 42
+lcd_device_address = 64
+
+# I2C
 scl = Pin(18, Pin.OUT, Pin.PULL_UP)
 sda = Pin(5, Pin.OUT, Pin.PULL_UP)
+
+sclk=Pin(12, Pin.OUT)
+mosi=Pin(13, Pin.OUT)
+blank=Pin(15, Pin.OUT)
+latch=Pin(14,Pin.OUT)
+
+well_heater_pin = Pin(25, mode=Pin.OUT, value=0)
+therm_switch = Pin(27, Pin.OUT)
+
+mux_s0 = Pin(19, Pin.OUT)
+mux_s1 = Pin(21, Pin.OUT)
+mux_s2 = Pin(22, Pin.OUT)
+mux_s3 = Pin(23, Pin.OUT)
+
+led_channels = [15, 14, 13, 12, 11,10,9,8, 0,1,2,3,4,5,6,7]
+mux_channels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+
 i2c = SoftI2C(scl, sda, freq=80000)
 adc = NAU7802(i2c, None, adc_device_address)
 adc.start()
 adc.select_conversion_rate(330)
 
-# Thermal control
 
+
+# Thermal control
 KELVIN = 273.15
 targetTemp = 100
 counter_r = 47
@@ -30,22 +64,15 @@ thermistor_nx = Thermistor(4311, 100, 25)
 thermistor_aki = Thermistor(4250, 100, 25)
 thermistor_none = Thermistor(4250, 100, 25)
 
-well_heater_pin = Pin(25, Pin.OUT)
 well_heater_pin.value(0)
 well_heater = PWM(well_heater_pin, duty=0)
 
-therm_switch = Pin(27, Pin.OUT)
 therm_switch.value(temp_switch_val)
 # well, air, lid, ext1, ext2, ext3
 # thermistors = [thermistor_ali, thermistor_aki, thermistor_none, thermistor_nx, thermistor_none, thermistor_nx ]
 # High/Low temp modes
 
 # Multiplexer control
-mux_s0 = Pin(19, Pin.OUT)
-mux_s1 = Pin(21, Pin.OUT)
-mux_s2 = Pin(22, Pin.OUT)
-mux_s3 = Pin(23, Pin.OUT)
-
 def select_mux (ch): 
     val0 = 0x01 & (ch >> 0)
     val1 = 0x01 & (ch >> 1)
@@ -56,11 +83,6 @@ def select_mux (ch):
     mux_s2.value(val2)
     mux_s3.value(val3)
 
-param_a = 0.35
-param_b = 0.35
-param_c = 15
-param_d = 4
-
 CONTROL_INTERVAL_MSEC = 500
 CONTROL_INTERVAL_SEC = CONTROL_INTERVAL_MSEC/1000.0
 CHANNEL_COUNT = 1
@@ -68,21 +90,50 @@ WELL_COUNT = 8
 DEFAULT_TEMP = 25
 
 # LED Driver
-# SCLK=12, MOSI=13, MISO=15, LAT=14
-sclk=Pin(12, Pin.OUT)
-mosi=Pin(13, Pin.OUT)
-blank=Pin(15, Pin.OUT)
-latch=Pin(14,Pin.OUT)
+
 sclk.off()
 mosi.off()
 latch.off()
 blank.off()
+
 print("Init SPI...")
 spi = SoftSPI(baudrate=10000, polarity=0, phase=0, firstbit=SPI.MSB, sck=sclk, mosi=mosi, miso=Pin(16))
 print("Init SPI done")
+
+class DisplayControl:
+    def __init__(self, display):
+        self.display = display
+        self.display.fill(1)
+    def display_qr(self, url):
+        # qr = QRCode()
+        # qr.add_data(url)
+        # matrix = qr.get_matrix()
+        dot_size = 2
+        w = 128
+        h = 64
+        for dot_y in range(len(matrix)):
+            for dot_x in range(len(matrix[0])):
+                x = int(w/2  + ( dot_x - len(matrix[0])/2) * dot_size)
+                y = int(h/2  + ( dot_y - len(matrix)/2) * dot_size)
+                value = not matrix[dot_y][dot_x]
+                self.display.fill_rect(x, y, x+dot_size, y+dot_size, value)
+        self.display.show()
+    def display_temp(self, temp):
+        self.display.fill(0)
+        txt = "Well {temp:.1f} C"
+        self.display.text(wlan.ifconfig()[0], 0, 0, 1)
+        self.display.text(txt.format(temp = temp), 0, 14, 1)
+        self.display.show()
+    def display_ip(self, temp):
+        self.display.fill(0)
+        self.display.text(wlan.ifconfig()[0], 0, 0, 1)
+        self.display.show()
+
+display_control = DisplayControl(ssd1306.SSD1306_I2C(128, lcd_device_address, i2c))
+console_url = "https://qninja.hisa.dev"
+display_control.display_qr(console_url)
+
 led = TLC5929(spi, latch, blank)
-led_channels = [15, 14, 13, 12, 11,10,9,8, 0,1,2,3,4,5,6,7]
-mux_channels = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 brightness = 0x7F
 class Optics:
     def __init__(self, scheduler, measure_interval_ms=200):
@@ -172,6 +223,11 @@ class TempControl:
         self.temp_unit_air = TempUnit(1, thermistor_aki, "Air", RESISTOR_SWITCH_LOW)
         self.temp_units = [ self.temp_unit_well, self.temp_unit_air ]
         self.config_pid(PID_RANGES_DEFAULT)
+        self.control_count = 0
+
+    def off (self):
+        well_heater.duty(0)
+        print("Heater off")
     def reset (self):
         self.pid.reset()
     def config_pid(self, ranges):
@@ -207,6 +263,10 @@ class TempControl:
         duty = int(512.0 * output)
         # print("W=%.2f\tA=%.2f\tO=%.2f" % (self.temp_unit_well.temp, self.temp_unit_air.temp, output)) # Print timestamp
         well_heater.duty(duty)
+        self.control_count += 1
+        if self.control_count == 4:
+            display_control.display_temp(self.temp_unit_well.temp)
+            self.control_count = 0
     def measure_next (self):
         # print("tmp", time.ticks_ms()%100000)
         adc.select_analog_input_channel(1) # Optics channel
