@@ -1,4 +1,4 @@
-22138233230947641
+22139956970256820
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -60470,15 +60470,15 @@ PowerPAK_SO-8
 
 
 0
-8
-8
+9
+5
 Ninja-qPCR
 PowerPAK_SO-8_Long
 
 
 0
-8
-8
+9
+5
 Ninja-qPCR
 PushPin
 
@@ -60488,6 +60488,13 @@ PushPin
 1
 Ninja-qPCR
 REG_TO252-3
+TO-252-2, tab to pin 1 https://www.wolfspeed.com/media/downloads/87/CSD01060.pdf
+TO-252-2 diode
+0
+7
+3
+Ninja-qPCR
+REG_TO252-3-INV
 TO-252-2, tab to pin 1 https://www.wolfspeed.com/media/downloads/87/CSD01060.pdf
 TO-252-2 diode
 0
