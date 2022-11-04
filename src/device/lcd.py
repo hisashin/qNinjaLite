@@ -3,13 +3,16 @@ import ssd1306
 import time
 from wifi_config import preferred_aps, network_state
 
-i2c = SoftI2C(Pin(18, Pin.OUT, Pin.PULL_UP), Pin(5, Pin.OUT, Pin.PULL_UP), freq=80000)
+# batch 3
+# i2c = SoftI2C(Pin(18, Pin.OUT, Pin.PULL_UP), Pin(5, Pin.OUT, Pin.PULL_UP), freq=80000)
+# batch 4
+i2c = SoftI2C(Pin(12, Pin.OUT, Pin.PULL_UP), Pin(13, Pin.OUT, Pin.PULL_UP), freq=80000)
 print(i2c.scan())
 display = ssd1306.SSD1306_I2C(128, 64, i2c)
 # display.text('Hello, World!', 0, 0, 1)
 display.fill(1)
 url = "https://hisa.dev/?hogehogehogehogehttps"
-if False:
+if True:
     from uQR import QRCode
     qr = QRCode()
     qr.add_data(url)
@@ -35,6 +38,7 @@ display.text(wlan.ifconfig()[0], 0, 0, 1)
 display.show()
 print("lcd 4")
 t = 12.3456
+time.sleep(3)
 while True:
     txt = "Well {temp:.1f} C"
     display.fill(0)

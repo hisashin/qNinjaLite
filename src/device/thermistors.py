@@ -6,18 +6,18 @@ from thermistor import Thermistor
 print("pcr.py")
 print("calling test_adc.start()")
 adc_device_address = 42
-scl = Pin(18, Pin.OUT, Pin.PULL_UP)
-sda = Pin(5, Pin.OUT, Pin.PULL_UP)
+scl = Pin(12, Pin.OUT, Pin.PULL_UP)
+sda = Pin(13, Pin.OUT, Pin.PULL_UP)
 i2c = SoftI2C(scl, sda, freq=80000)
 # adc = ADS1219(i2c, adc_device_address, Pin(17, Pin.IN, Pin.PULL_UP))
 adc = NAU7802(i2c, None, adc_device_address)
 adc.start()
 
 # S0=19, S1=21, S2=22, S3=23
-mux_s0 = Pin(19, Pin.OUT)
-mux_s1 = Pin(21, Pin.OUT)
+mux_s0 = Pin(4, Pin.OUT)
+mux_s1 = Pin(21, Pin.OUT) 
 mux_s2 = Pin(22, Pin.OUT)
-mux_s3 = Pin(23, Pin.OUT)
+mux_s3 = Pin(16, Pin.OUT)
 
 # High/Low temp modes
 therm_switch = Pin(27, Pin.OUT)
@@ -69,7 +69,7 @@ thermistor_nx = Thermistor(4311, 100, 25)
 thermistor_aki = Thermistor(4250, 100, 25)
 thermistor_none = Thermistor(4250, 100, 25)
 # well, air, lid, ext1, ext2, ext3
-thermistors = [thermistor_ali, thermistor_aki, thermistor_none, thermistor_nx, thermistor_none, thermistor_nx ]
+thermistors = [thermistor_ali, thermistor_ali, thermistor_none, thermistor_nx, thermistor_none, thermistor_nx ]
 
 adc.read_conversion_data()
 
@@ -80,23 +80,26 @@ if True:
     well_heater.duty(182) #1023 all on
 
 time_zero = time.ticks_ms()
-
+count = 0
 while True:
     try:
         select_mux(mux_ch)
         time.sleep(0.125)
         v = adc.read_conversion_data() # (adc.read_conversion_data() + 1) / 2
         temp = thermistors[mux_ch].to_temp(v, counter_r)
-        print("%dch %.2fV, %.2fC" % (mux_ch, v * 3.3, temp))
+        print("%dch %.2fV, %.2fC R=%d" % (mux_ch, v * 3.3, temp, counter_r))
         # print(switch_val, counter_r)
         time.sleep(0.375)
 
         if mux_ch == 0:
-            if switch_val == 0 and temp > 60:
+            count += 1
+            # if switch_val == 0 and temp > 60:
+            if count%2 == 0:
                 print("To High Temp Mode")
                 counter_r = 10
                 switch_val = 1
-            if switch_val == 1 and temp < 50:
+            # if switch_val == 1 and temp < 50:
+            else:
                 print("To Low Temp Mode")
                 counter_r = 47
                 switch_val = 0
