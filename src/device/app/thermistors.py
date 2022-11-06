@@ -69,7 +69,7 @@ thermistor_nx = Thermistor(4311, 100, 25)
 thermistor_aki = Thermistor(4250, 100, 25)
 thermistor_none = Thermistor(4250, 100, 25)
 # well, air, lid, ext1, ext2, ext3
-thermistors = [thermistor_ali, thermistor_ali, thermistor_none, thermistor_nx, thermistor_none, thermistor_nx ]
+thermistors = [thermistor_nx, thermistor_ali, thermistor_none, thermistor_nx, thermistor_none, thermistor_nx ]
 
 adc.read_conversion_data()
 
