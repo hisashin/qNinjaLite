@@ -4,3 +4,5 @@ esp.osdebug(None)
 print("boot.py")
 import webrepl
 webrepl.start()
+import sys
+sys.path.insert(0, 'app')
