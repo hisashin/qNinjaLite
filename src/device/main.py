@@ -84,5 +84,21 @@ def ap_mode ():
 
 print([pin_ap_mode.value(), pin_no_run.value()])
 
-print("Importing cycler_mqtt")
-import cycler_mqtt
+if pin_ap_mode.value()==PIN_VALUE_ON:
+    print("Boot in AP mode")
+    ap_mode()
+else:
+    if connect():    
+        print("WiFi Client Mode")
+        if pin_no_run.value()==PIN_VALUE_ON:
+            print("No MQTT")
+            lcd_message("WLAN Mode",wlan.ifconfig()[0])
+        else:
+            print("Start MQTT")
+            try:
+                import cycler_mqtt
+            except :
+                print("Import error")
+    else:
+        print("Connection failed")
+        ap_mode()
