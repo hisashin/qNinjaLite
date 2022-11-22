@@ -37,8 +37,8 @@
 
 <script>
 import Graph from "../../lib_shared/Graph.js";
-// const TIME_RANGES = [10000, 1000, 500, 250, 120, 60];
-const TIME_RANGES = [200, 100, 80, 60, 40, 20];
+const TIME_RANGES = [10000, 1000, 500, 250, 120, 60];
+// const TIME_RANGES = [200, 100, 80, 60, 40, 20]; // Narrow ranges for debugging
 const PADDING = 10;
 let timeRangeSec = TIME_RANGES[3];
 
@@ -137,6 +137,7 @@ export default {
         this.dataRange.max = Math.max(this.dataRange.max, timeSec);
         this.dataRange.min = Math.min(this.dataRange.min, timeSec);
       } else {
+        // Graph is empty
         this.dataRange = {
           min: timeSec,
           max: timeSec

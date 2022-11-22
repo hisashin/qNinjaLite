@@ -1,6 +1,7 @@
 import time
 import network
 from wifi_config import preferred_aps, network_state
+from machine import Pin, SoftI2C
 import os
 
 print("HEATER ZERO")
@@ -46,9 +47,9 @@ def connect ():
                 if result is not None:
                     print("Connected.")
                     print(result)
-                    return
+                    return True
+    return False
 
-connect()
 
 if "conf" not in os.listdir():
     print("Creating conf dir")
@@ -57,7 +58,47 @@ if "certs" not in os.listdir():
     print("Creating certs dir")
     os.mkdir("certs")
 
-try:
-    import hardware_batch4
-except :
-    print("Import error")
+
+pin_ap_mode=Pin(33, Pin.IN, Pin.PULL_UP)
+pin_no_run=Pin(2, Pin.IN, Pin.PULL_UP)
+PIN_VALUE_ON = 0
+
+def lcd_message (msg0, msg1):
+    import ssd1306 #LCD
+    lcd_device_address = 64
+    scl = Pin(12, Pin.OUT, Pin.PULL_UP)
+    sda = Pin(13, Pin.OUT, Pin.PULL_UP)
+    i2c = SoftI2C(scl, sda, freq=80000)
+    lcd = ssd1306.SSD1306_I2C(128, lcd_device_address, i2c)
+    lcd.fill(1)
+    lcd.text(msg0, 2, 2, 0)
+    lcd.text(msg1, 2, 16, 0)
+    lcd.show()
+
+def ap_mode ():
+    ap = network.WLAN(network.AP_IF)
+    ap.active(False)
+    ap.active(True)
+    ap.config(essid="qNinjaLITE")
+    lcd_message("AP Mode",ap.ifconfig()[0])
+
+print([pin_ap_mode.value(), pin_no_run.value()])
+
+if pin_ap_mode.value()==PIN_VALUE_ON:
+    print("Boot in AP mode")
+    ap_mode()
+else:
+    if connect():    
+        print("WiFi Client Mode")
+        if pin_no_run.value()==PIN_VALUE_ON:
+            print("No MQTT")
+            lcd_message("WLAN Mode",wlan.ifconfig()[0])
+        else:
+            print("Start MQTT")
+            try:
+                import cycler_mqtt
+            except :
+                print("Import error")
+    else:
+        print("Connection failed")
+        ap_mode()

@@ -230,7 +230,7 @@ MAX_DUTY = 1023
 # Default PID ranges
 
 PID_RANGES_DEFAULT = [
-    PIDRange(kp=0.012, ki=0.009, kd=0.02, min_value=None, max_value=None)
+    PIDRange(kp=0.12, ki=0.009, kd=0.02, min_value=None, max_value=None)
     ]
 
 class TempUnit:
