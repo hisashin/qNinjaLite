@@ -2325,10 +2325,10 @@
       (reference "J25") (unit 1) (value "Conn_01x02_Male") (footprint "Connector_PinHeader_1.27mm:PinHeader_1x02_P1.27mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-0000614a4588/892f7ae3-c5e4-46e9-8532-89e8b2103473"
-      (reference "JLN1") (unit 1) (value "Conn_01x10_Male") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical")
+      (reference "JLN1") (unit 1) (value "Conn_01x10_Male") (footprint "Connector_PinSocket_1.27mm:PinSocket_2x05_P1.27mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-0000614a4588/d4eae4fa-5601-4840-8a38-af376cef163b"
-      (reference "JLS1") (unit 1) (value "Conn_01x10_Male") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical")
+      (reference "JLS1") (unit 1) (value "Conn_01x10_Male") (footprint "Connector_PinSocket_1.27mm:PinSocket_2x05_P1.27mm_Vertical")
     )
     (path "/00000000-0000-0000-0000-0000614a3cbb/00000000-0000-0000-0000-0000614dbb8f"
       (reference "JP1") (unit 1) (value "SolderJumper_2_Bridged") (footprint "Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm")
