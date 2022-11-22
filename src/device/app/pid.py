@@ -42,7 +42,7 @@ class PID:
 
     def set_setpoint(self, setpoint):
         if setpoint == None:
-            self.controlType = CONTROL_TYPE_RAMP_DECREASE
+            self.controlType = CONTROL_TYPE_OFF
             return
         if setpoint < self.setpoint - 10:
             self.controlType = CONTROL_TYPE_RAMP_DECREASE
@@ -58,9 +58,42 @@ class PID:
         self.output_off = off
     
     def back_calc_setpoint_diff (self, ctrl):
-        return (self.ki*self.i + (self.kd*(self.value-self.prevValue)/self.interval) + ctrl) / (self.kp + self.ki*self.interval);
+        return (self.ki*self.i + (self.kd*(self.value-self.prevValue)/self.interval) + ctrl) / (self.kp + self.ki*self.interval)
 
+    
     def set_value(self, value):
+        if self.controlType == CONTROL_TYPE_OFF:
+            return
+        new_range = self.select_range(value)
+        if self.range != new_range:
+            self.range = new_range
+            self.kp = self.range.kp
+            self.ki = self.range.ki
+            self.kd = self.range.kd
+        self.value = value
+        rampSetpoint = self.setpoint
+        if False:
+            if self.controlType == CONTROL_TYPE_RAMP_INCREASE:
+                ctrl = self.output_upper
+                diff = self.back_calc_setpoint_diff(ctrl)
+                rampSetpoint = min(self.setpoint, self.value+diff)
+                if self.setpoint <= self.value:
+                    self.controlType = CONTROL_TYPE_NORMAL
+            if self.controlType == CONTROL_TYPE_RAMP_DECREASE:
+                ctrl = self.output_lower
+                diff = self.back_calc_setpoint_diff(ctrl)
+                rampSetpoint = max(self.setpoint, self.value+diff)
+                if self.setpoint >= self.value:
+                    self.controlType == CONTROL_TYPE_NORMAL
+        self.p = self.value - rampSetpoint
+        ctrl = self.output
+        if not (ctrl == self.output_lower or ctrl == self.output_upper):
+            self.i += (self.value - rampSetpoint) * self.interval
+        self.d = (self.value - self.prevValue) / self.interval
+
+        print("V=%.2f p=%.2f(%.2f)\ti=%.2f(%.2f)\td=%.2f(%.2f) SP=%.1f" % (self.value, self.p, self.p*self.kp, self.i, self.i*self.ki, self.d, self.d*self.kd, rampSetpoint))
+        self.prevValue = self.value
+    def set_value_by_ramping_setpoint(self, value):
         if self.controlType == CONTROL_TYPE_OFF:
             return
         new_range = self.select_range(value)

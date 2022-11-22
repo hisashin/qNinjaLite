@@ -128,6 +128,7 @@ class Cycler:
         self.protocol = None
         self.state = STATE_IDLE
         self.experiment_id = ""
+        self.schedule.init_timer(TEMP_CONTROL_INTERVAL_MSEC, Timer.PERIODIC, self.periodic)
     
     def start(self, protocol, experiment_id=""):
         print("start.")
@@ -140,10 +141,10 @@ class Cycler:
         self.protocol = protocol
         self.started = True
         self.step_index = None
-        self.schedule.init_timer(TEMP_CONTROL_INTERVAL_MSEC, Timer.PERIODIC, self.progress)
+        # self.schedule.init_timer(TEMP_CONTROL_INTERVAL_MSEC, Timer.PERIODIC, self.progress)
         self.state = STATE_RUNNING
         self.next_stage()
-        self.communicator.on_event("start")
+        self.communicator.on_event("start", data={"protocol":self.protocol.protocol})
         self._publish_state()
         return True
 
@@ -182,7 +183,7 @@ class Cycler:
         if self.protocol == None:
             self.communicator.on_error("No experiment")
             return False
-        self.schedule.cancel_timer()
+        # self.schedule.cancel_timer()
         self.temp_control.set_target_temp(None)
         self.protocol = None
         self.communicator.on_event("cancel")
@@ -191,26 +192,18 @@ class Cycler:
         return True
     
     def finish (self):
-        print("Finish 0")
         if self.protocol == None:
-            print("Finish 01")
             self.communicator.on_error("No experiment")
             return False
         if self.current_step.is_finished() == False:
-            print("Finish 02")
             self.communicator.on_error("Still running")
             return False
-        print("Finish 1")
-        self.schedule.cancel_timer()
-        print("Finish 3")
+        # self.schedule.cancel_timer()
         self.temp_control.set_target_temp(None)
-        print("Finish 4")
         self.protocol = None
         self.communicator.on_event("finish")
-        print("Finish 5")
         self.state = STATE_IDLE
         self._publish_state()
-        print("Finish 6")
         return True
 
     def pause (self):
@@ -244,10 +237,12 @@ class Cycler:
             self.communicator.on_event("complete")
             self.state = STATE_COMPLETE
             self._publish_state()
-
+    def periodic(self):
+        self.temp_control.control()
+        if self.protocol:
+            self.progress()
     def progress(self):
         self._timestamp_update()
-        self.temp_control.control()
         temp = self.temp_control.get_temp()
         self.temperature = temp
         if self.started == False:
@@ -286,6 +281,7 @@ class ExperimentProtocol:
     def __init__(self, profile=None):
         self.steps = []
         self.raw = profile
+        self.protocol = profile
         if str:
             try:
                 print(str)
@@ -321,9 +317,10 @@ class StepRamp:
             return measured_temp >= self.target_temp - TEMP_TOLERANCE
         else:
             # Cooling ramp
-            return measured_temp <= self.target_temp + TEMP_CONTROL_INTERVAL_MSEC
+            return measured_temp <= self.target_temp + TEMP_TOLERANCE
     def start(self, measured_temp, timestamp_ms):
         self.initial_temp = measured_temp
+        print(["StepRamp Start", self.initial_temp, self.target_temp])
     def is_finished(self):
         return False
     def obj (self):

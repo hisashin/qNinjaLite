@@ -24,10 +24,16 @@
       <div>
         <textarea v-model="pid_config" cols="60" rows="4"></textarea>
         <br/>
-        <b-button class="mr-1 btn-sm"
+        <!--
           :disabled="!connectionStatus.device.connected"
+          -->
+        <b-button class="mr-1 btn-sm"
           @click.stop="confPID">
           Set PID Constants
+        </b-button>
+        <b-button class="mr-1 btn-sm"
+          @click.stop="validatePID">
+          validate
         </b-button>
       </div>
     </section>
@@ -37,15 +43,20 @@
 
 import appState from "../../lib/AppState.js";
 import device from "../../lib/Device.js";
+import pidValidator from "../../lib/pid_validation.js";
 /*
-const DEFAULT_PID_CONF = [
+const DEFAULT_PID_CONF = {
+  "consts":[
     {"kp":0.3, "ki":0, "kd":0, "max_value":55},
     {"kp":0.3, "ki":0, "kd":0, "min_value":55, "max_value":80},
     {"kp":0.3, "ki":0, "kd":0, "min_value":80}
   ]
+}
   */
 
-const DEFAULT_PID_CONF = [{"kp":0.19,"ki":0.013,"kd":0.02}]
+const DEFAULT_PID_CONF = {
+  "consts":[{"kp":0.12,"ki":0.009,"kd":0.02}]
+}
   
 const DEFAULT_PROTOCOL = 
 {
@@ -79,7 +90,6 @@ export default {
     device.deviceState.observe((state)=>{
       this.deviceState = state;
       appState.loadProtocols((protocols)=>{
-        console.log(protocols.map(p=>p.name).join(","))
         this.protocols = protocols;
       }, ()=>{
         // onError
@@ -97,9 +107,26 @@ export default {
     newProtocol () {
       appState.pushPanel(appState.PANELS.PROTOCOL_EDITOR, {protocol:appState.protocolTemplate()});
     },
+    validatePID(){
+      const errors = pidValidator.validate(JSON.parse(this.pid_config))
+      console.log(errors)
+      if (errors.length > 0) {
+        appState.toast(this, "PID Config Error", JSON.stringify(errors));
+      } else {
+        appState.toast(this, "PID Config Error", "OK");
+      }
+
+    },
     confPID () {
       console.log(this.pid_config);
-      device.confPID(JSON.parse(this.pid_config), ()=>{
+      const pidObj = JSON.parse(this.pid_config);
+      const errors = pidValidator.validate(JSON.parse(this.pid_config))
+      if (errors.length > 0) {
+        console.log("Error.")
+        appState.toast(this, "PID Config Error", JSON.stringify(errors));
+        return;
+      }
+      device.confPID(pidObj, ()=>{
         appState.toast(this, "PID Config", "PID constants have changed.");
       })
     },

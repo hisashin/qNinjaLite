@@ -44,14 +44,17 @@
             class="progress-meter__item"
             v-for="(step, index) in protocol.steps" :key="index" 
             v-bind:class="{ 'progress-meter__item--notyet': progress.step<index,'progress-meter__item--current': progress.step==index,'progress-meter__item--done': progress.step>index }">
-            <span class="progress-meter__item progress-meter__label">{{ step.temp }}℃ {{ step.duration }}s</span>
+            <span class="progress-meter__item progress-meter__label">{{ step.temp }}℃ 
+              <span
+                v-if="progress.step==index && progress.step_label=='hold'">{{ stepElapsedSec }}</span>/{{ step.duration }}s
+            </span>
             <div
               v-if="progress.step==index" class="progress-meter__item progress-meter__detail">{{ progress.step_label }}</div>
           </li>
           <li
             class="progress-meter__item"
             v-bind:class="{ 'progress-meter__item--current': progress.step_label=='final_hold', 'progress-meter__item--notyet': progress.step_label!='final_hold' }">
-            <span class="progress-meter__item progress-meter__label">Finished</span>
+            <span class="progress-meter__item progress-meter__label">Final hold</span>
           </li>
         </ul>
       </div>
@@ -85,7 +88,7 @@
         </div>
       </div>
       <div>
-        Air={{ progress.air }}
+        Air {{ airTemp }}C
         
       </div>
       <div class="progress-monitor__row" v-if="progress.step_label!='final_hold'">
@@ -145,12 +148,13 @@ export default {
       totalTimeLabel: "-",
 
       plateTemp: "-",
+      airTemp: "-"
     }
   },
   computed: {
   },
   created: function () {
-    device.subscribe(device.experiment_data_topic("progress"), (topic, data, id)=>{
+    device.subscribe(device.experiment_data_topic_filter("progress"), (topic, data, id)=>{
       this.applyProgress(data);
     });
     device.protocol.observe((protocol)=>{
@@ -229,6 +233,7 @@ export default {
       this.progress = progress;
       if (!this.protocol) return;
       this.elapsedTime = Util.humanTime(this.progress.elapsed/1000);
+      this.stepElapsedSec = Math.round(this.progress.step_elapsed / 1000);
       // Calculate estimated remaining time
       const remaining = this.getRemainingTimeMs(this.protocol, progress);
       this.elapsedTime = this.progress.elapsed;
@@ -238,6 +243,7 @@ export default {
       this.remainingTime = remaining
       this.totalTime = (remaining+this.progress.elapsed)
       this.plateTemp = (this.progress) ? Math.round(this.progress.plate) : "-";
+      this.airTemp = (this.progress) ? Math.round(this.progress.air) : "-";
     },
     pause () { device.pause(); },
     resume () { device.resume(); },

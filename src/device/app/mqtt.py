@@ -3,12 +3,13 @@ from mqtt_packet import MQTTProtocol
 mqtt = MQTTProtocol()
 
 class MQTTClient:
-    def __init__ (self, network, keep_alive=60, client_id=""):
+    def __init__ (self, network, keep_alive=60, client_id="", buff_size=4096):
         self.last_ping = 0
         self.keep_alive = keep_alive
         self.on_message = None
         self.network = network
         self.client_id = client_id
+        self.buff_size = buff_size
     def set_on_message (self, func):
         self.on_message = func
 
@@ -41,7 +42,7 @@ class MQTTClient:
         packet = mqtt.subscribe(topic_filter, requested_qos=requested_qos)
         try:
             self._write(packet)
-            resp = bytearray(self._recv(4096))
+            resp = bytearray(self._recv(self.buff_size))
         except Exception as e:
             print("NO Sub Resp")
 
@@ -53,7 +54,7 @@ class MQTTClient:
         try:
             packet = mqtt.pingreq()
             self._write(packet)
-            resp = self._recv(4096)
+            resp = self._recv(self.buff_size)
             res = mqtt.pingres_read(bytearray(resp))
             self.debug(res)
         except:
@@ -112,7 +113,7 @@ class MQTTClient:
         while next:
             next = False
             try:
-                resp = self._recv(4096 * 1)
+                resp = self._recv(self.buff_size)
                 try:
                     next = self._process_response(resp)
                     if (next):

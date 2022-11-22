@@ -31,8 +31,14 @@
         />
         </div>
         <div>
-        password<input
+        password <input
           v-model="password"
+          type="text"
+        />
+        </div>
+        <div>
+        Thing ID <input
+          v-model="thingId"
           type="text"
         />
         </div>
@@ -102,7 +108,9 @@ export default {
       initialState:null,
       username:"",
       password:"",
-      autologin:false
+      thingId:"",
+      autologin:false,
+      autologinDisabled:true
     }
   },
   created: function () {
@@ -111,8 +119,6 @@ export default {
       this.connectionStatus = status;
     });
     device.deviceState.observe((data)=>{
-      console.log("TheMain.deviceState")
-      console.log(data)
       if (!data) return;
       if (!this.initialState) {
         this.initialState = data
@@ -123,7 +129,7 @@ export default {
       }
     });
 
-    device.subscribe("device/update/state", (topic, data)=>{
+    device.subscribe(device.device_data_topic_filter("state"), (topic, data)=>{
         if (!this.initialState) {
           this.initialState = data
           console.log("Initialstate=%s", data.label)
@@ -132,7 +138,7 @@ export default {
           }
         }
     });
-    device.subscribe(device.experiment_data_topic("event"), (topic, data)=>{
+    device.subscribe(device.experiment_data_topic_filter("event"), (topic, data)=>{
         console.log("Event received %s", topic)
         console.log("Experiment started.");
         this.status = DEVICE_STATUS_RUNNING;
@@ -147,8 +153,9 @@ export default {
     const loginInfo = login.getLoginInfo();
     this.username = loginInfo.username;
     this.password = loginInfo.password;
-    this.autologin = loginInfo.autologin;
-    if (login.isFilled() && loginInfo.autologin) {
+    this.password = loginInfo.password;
+    this.thingId = loginInfo.thingId;
+    if (login.isFilled() && loginInfo.autologin && !this.autologinDisabled) {
       device.connect(loginInfo);
     } else {
       this.$nextTick(()=>{
@@ -184,12 +191,13 @@ export default {
       const loginInfo = {
         username: this.username,
         password: this.password,
+        thingId: this.thingId,
         autologin: this.autologin,
       };
       login.setLoginInfo(loginInfo);
       if (login.isFilled()) {
         device.connect(loginInfo);
-        this.$bvModal.show('login-modal');
+        this.$bvModal.hide('login-modal');
       }
     }
   }

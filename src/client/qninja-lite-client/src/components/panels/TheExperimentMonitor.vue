@@ -1,7 +1,6 @@
 <template>
   <div class="panel panel--dashboard">
     <div class="panel__menu">
-      Experiment Monitor
     </div>
     <ProgressMonitor ref="progressMonitor"/>
     <b-button class="mr-1 btn-sm"
@@ -9,7 +8,6 @@
       Back
     </b-button>
     <section class="section" v-show="protocol">
-      Monitor Body
       <div class="section__body">
         <div class="item item--tabbed">
           <b-tabs pills content-class="item--tabbed__content" nav-wrapper-class="item--tabbed__tabs" active>
@@ -87,14 +85,14 @@ export default {
       console.log("TheExperimentMonitor CLEAR!!!");
       this.$refs.amplificationChart.clear();
       this.$refs.temperatureChart.clear();
-      this.subscribe(device.experiment_data_topic("progress"), (topic, progress)=>{
+      this.subscribe(device.experiment_data_topic_filter("progress"), (topic, progress)=>{
         if (!(progress.step_label == 'final_hold')) {
           this.$refs.temperatureChart.add(progress.elapsed, progress.plate);
         } else {
           // TODO complete!
         }
       });
-      this.subscribe(device.experiment_data_topic("fluo"), (topic, obj)=>{
+      this.subscribe(device.experiment_data_topic_filter("fluo"), (topic, obj)=>{
         console.log(obj)
         this.$refs.amplificationChart.add(obj);
       });
