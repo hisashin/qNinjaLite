@@ -13,5 +13,5 @@ echo "Copying app files"
 for f in app/*.py; do
     cmd="python ../webrepl/webrepl_cli.py -p $password $f $ip:/app/"
     echo $cmd
-    # $cmd
+    $cmd
 done

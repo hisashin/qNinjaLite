@@ -1,10 +1,11 @@
 import time
 import network
 from wifi_config import preferred_aps, network_state
+import os
 
 print("HEATER ZERO")
 from machine import Pin
-Pin(25, Pin.OUT).value(0)
+Pin(25, Pin.OUT).value(0) # Well heater off
 
 wlan = network.WLAN(network.STA_IF)
 network_state["wlan"] = wlan
@@ -47,8 +48,16 @@ def connect ():
                     print(result)
                     return
 
-# wlan.disconnect()
 connect()
 
-print("Importing cycler_mqtt")
-# import cycler_mqtt
+if "conf" not in os.listdir():
+    print("Creating conf dir")
+    os.mkdir("conf")
+if "certs" not in os.listdir():
+    print("Creating certs dir")
+    os.mkdir("certs")
+
+try:
+    import hardware_batch4
+except :
+    print("Import error")

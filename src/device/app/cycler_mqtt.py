@@ -2,14 +2,16 @@ from cycler import *
 from mqtt import MQTTClient
 from scheduler import Scheduler
 import machine
+from qninja_conf import conf
 import sys
+import gc
 
 import socket
 import json
 import cycler_mqtt_config
 
 scheduler = Scheduler()
-demo_thing_id = cycler_mqtt_config.demo_thing_id
+demo_thing_id = conf.thing_id()
 server = cycler_mqtt_config.server
 port = 8883 #secure
 
@@ -41,6 +43,8 @@ class NetworkMQTTClient:
         print("Connected")
         global s
         s = ssl.wrap_socket(skt, cert=cert, key=key)
+        cert = ""
+        key = ""
         print("Wrapped")
         self.socket = s
         s.setblocking(False)
@@ -51,7 +55,7 @@ class NetworkMQTTClient:
     def write (self, packet):
         self.socket.write(packet)
 
-mqttclient = MQTTClient(NetworkMQTTClient())
+mqttclient = MQTTClient(NetworkMQTTClient(), buff_size=1023)
 mqttclient.connect()
 
 # ESP32 works as WebSoekct Server
@@ -97,8 +101,9 @@ class MQTTCommunicator:
         mqttclient.publish(self._experiment_data_topic("progress"), json.dumps(data), qos=0)
     def on_measure(self, data):
         mqttclient.publish(self._experiment_data_topic("fluo"), json.dumps(data), qos=0)
-    def on_event(self, label):
-        data = {"label":label}
+    def on_event(self, label, data={}):
+        print(["on_event", label])
+        data = {"label":label,"data":data}
         mqttclient.publish(self._experiment_data_topic("event"), json.dumps(data), qos=0)
     def on_device_state_change(self, data):
         mqttclient.publish(self._device_data_topic("state"),  json.dumps(data), qos=0)
@@ -111,11 +116,11 @@ class MQTTCommunicator:
         print(["on_message","topic", topic])
 
         # Experiment control
+        obj = json.loads(message["message"])
         if topic == "start":
             print("Start!!!")
             # { experiment_id:this._issueExperimentId(), protocol: experiment }
             print(message["message"])
-            obj = json.loads(message["message"])
             accepted = cycler.start(ExperimentProtocol(profile=obj["protocol"]), experiment_id=obj["experiment_id"])
             self._respond_to_command(fullTopic, obj, accepted=accepted)
         elif topic == "cancel":
@@ -137,7 +142,10 @@ class MQTTCommunicator:
         
         elif topic == "pid":
             obj = json.loads(message["message"])
-            temp_control.set_pid_constants(obj["ranges"])
+            
+            temp_control.set_pid_constants(obj["consts"])
+            conf.set_pid(obj)
+            conf.save()
             accepted = True
             self._respond_to_command(fullTopic, obj, accepted=accepted)
 
@@ -175,8 +183,7 @@ if False:
     optics = OpticsSimulator(scheduler)
 # Use hardware
 
-# if False:
-from hardware_batch3 import TempControl, Optics, init_hardware
+from hardware_batch4 import TempControl, Optics, init_hardware
 temp_control = TempControl(scheduler)
 optics = Optics(scheduler)
 
@@ -193,15 +200,12 @@ count = 0
 while True:
     try:
         if count % 1000 == 0:
-            print("1000 loops A")
+            print("1000 loops A (GC)")
+            gc.collect()
         scheduler.loop()
         time.sleep(0.005)
-        if count % 1000 == 0:
-            print("1000 loops B")
         communicator.loop()
         time.sleep(0.005)
-        if count % 1000 == 0:
-            print("1000 loops C")
         count += 1
         wdt.feed()
     except KeyboardInterrupt as e:

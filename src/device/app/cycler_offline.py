@@ -18,7 +18,7 @@ class OfflineCommunicator:
         print(json.dumps(data))
     def on_measure(self, data):
         print(json.dumps(data))
-    def on_event(self, label):
+    def on_event(self, label, data={}):
         data = {"label":label}
         print(json.dumps(data))
     def on_device_state_change(self, data):

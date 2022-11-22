@@ -5,6 +5,7 @@
       <div class="section__body">
         <div class="item">
           <div>
+            <span :class="'validation-label validation__name'"/>
             Name:
             <input
               v-model="protocol.name"
@@ -13,6 +14,7 @@
             />
           </div>
           <div>
+            <span :class="'validation-label validation__final_hold_temp'"/>
             <input
               v-model.number="protocol.final_hold_temp"
               v-on:input="onChangeProtocol()"
@@ -22,17 +24,23 @@
           <b-button variant="secondary" class="ml-1" @click="addStepFirst()">
             Add
           </b-button>
+          <span :class="'validation-label validation__steps'"/>
           <ul>
             <template v-for="(step, index) in protocol.steps">
               <li :key="index">
                 <div>
-                  Step {{ index + 1 }} Temp:<input
+                  <span :class="'validation-label validation__steps__' + index" />
+                  Step {{ index + 1 }} Temp:
+                  <span :class="'validation-label validation__steps__' + index + '__temp'" />
+                  <input
                     v-model.number="step.temp"
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
                     type="number"
                     :min="minTemp" :max="maxTemp"
-                  />℃ Duration:<input
+                  />℃ Duration:
+                  <span :class="'validation-label validation__steps__' + index + '__duration'" />
+                  <input
                     v-model.number="step.duration"
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
@@ -48,7 +56,8 @@
                     :true-value="trueValue"
                     :false-value="falseValue"
                   /></label>
-                  Data collection interval:<input
+                  Data collection interval:
+                  <span :class="'validation-label validation__steps__' + index + '__data_collection_interval'" /><input
                     v-model.number="step.data_collection_interval"
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
@@ -75,11 +84,16 @@
               </li>
             </template>
           </ul>
+          <!--
           <b-button variant="primary" class="ml-1" @click="save()">
             Save
           </b-button>
-          <b-button :disabled="!(deviceState && deviceState.start_available)" variant="primary" class="ml-1" @click="saveAndRun()">
-            Save and Run
+          -->
+          <b-button :disabled="hasError || !(deviceState && deviceState.start_available)" variant="primary" class="ml-1" @click="saveAndRun()">
+            Run
+          </b-button>
+          <b-button variant="primary" class="ml-1" @click="validate()">
+            Validate
           </b-button>
         </div>
       </div>
@@ -89,12 +103,13 @@
 <script>
 import appState from "../../lib/AppState.js";
 import device from "../../lib/Device.js";
+import protocolValidator from "../../lib/protocol_validation.js";
 
 const DEFAULT_STEP = {
-  temp: 42,
-  duration: 42.0,
+  temp: 50.0,
+  duration: 180.0,
   data_collection: 1,
-  data_collection_interval: 5,
+  data_collection_interval: 10,
 };
 export default {
   name: "TheExperimentMonitor",
@@ -108,6 +123,7 @@ export default {
       minTemp: 4,
       maxTemp:98,
       deviceState:{},
+      hasError: false
     };
   },
   mounted: function () {},
@@ -143,9 +159,36 @@ export default {
         appState.pushPanel(appState.PANELS.EXPERIMENT_MONITOR);
       });
     },
+    _setMessage: function (selector, message) {
+      let elements = document.querySelectorAll(selector);
+      for (let i=0; i<elements.length; i++) {
+        elements[i].innerHTML = message;
+      }
+      if (elements.length == 0) {
+        console.warn("No element for selector %s", selector);
+      }
+    },
+    pathToClassName: function(path) {
+      return ".validation__" + path.join("__");
+    },
+    processValidationResult: function (result) {
+      this._setMessage(".validation-label", "");
+      console.log(result)
+      for (let item of result) {
+        console.log("Path=" + this.pathToClassName(item.path));
+        this._setMessage(this.pathToClassName(item.path), '<div class="validation-label__content">'+item.message+'</div>')
+      }
+      // this._setMessage(".validation-label", '<div class="validation-label__content">DEBUG</div>'); // For style debug
+      this.hasError = (result.length > 0);
+    },
+    validate: function () {
+      console.log("TheProtocolEditor.validate");
+      const errors = protocolValidator.validate(this.protocol)
+      this.processValidationResult(errors);
+
+    },
     onChangeProtocol: function () {
-      console.log("onChangeProtocol");
-      console.log(JSON.parse(JSON.stringify(this.protocol)));
+      this.validate();
     },
     addStepFirst: function () {
       console.log("TODO addStepFirst");

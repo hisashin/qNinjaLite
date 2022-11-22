@@ -87,7 +87,7 @@ class NetworkWebsocket {
   }
 }
 class NetworkAWSMQTT {
-  constructor(thingId) {
+  constructor() {
     this.ws = null;
     /* Handlers */
     console.log("### NetworkAWSMQTT.constructor");
@@ -96,7 +96,7 @@ class NetworkAWSMQTT {
     this.onerror = null;
     this.onmessage = null;
     this.client = null;
-    this.thingId = thingId;
+    this.thingId = "";
     this.retryInterval = 10;
     this.lastMessage = null;
     this.connectionStatus = new ObservableValue(Connection.DISCONNECTED);
@@ -117,7 +117,9 @@ class NetworkAWSMQTT {
   }
   connect(connectionInfo) {
     console.log("### NetworkAWSMQTT.connect");
-    let host = AWS_HOST;
+    console.log(JSON.stringify(connectionInfo))
+    this.thingId = connectionInfo.thingId;
+    let host = AWS_HOST + "&thing=" + connectionInfo.thingId;
     let options = {
       rejectUnauthorized: false,
       username: connectionInfo.username,
@@ -135,11 +137,11 @@ class NetworkAWSMQTT {
       const dataTopicFilter = this._dataTopic() + "/#";
       const commandTopicFilter = this._commandTopic() + "/#";
       console.log("NetworkAWSMQTT.client.connect subscribing...")
-      this.client.subscribe(dataTopicFilter, (e) => {
-        console.log("NetworkWebsocket.client.subscribe OK %s", dataTopicFilter)
-        console.log("NetworkAWSMQTT.client.on.connect subscribing...")
-        this.client.subscribe(commandTopicFilter, (e) => {
-          console.log("NetworkWebsocket.client.subscribe callback %s", commandTopicFilter)
+      this.client.subscribe(commandTopicFilter, (e) => {
+        console.log("NetworkWebsocket.client.subscribe cmd OK %s", commandTopicFilter)
+        console.log("NetworkAWSMQTT.client.on.connect subscribing dt...")
+        this.client.subscribe(dataTopicFilter, (e) => {
+          console.log("NetworkWebsocket.client.subscribe dt callback %s", dataTopicFilter)
           // Ready to pub & sub ping 
           const pingTopic = this._commandTopic() + "/ping-client";
           this.publish(pingTopic, EMPTY_MSG);
@@ -229,7 +231,7 @@ class NetworkAWSMQTT {
 }
 class Device {
   constructor() {
-    this.network = new NetworkAWSMQTT(this._thing_id());
+    this.network = new NetworkAWSMQTT();
     // this.network = new NetworkWebsocket(); // WebSocket object
 
     this.topicManager = new TopicManager();
@@ -241,6 +243,7 @@ class Device {
     this.reqIdMap = {};
     this.maxReqId = 0;
     this.experimentId = "0";
+    this.thingId = "";
   }
   init(config) {
     this.config = config;
@@ -249,7 +252,7 @@ class Device {
         this.protocol.set(experiment.protocol);
       }
     });
-    this.subscribe(this.device_data_topic("state"), (topic, data, id) => {
+    this.subscribe(this.device_data_topic_filter("state"), (topic, data, id) => {
       console.log("Device.js deviceState updated.")
       console.log(data)
       this.deviceState.set(data);
@@ -294,7 +297,7 @@ class Device {
     };
   }
   _thing_id() {
-    return "qninja_1662866929700"
+    return this.thingId;
   }
   _experiment_id() {
     return this.experimentId;
@@ -302,18 +305,31 @@ class Device {
   experiment_data_topic(category) {
     return "dt/qninjalite/" + this._thing_id() + "/experiment/+/" + category
   }
+  experiment_data_topic_filter(category) {
+    return "dt/qninjalite/+/experiment/+/" + category
+  }
   device_data_topic(category) {
     return "dt/qninjalite/" + this._thing_id() + "/" + category
+  }
+  device_data_topic_filter(category) {
+    return "dt/qninjalite/+/" + category
   }
   device_command_topic(command) {
     return "cmd/qninjalite/" + this._thing_id() + "/" + command
   }
+  device_command_topic_filter(command) {
+    return "cmd/qninjalite/+/" + command
+  }
   experiment_command_topic(command) {
     return "cmd/qninjalite/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command
+  }
+  experiment_command_topic_filter(command) {
+    return "cmd/qninjalite/+/experiment/" + this._experiment_id() + "/" + command
   }
 
   /* Event bus proxy functionalities */
   subscribe(topic, handler/* (topic, data)=>{} */) {
+    console.log("SUBSCRIBE %s", topic)
     if (typeof (topic) != 'string') {
       throw "EventBus.subscribe topic should be <string> type.";
     }
@@ -354,6 +370,7 @@ class Device {
 
   /* API */
   connect(connectionInfo) {
+    this.thingId = connectionInfo.thingId;
     console.log("Device.connect()")
     try {
       this.network.connect(connectionInfo);
@@ -389,8 +406,7 @@ class Device {
       callback()
     });
   }
-  confPID (ranges, callback) {
-    const obj = { ranges: ranges };
+  confPID (obj, callback) {
     console.log(obj);
     this.publish(this.device_command_topic("pid"), obj, () => {
       console.log("PID const updated")

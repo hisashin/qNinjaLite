@@ -1,18 +1,17 @@
 [
     {
-        "name": "Default Protocol",
+        "name": "Int6s",
         "steps": [
             {
-                "temp": 72,
-                "duration": 120.0,
-                "data_collection": 1,
-                "data_collection_interval": 5
+                "temp": 95,
+                "duration": 900.0,
+                "data_collection": 0
             },
             {
-                "temp": 84,
-                "duration": 30.0,
+                "temp": 65,
+                "duration": 2100.0,
                 "data_collection": 1,
-                "data_collection_interval": 5
+                "data_collection_interval": 10
             }
         ],
         "final_hold_temp": 20
