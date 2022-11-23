@@ -3,7 +3,7 @@
     <header class="header">
       <div class="header__content">
         <h1 class="header__title">
-          <a href="ninjaqpcr_splash.html">Ninja qPCR</a>
+          qNinja LITE
         </h1>
         <!-- Device monitor -->
           <div class="header__device">
