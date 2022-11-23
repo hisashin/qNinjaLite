@@ -14,6 +14,14 @@ class LoginManager {
       console.log("Failed to load username & password");
     }
   }
+  logout () {
+    try {
+      localStorage.setItem("autologin", "false");
+    } catch (e) {
+      console.log("Failed to load username & password");
+    }
+
+  }
   isFilled () {
     return this.loginInfo.username != null && this.loginInfo.username.length > 0 && 
     this.loginInfo.password != null && this.loginInfo.password.length > 0 &&

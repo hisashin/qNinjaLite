@@ -3,20 +3,21 @@
     <div class="panel__menu">
     </div>
     <section class="section section--dashboard-protocols">
-      <h2>Experiment</h2>
       <div>
         <select v-model="protocolIndex" :disabled="!protocols || protocols.length==0">
             <option v-for="(protocol, index) in protocols" :key="index" :value="index">
               {{ protocol.name }}
             </option>
         </select>
-        <b-button class="ml-1 btn-sm" :disabled="!protocols || protocols.length==0"
+        <b-button variant="primary" class="ml-1 btn-sm" :disabled="!protocols || protocols.length==0"
           @click.stop="selectProtocol">
-          Select Protocol
+          Use this protocol
         </b-button>
-        <b-button class="ml-1 btn-sm"
+      </div>
+      <div>
+        <b-button variant="primary" class="ml-1 btn-sm"
           @click.stop="newProtocol">
-          New Protocol
+          + New protocol
         </b-button>
 
       </div>

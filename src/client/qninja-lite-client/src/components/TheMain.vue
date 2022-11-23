@@ -7,10 +7,17 @@
         </h1>
         <!-- Device monitor -->
           <div class="header__device">
-          <span>
-            Server:{{ connectionStatus.server.message }}
-            Device:{{ connectionStatus.device.message }}
-            <a v-if="!connectionStatus.server.connected" @click="openLogin()">Connect</a>
+          <span class="header__device">
+            <span v-if="connectionStatus.device.connected">🟢 Device is online</span>
+            <span v-if="!connectionStatus.device.connected">⚪Device is offline</span>
+          </span>
+          <span class="header__user">
+            <a href="javascript:void(0)" v-if="!connectionStatus.server.connected" @click="openLogin()">Connect</a>
+            <span v-if="connectionStatus.server.connected">
+              👤{{ username }}
+              <a href="javascript:void(0)" @click="logout()">Logout</a>
+            </span>
+            
           </span>
           <!-- Network -->
         </div>
@@ -110,7 +117,7 @@ export default {
       password:"",
       thingId:"",
       autologin:false,
-      autologinDisabled:true
+      autologinDisabled:false // For test
     }
   },
   created: function () {
@@ -199,6 +206,10 @@ export default {
         device.connect(loginInfo);
         this.$bvModal.hide('login-modal');
       }
+    },
+    logout () {
+      login.logout();
+      location.reload();
     }
   }
 }
