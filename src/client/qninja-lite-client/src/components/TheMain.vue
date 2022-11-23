@@ -12,7 +12,7 @@
             <span v-if="!connectionStatus.device.connected">⚪Device is offline</span>
           </span>
           <span class="header__user">
-            <a href="javascript:void(0)" v-if="!connectionStatus.server.connected" @click="openLogin()">Connect</a>
+            <a href="javascript:void(0)" v-if="!connectionStatus.server.connected" @click="openLogin()">Logout</a>
             <span v-if="connectionStatus.server.connected">
               👤{{ username }}
               <a href="javascript:void(0)" @click="logout()">Logout</a>
@@ -56,7 +56,7 @@
         </label>
         </div>
         <div>
-          <b-button variant="secondary" class="ml-1" @click="login()">
+          <b-button variant="primary" class="ml-1" @click="login()">
             Login
           </b-button>
         </div>

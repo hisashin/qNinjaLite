@@ -6,7 +6,7 @@
         <div class="item">
           <div>
             <span :class="'validation-label validation__name'"/>
-            Name:
+            Name
             <input
               v-model="protocol.name"
               type="text"
@@ -15,22 +15,32 @@
           </div>
           <div>
             <span :class="'validation-label validation__final_hold_temp'"/>
-            <input
+            Final hold temp <input
               v-model.number="protocol.final_hold_temp"
               v-on:input="onChangeProtocol()"
               class="input-temp input-temp--2"
             />℃
           </div>
-          <b-button variant="secondary" class="ml-1" @click="addStepFirst()">
-            Add
+          <b-button pill size="sm" variant="secondary" class="ml-1" @click="addStepFirst()">
+            + Step
           </b-button>
           <span :class="'validation-label validation__steps'"/>
           <ul>
             <template v-for="(step, index) in protocol.steps">
               <li :key="index">
                 <div>
-                  <span :class="'validation-label validation__steps__' + index" />
-                  Step {{ index + 1 }} Temp:
+                  <div>
+                    <span :class="'validation-label validation__steps__' + index" />
+                    Step {{ index + 1 }} 
+                    <b-button
+                      variant="link"
+                      class="ml-1" size="sm"
+                      @click="deleteStep(index)"
+                    >
+                      Delete
+                    </b-button>
+                  </div>
+                  Temp
                   <span :class="'validation-label validation__steps__' + index + '__temp'" />
                   <input
                     v-model.number="step.temp"
@@ -38,7 +48,7 @@
                     class="input-temp"
                     type="number"
                     :min="minTemp" :max="maxTemp"
-                  />℃ Duration:
+                  />℃ Duration
                   <span :class="'validation-label validation__steps__' + index + '__duration'" />
                   <input
                     v-model.number="step.duration"
@@ -47,7 +57,7 @@
                     type="number"
                     min="0"
                   />s 
-                  <label>Data collection:
+                  <label>
                   <input
                     type="checkbox"
                     v-bind:id="'data_collection' + index"
@@ -55,30 +65,23 @@
                     v-bind:key="'data_collection' + index"
                     :true-value="trueValue"
                     :false-value="falseValue"
-                  /></label>
-                  Data collection interval:
+                  />Data collection</label>
+                  (Interval
                   <span :class="'validation-label validation__steps__' + index + '__data_collection_interval'" /><input
                     v-model.number="step.data_collection_interval"
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
                     type="number"
                     min="5"
-                  />s
+                  />s)
                 </div>
                 <div>
-                  <b-button
+                  <b-button pill size="sm"
                     variant="secondary"
                     class="ml-1"
                     @click="addStep(index)"
                   >
-                    Add
-                  </b-button>
-                  <b-button
-                    variant="secondary"
-                    class="ml-1"
-                    @click="deleteStep(index)"
-                  >
-                    Delete
+                    + Step
                   </b-button>
                 </div>
               </li>
@@ -92,9 +95,11 @@
           <b-button :disabled="hasError || !(deviceState && deviceState.start_available)" variant="primary" class="ml-1" @click="saveAndRun()">
             Run
           </b-button>
-          <b-button variant="primary" class="ml-1" @click="validate()">
+          <!--
+          <b-button variant="secondary" class="ml-1" @click="validate()">
             Validate
           </b-button>
+          -->
         </div>
       </div>
     </section>

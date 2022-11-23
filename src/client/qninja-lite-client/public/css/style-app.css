@@ -277,8 +277,9 @@ a {
   flex-grow: 1;
 }
 .header__device {
-  flex-grow: 1;
-  text-align: right;
+  margin-right:1em;
+}
+.header__user {
 }
 
 /* Protocol detail & editor view */
