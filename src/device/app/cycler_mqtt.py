@@ -65,9 +65,9 @@ class MQTTCommunicator:
     def start(self):   
         time.sleep(0.5)
         print("Sub cmd")
-        mqttclient.subscribe("cmd/qninjalite/#")
+        mqttclient.subscribe("cmd/ninja/#")
         time.sleep(0.5)
-        ping_topic =  "cmd/qninjalite/" + self._thing_id() + "/ping-device"
+        ping_topic =  "cmd/ninja/" + self._thing_id() + "/ping-device"
         mqttclient.publish(ping_topic,"{}", qos=0)
 
     def _thing_id (self):
@@ -76,9 +76,9 @@ class MQTTCommunicator:
         return cycler.experiment_id
 
     def _experiment_data_topic (self, command):
-        return "dt/qninjalite/" + self._thing_id() + "/experiment/" + self._experiment_id() + "/" + command
+        return "dt/ninja/" + self._thing_id() + "/experiment/" + self._experiment_id() + "/" + command
     def _device_data_topic (self, command):
-        return "dt/qninjalite/" + self._thing_id() + "/" + command
+        return "dt/ninja/" + self._thing_id() + "/" + command
 
     def _parse_command_topic (self, topic):
         levels = topic.split("/")

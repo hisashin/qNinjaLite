@@ -110,10 +110,10 @@ class NetworkAWSMQTT {
     setInterval(()=>{ this.keepDeviceConnection() }, 2000);
   }
   _dataTopic() {
-    return "dt/qninjalite/" + this.thingId;
+    return "dt/ninja/" + this.thingId;
   }
   _commandTopic() {
-    return "cmd/qninjalite/" + this.thingId;
+    return "cmd/ninja/" + this.thingId;
   }
   connect(connectionInfo) {
     console.log("### NetworkAWSMQTT.connect");
@@ -303,28 +303,28 @@ class Device {
     return this.experimentId;
   }
   experiment_data_topic(category) {
-    return "dt/qninjalite/" + this._thing_id() + "/experiment/+/" + category
+    return "dt/ninja/" + this._thing_id() + "/experiment/+/" + category
   }
   experiment_data_topic_filter(category) {
-    return "dt/qninjalite/+/experiment/+/" + category
+    return "dt/ninja/+/experiment/+/" + category
   }
   device_data_topic(category) {
-    return "dt/qninjalite/" + this._thing_id() + "/" + category
+    return "dt/ninja/" + this._thing_id() + "/" + category
   }
   device_data_topic_filter(category) {
-    return "dt/qninjalite/+/" + category
+    return "dt/ninja/+/" + category
   }
   device_command_topic(command) {
-    return "cmd/qninjalite/" + this._thing_id() + "/" + command
+    return "cmd/ninja/" + this._thing_id() + "/" + command
   }
   device_command_topic_filter(command) {
-    return "cmd/qninjalite/+/" + command
+    return "cmd/ninja/+/" + command
   }
   experiment_command_topic(command) {
-    return "cmd/qninjalite/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command
+    return "cmd/ninja/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command
   }
   experiment_command_topic_filter(command) {
-    return "cmd/qninjalite/+/experiment/" + this._experiment_id() + "/" + command
+    return "cmd/ninja/+/experiment/" + this._experiment_id() + "/" + command
   }
 
   /* Event bus proxy functionalities */
