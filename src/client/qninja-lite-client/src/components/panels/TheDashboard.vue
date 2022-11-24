@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      connectionStatus: device.Connection.DISCONNECTED,
+      connectionStatus: device.Connection.INITIAL,
       pid_config:JSON.stringify(DEFAULT_PID_CONF),
       deviceState:{},
       protocols:[],

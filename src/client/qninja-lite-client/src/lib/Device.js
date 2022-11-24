@@ -38,6 +38,7 @@ class ObservableValue {
   }
 }
 const Connection = {
+  INITIAL: { server:{connected:false, message:"Disconnected"}, device:{connected:false, message:"-"} },
   DISCONNECTED: { server:{connected:false, message:"Disconnected"}, device:{connected:false, message:"-"} },
   SERVER_CONNECTED: { server:{connected:true, message:"Connected"}, device:{connected:false, message:"Offline"} },
   DEVICE_CONNECTED: {  server:{connected:true, message:"Connected"}, device:{connected:true, message:"Online"}  },

@@ -12,7 +12,7 @@
             <span v-if="!connectionStatus.device.connected">⚪Device is offline</span>
           </span>
           <span class="header__user">
-            <a href="javascript:void(0)" v-if="!connectionStatus.server.connected" @click="openLogin()">Logout</a>
+            <a href="javascript:void(0)" v-if="!connectionStatus.server.connected" @click="openLogin()">Login</a>
             <span v-if="connectionStatus.server.connected">
               👤{{ username }}
               <a href="javascript:void(0)" @click="logout()">Logout</a>
@@ -104,19 +104,39 @@ export default {
       selectedPanel:appState.PANELS.DASHBOARD,
       backEnabled: false,
       panelTitle: "",
-      connectionStatus: device.Connection.DISCONNECTED,
+      connectionStatus: device.Connection.INITIAL,
       wellTemp: "-",
       initialState:null,
       username:"",
       password:"",
       thingId:"",
       autologin:false,
+      startedConnection: false,
       autologinDisabled:false // For test
     }
   },
   created: function () {
     appState.setPanelContainer(this);
     device.network.connectionStatus.observe((connStatus)=>{
+      if (connStatus == device.Connection.INITIAL) return;
+      console.log("CONN STATUS")
+      if (this.startedConnection) {
+        if (!connStatus.server.connected) {
+          appState.toast(this, "qNinja LITE", "Failed to connect to the server.");
+        } else {
+          // appState.toast(this, "qNinja LITE", "Connected to the server.");
+        }
+        this.startedConnection = false;
+      }
+      if (this.connectionStatus.server.connected && !connStatus.server.connected) {
+        appState.toast(this, "qNinja LITE", "Disconnected from the server.");
+      }
+      if (!this.connectionStatus.device.connected && connStatus.device.connected) {
+        appState.toast(this, "qNinja LITE", "The device is now online.");
+      }
+      if (this.connectionStatus.device.connected && !connStatus.device.connected) {
+        appState.toast(this, "qNinja LITE", "The device went offline.");
+      }
       this.connectionStatus = connStatus;
     });
     device.deviceState.observe((data)=>{
@@ -139,6 +159,7 @@ export default {
           }
         }
     });
+
     device.subscribe(device.experiment_data_topic_filter("event"), (topic, data)=>{
       if (data.label == "start") {
         appState.toast(this, "qNinja LITE", "The experiment has started.");
@@ -161,8 +182,8 @@ export default {
     });
     appState.setNavigationHandler((panelStack)=>{
       this.backEnabled = (panelStack.length > 1);
-    
     });
+
     // Connection check
     const loginInfo = login.getLoginInfo();
     this.username = loginInfo.username;
@@ -170,6 +191,8 @@ export default {
     this.password = loginInfo.password;
     this.thingId = loginInfo.thingId;
     if (login.isFilled() && loginInfo.autologin && !this.autologinDisabled) {
+      this.startedConnection = true;
+      device.network.connectionStatus.set(device.Connection.INITIAL);
       device.connect(loginInfo);
     } else {
       this.$nextTick(()=>{
@@ -179,7 +202,6 @@ export default {
   },
   mounted: function () {
     appState.setViews(this.$refs);
-  
   },
   methods: {
     presentPanel(panel, toPanel) {
@@ -188,7 +210,6 @@ export default {
     },
     showTemplate () {
       appState.pushPanel(appState.PANELS.TEMPLATE);
-      
     },
     home () {
       appState.home();
@@ -198,7 +219,6 @@ export default {
     },
     openLogin () {
         this.$bvModal.show('login-modal');
-
     },
     login () {
       console.log("login")
@@ -210,6 +230,8 @@ export default {
       };
       login.setLoginInfo(loginInfo);
       if (login.isFilled()) {
+        this.startedConnection = true;
+        device.network.connectionStatus.set(device.Connection.INITIAL);
         device.connect(loginInfo);
         this.$bvModal.hide('login-modal');
       }
