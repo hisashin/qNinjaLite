@@ -89,11 +89,6 @@ import device from "../lib/Device.js";
 import appState from "../lib/AppState.js";
 import login from "../lib/Login.js";
 
-const DEVICE_STATUS_IDLE = 1;
-const DEVICE_STATUS_RUNNING = 2;
-const DEVICE_STATUS_FINISHED = 3;
-const DEVICE_STATUS_AUTO_PAUSE = 4;
-
 export default {
   name: 'TheMain',
   components: {
@@ -105,7 +100,6 @@ export default {
   data() {
     return {
       isIdle:true,
-      status:DEVICE_STATUS_IDLE,
       panels:appState.PANELS,
       selectedPanel:appState.PANELS.DASHBOARD,
       backEnabled: false,
@@ -122,8 +116,8 @@ export default {
   },
   created: function () {
     appState.setPanelContainer(this);
-    device.network.connectionStatus.observe((status)=>{
-      this.connectionStatus = status;
+    device.network.connectionStatus.observe((connStatus)=>{
+      this.connectionStatus = connStatus;
     });
     device.deviceState.observe((data)=>{
       if (!data) return;
@@ -146,11 +140,24 @@ export default {
         }
     });
     device.subscribe(device.experiment_data_topic_filter("event"), (topic, data)=>{
-        console.log("Event received %s", topic)
-        console.log("Experiment started.");
-        this.status = DEVICE_STATUS_RUNNING;
-        // console.log("Experiment is complete!");
-        // this.status = DEVICE_STATUS_FINISHED;
+      if (data.label == "start") {
+        appState.toast(this, "qNinja LITE", "The experiment has started.");
+      }
+      if (data.label == "resume") {
+        appState.toast(this, "qNinja LITE", "The experiment has been resumed.");
+      }
+      if (data.label == "cancel") {
+        appState.toast(this, "qNinja LITE", "The experiment was cancelled.");
+      }
+      if (data.label == "finish") {
+        // Nothing to do 
+      }
+      if (data.label == "pause") {
+        appState.toast(this, "qNinja LITE", "The experiment has been paused.");
+      }
+      if (data.label == "complete") {
+        // Nothing to do
+      }
     });
     appState.setNavigationHandler((panelStack)=>{
       this.backEnabled = (panelStack.length > 1);

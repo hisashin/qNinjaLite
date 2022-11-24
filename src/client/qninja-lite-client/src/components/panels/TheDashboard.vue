@@ -127,7 +127,7 @@ export default {
       if (errors.length > 0) {
         appState.toast(this, "PID Config Error", JSON.stringify(errors));
       } else {
-        appState.toast(this, "PID Config Error", "OK");
+        appState.toast(this, "PID Config", "OK");
       }
 
     },
