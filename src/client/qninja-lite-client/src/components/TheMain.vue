@@ -143,8 +143,8 @@ export default {
       if (!data) return;
       if (!this.initialState) {
         this.initialState = data
-        console.log("Initialstate=%s", data.label)
-        if (data.has_experiment && window.confirm("The device has an ongoing experiment. Do you like to open the monitor?")) {
+        console.log("Initialstate=%s", data.b)
+        if (data.x && window.confirm("The device has an ongoing experiment. Do you like to open the monitor?")) {
           appState.pushPanel(appState.PANELS.EXPERIMENT_MONITOR, {continue:true});
         }
       }
@@ -153,30 +153,29 @@ export default {
     device.subscribe(device.device_data_topic_filter("state"), (topic, data)=>{
         if (!this.initialState) {
           this.initialState = data
-          console.log("Initialstate=%s", data.label)
-          if (data.has_experiment && window.confirm("The device has an ongoing experiment. Do you like to open the monitor?")) {
+          if (data.x && window.confirm("The device has an ongoing experiment. Do you like to open the monitor?")) {
             appState.pushPanel(appState.PANELS.EXPERIMENT_MONITOR, {continue:true});
           }
         }
     });
 
     device.subscribe(device.experiment_data_topic_filter("event"), (topic, data)=>{
-      if (data.label == "start") {
+      if (data.b == "start") {
         appState.toast(this, "qNinja LITE", "The experiment has started.");
       }
-      if (data.label == "resume") {
+      if (data.b == "resume") {
         appState.toast(this, "qNinja LITE", "The experiment has been resumed.");
       }
-      if (data.label == "cancel") {
+      if (data.b == "cancel") {
         appState.toast(this, "qNinja LITE", "The experiment was cancelled.");
       }
-      if (data.label == "finish") {
+      if (data.b == "finish") {
         // Nothing to do 
       }
-      if (data.label == "pause") {
+      if (data.b == "pause") {
         appState.toast(this, "qNinja LITE", "The experiment has been paused.");
       }
-      if (data.label == "complete") {
+      if (data.b == "complete") {
         // Nothing to do
       }
     });

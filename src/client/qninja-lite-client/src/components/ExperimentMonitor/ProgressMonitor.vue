@@ -43,17 +43,17 @@
           <li 
             class="progress-meter__item"
             v-for="(step, index) in protocol.steps" :key="index" 
-            v-bind:class="{ 'progress-meter__item--notyet': progress.step<index,'progress-meter__item--current': progress.step==index,'progress-meter__item--done': progress.step>index }">
+            v-bind:class="{ 'progress-meter__item--notyet': progress.s<index,'progress-meter__item--current': progress.s==index,'progress-meter__item--done': progress.s>index }">
             <span class="progress-meter__item progress-meter__label">{{ step.temp }}℃ 
               <span
-                v-if="progress.step==index && progress.step_label=='hold'">{{ stepElapsedSec }}</span>/{{ step.duration }}s
+                v-if="progress.s==index && progress.l=='hold'">{{ stepElapsedSec }}</span>/{{ step.duration }}s
             </span>
             <div
-              v-if="progress.step==index" class="progress-meter__item progress-meter__detail">{{ progress.step_label }}</div>
+              v-if="progress.s==index" class="progress-meter__item progress-meter__detail">{{ progress.l }}</div>
           </li>
           <li
             class="progress-meter__item"
-            v-bind:class="{ 'progress-meter__item--current': progress.step_label=='final_hold', 'progress-meter__item--notyet': progress.step_label!='final_hold' }">
+            v-bind:class="{ 'progress-meter__item--current': progress.l=='final_hold', 'progress-meter__item--notyet': progress.l!='final_hold' }">
             <span class="progress-meter__item progress-meter__label">Final hold</span>
           </li>
         </ul>
@@ -72,7 +72,7 @@
             <meter class="temperature-monitor__meter-body"
               min="20"
               max="100"
-              :value="progress.plate"></meter>
+              :value="progress.p"></meter>
             <div class="temperature-monitor__meter-scale">
               <div class="temperature-monitor__meter-scale-element">20</div>
               <div class="temperature-monitor__meter-scale-spacer"></div>
@@ -91,7 +91,7 @@
         Air {{ airTemp }}C
         
       </div>
-      <div class="progress-monitor__row" v-if="progress.step_label!='final_hold'">
+      <div class="progress-monitor__row" v-if="progress.l!='final_hold'">
         <div class="time-monitor">
           <div class="time-monitor__elapsed">{{ elapsedTimeLabel }} </div>
           <div class="time-monitor__estimated"> / {{ totalTimeLabel }}</div>
@@ -99,14 +99,13 @@
           <meter class="time-monitor__meter" 
             min="0"
             :max="remainingTime+elapsedTime"
-            :value="progress.elapsed"></meter>
+            :value="progress.e"></meter>
           
           <template v-if="deviceState != null">
-          <button class="time-monitor__button" v-if="deviceState.pause_available" @click="pause">Pause</button>
-          <button class="time-monitor__button" v-if="deviceState.resume_available" @click="resume">Resume</button>
-          <button class="time-monitor__button" v-if="deviceState.cancel_available" @click="cancel">Cancel</button>
-          <button class="time-monitor__button" v-if="deviceState.finish_available" @click="finish">Finish</button>
-          <!--<button class="time-monitor__button" v-if="deviceState.start_available" @click="start">Start</button>-->
+          <button class="time-monitor__button" v-if="deviceState.u" @click="pause">Pause</button>
+          <button class="time-monitor__button" v-if="deviceState.r" @click="resume">Resume</button>
+          <button class="time-monitor__button" v-if="deviceState.c" @click="cancel">Cancel</button>
+          <button class="time-monitor__button" v-if="deviceState.f" @click="finish">Finish</button>
           </template>
           
         </div>
@@ -164,13 +163,10 @@ export default {
     });
     device.deviceState.observe((state)=>{
       this.closeModals(); 
-      if (this.deviceState && state)
-        console.log([this.deviceState.label, state.label, 
-          this.deviceState.finish_available, state.finish_available, this.deviceState.has_experiment, state.has_experiment])
-      if (this.deviceState && !this.deviceState.finish_available && state.finish_available) {
+      if (this.deviceState && !this.deviceState.f && state.f) {
         this.$bvModal.show('finish-modal');
       }
-      if (this.deviceState && this.deviceState.has_experiment && !state.has_experiment) {
+      if (this.deviceState && this.deviceState.x && !state.x) {
         // The device become "idle"
         this.$bvModal.show('result-modal');
       }
@@ -198,25 +194,25 @@ export default {
       if (!progress) {
         throw "Progress is null."
       }
-      if (progress.step_label == "final_hold") {
+      if (progress.l == "final_hold") {
         // Experiment is complete
         return 0;
       }
       protocol.steps.forEach((step, index)=>{
-        if (progress.step  == index) {
+        if (progress.s  == index) {
           // Current step
-          if (progress.step_label == "ramp") {
+          if (progress.l == "ramp") {
             // Ramp time
-            time += this.getEstimatedTransitionTimeMs(progress.plate, step.temp);
+            time += this.getEstimatedTransitionTimeMs(progress.p, step.temp);
             // Hold time
             time += step.duration * 1000;
-          } else if (progress.step_label == "hold") {
-            time += (step.duration * 1000 - progress.step_elapsed)
+          } else if (progress.l == "hold") {
+            time += (step.duration * 1000 - progress.d)
           } else {
-            throw "Unknown progress.step_label value: " + progress.step_label;
+            throw "Unknown progress.l value: " + progress.l;
 
           }
-        } else if (progress.step  < index) {
+        } else if (progress.s  < index) {
           // Ramp time
           time += this.getEstimatedTransitionTimeMs(protocol.steps[index-1].temp, step.temp);
           // Hold time
@@ -232,18 +228,18 @@ export default {
     applyProgress (progress) {
       this.progress = progress;
       if (!this.protocol) return;
-      this.elapsedTime = Util.humanTime(this.progress.elapsed/1000);
-      this.stepElapsedSec = Math.round(this.progress.step_elapsed / 1000);
+      this.elapsedTime = Util.humanTime(this.progress.e/1000);
+      this.stepElapsedSec = Math.round(this.progress.d / 1000);
       // Calculate estimated remaining time
       const remaining = this.getRemainingTimeMs(this.protocol, progress);
-      this.elapsedTime = this.progress.elapsed;
-      this.elapsedTimeLabel = Util.humanTime(this.progress.elapsed / 1000);
+      this.elapsedTime = this.progress.e;
+      this.elapsedTimeLabel = Util.humanTime(this.progress.e / 1000);
       this.remainingTimeLabel = Util.humanTime(remaining/1000);
-      this.totalTimeLabel = Util.humanTime((remaining+this.progress.elapsed)/1000);
+      this.totalTimeLabel = Util.humanTime((remaining+this.progress.e)/1000);
       this.remainingTime = remaining
-      this.totalTime = (remaining+this.progress.elapsed)
-      this.plateTemp = (this.progress) ? Math.round(this.progress.plate) : "-";
-      this.airTemp = (this.progress) ? Math.round(this.progress.air) : "-";
+      this.totalTime = (remaining+this.progress.e)
+      this.plateTemp = (this.progress) ? Math.round(this.progress.p) : "-";
+      this.airTemp = (this.progress) ? Math.round(this.progress.a) : "-";
     },
     pause () { device.pause(); },
     resume () { device.resume(); },

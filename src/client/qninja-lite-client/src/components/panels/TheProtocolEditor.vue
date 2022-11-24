@@ -92,7 +92,7 @@
             Save
           </b-button>
           -->
-          <b-button :disabled="hasError || !(deviceState && deviceState.start_available)" variant="primary" class="ml-1" @click="saveAndRun()">
+          <b-button :disabled="hasError || !(deviceState && deviceState.r)" variant="primary" class="ml-1" @click="saveAndRun()">
             Run
           </b-button>
           <!--

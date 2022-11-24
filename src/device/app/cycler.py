@@ -20,13 +20,13 @@ class DeviceState:
     def data(self):
         print("DeviceState.data()")
         return {
-            "label":self.label,
-            "has_experiment":self.has_experiment,
-            "start_available":self.start_available,
-            "resume_available":self.resume_available,
-            "pause_available":self.pause_available,
-            "cancel_available":self.cancel_available,
-            "finish_available":self.finish_available
+            "b":self.label, # label
+            "x":self.has_experiment, # has_experiment
+            "i":self.start_available, # start_available
+            "r":self.resume_available, # resume_available
+            "u":self.pause_available, # pause_available
+            "c":self.cancel_available, # cancel_available
+            "f":self.finish_available # finish_available
         }
 TEMP_CONTROL_INTERVAL_MSEC = 500
 DEFAULT_TEMP = 25
@@ -200,8 +200,8 @@ class Cycler:
             return False
         # self.schedule.cancel_timer()
         self.temp_control.set_target_temp(None)
-        self.protocol = None
         self.communicator.on_event("finish", data={"protocol":self.protocol.protocol})
+        self.protocol = None
         self.state = STATE_IDLE
         self._publish_state()
         return True
@@ -256,17 +256,17 @@ class Cycler:
                     self.last_measurement = self.timestamp_ms
         state = {"state":self.current_step.label}
         self.communicator.on_progress({
-            "elapsed":self.timestamp_ms,
-            "step_elapsed":self.step_timestamp_ms,
-            "step": self.current_step.index,
-            "step_label": self.current_step.label,
-            "plate": self.temperature, 
-            "air": self.temp_control.get_air_temp(),
-            "sample":self.temp_control.get_sample_temp()
+            "e":self.timestamp_ms, # elapsed
+            "s": self.current_step.index, #step
+            "d":self.step_timestamp_ms, # step_elapsed
+            "l": self.current_step.label, #step_label
+            "p": self.temperature, # p
+            "a": self.temp_control.get_air_temp(), # air
+            "m":self.temp_control.get_sample_temp() # sample
         })
 
     def optics_on_measure(self, data):
-        self.communicator.on_measure({"elapsed":self.timestamp_ms,"step": self.current_step.index,"step_elapsed":self.step_timestamp_ms,"v":data})
+        self.communicator.on_measure({"e":self.timestamp_ms,"s": self.current_step.index,"d":self.step_timestamp_ms,"v":data})
 
     def request_state(self):
         self._publish_state()

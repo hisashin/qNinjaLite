@@ -103,7 +103,7 @@ class MQTTCommunicator:
         mqttclient.publish(self._experiment_data_topic("fluo"), json.dumps(data), qos=0)
     def on_event(self, label, data={}):
         print(["on_event", label])
-        data = {"label":label, "data":data}
+        data = {"b":label, "g":data}
         mqttclient.publish(self._experiment_data_topic("event"), json.dumps(data), qos=0)
     def on_device_state_change(self, data):
         mqttclient.publish(self._device_data_topic("state"),  json.dumps(data), qos=0)
