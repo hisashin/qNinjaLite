@@ -174,7 +174,7 @@ class Cycler:
         # Resume heating or cooling
         self.temp_control.set_target_temp(self.current_step.target_temp)
         self.paused = False
-        self.communicator.on_event("resume")
+        self.communicator.on_event("resume", data={"protocol":self.protocol.protocol})
         self.state = STATE_RUNNING
         self._publish_state()
         return True
@@ -186,7 +186,7 @@ class Cycler:
         # self.schedule.cancel_timer()
         self.temp_control.set_target_temp(None)
         self.protocol = None
-        self.communicator.on_event("cancel")
+        self.communicator.on_event("cancel", data={"protocol":self.protocol.protocol})
         self.state = STATE_IDLE
         self._publish_state()
         return True
@@ -201,7 +201,7 @@ class Cycler:
         # self.schedule.cancel_timer()
         self.temp_control.set_target_temp(None)
         self.protocol = None
-        self.communicator.on_event("finish")
+        self.communicator.on_event("finish", data={"protocol":self.protocol.protocol})
         self.state = STATE_IDLE
         self._publish_state()
         return True
@@ -216,7 +216,7 @@ class Cycler:
             return False
         self.temp_control.set_target_temp(self.temperature)
         self.paused = True
-        self.communicator.on_event("pause")
+        self.communicator.on_event("pause", data={"protocol":self.protocol.protocol})
         self.state = STATE_PAUSED
         self._publish_state()
         return True
@@ -234,7 +234,7 @@ class Cycler:
         self.last_measurement = None
 
         if self.current_step.is_finished():
-            self.communicator.on_event("complete")
+            self.communicator.on_event("complete", data={"protocol":self.protocol.protocol})
             self.state = STATE_COMPLETE
             self._publish_state()
     def periodic(self):

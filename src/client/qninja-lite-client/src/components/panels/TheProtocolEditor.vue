@@ -31,7 +31,7 @@
                 <div>
                   <div>
                     <span :class="'validation-label validation__steps__' + index" />
-                    Step {{ index + 1 }} 
+                    <strong>Step {{ index + 1 }} </strong>
                     <b-button
                       variant="link"
                       class="ml-1" size="sm"
@@ -45,7 +45,7 @@
                   <input
                     v-model.number="step.temp"
                     v-on:input="onChangeProtocol()"
-                    class="input-temp"
+                    class="input-temp--2"
                     type="number"
                     :min="minTemp" :max="maxTemp"
                   />℃ Duration
