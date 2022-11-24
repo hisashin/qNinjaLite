@@ -144,7 +144,7 @@ class Cycler:
         # self.schedule.init_timer(TEMP_CONTROL_INTERVAL_MSEC, Timer.PERIODIC, self.progress)
         self.state = STATE_RUNNING
         self.next_stage()
-        self.communicator.on_event("start", data={"protocol":self.protocol.protocol})
+        self.communicator.on_event("start", data={"p":self.protocol.protocol})
         self._publish_state()
         return True
 

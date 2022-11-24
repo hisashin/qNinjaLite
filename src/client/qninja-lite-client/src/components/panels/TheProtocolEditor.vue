@@ -4,6 +4,7 @@
     <section class="section" v-show="protocol">
       <div class="section__body">
         <div class="item">
+          <!--
           <div>
             <span :class="'validation-label validation__name'"/>
             Name
@@ -13,6 +14,7 @@
               v-on:input="onChangeProtocol()"
             />
           </div>
+          -->
           <div>
             <span :class="'validation-label validation__final_hold_temp'"/>
             Final hold temp <input
@@ -92,14 +94,12 @@
             Save
           </b-button>
           -->
-          <b-button :disabled="hasError || !(deviceState && deviceState.r)" variant="primary" class="ml-1" @click="saveAndRun()">
+          <b-button :disabled="hasError || !(deviceState && deviceState.i)" variant="primary" class="ml-1" @click="saveAndRun()">
             Run
           </b-button>
-          <!--
           <b-button variant="secondary" class="ml-1" @click="validate()">
-            Validate
+            Debug
           </b-button>
-          -->
         </div>
       </div>
     </section>
@@ -144,10 +144,10 @@ export default {
     },
     onAppear(message) {
       console.log(message)
-      if (message && message.protocol) {
+      if (message && message.protocol /* Protocol item */) {
         console.log("Edit protocol")
         console.log(message.protocol)
-        this.protocol = message.protocol;
+        this.protocol = message.protocol.p;
       }
     },
     back() {
@@ -188,6 +188,7 @@ export default {
     },
     validate: function () {
       console.log("TheProtocolEditor.validate");
+      console.log(JSON.stringify(this.protocol))
       const errors = protocolValidator.validate(this.protocol)
       this.processValidationResult(errors);
 

@@ -262,20 +262,20 @@ class Device {
       console.log('network.onopen');
       device.publish(device.device_command_topic("req-state"), {}, (res) => {
         console.log("Received req-state response.");
-        console.log(res.data)
-        this.deviceState.set(res.data);
+        console.log(res.g)
+        this.deviceState.set(res.g);
       });
     };
     this.network.onmessage = (topic, data) => {
       // Process response to cmd
-      if (data.req_id) {
-        if (this.reqIdMap[data.req_id]) {
+      if (data.q) {
+        if (this.reqIdMap[data.q]) {
           try {
-            this.reqIdMap[data.req_id](data);
+            this.reqIdMap[data.q](data);
           } catch (e) {
             console.error(e)
           } finally {
-            delete this.reqIdMap[data.req_id];
+            delete this.reqIdMap[data.q];
           }
         }
       }
@@ -357,8 +357,8 @@ class Device {
     if (responseHandler) {
       const reqId = this._issueReqId();
       this.reqIdMap[reqId] = responseHandler;
-      data.req_id = reqId;
-      const expectedResponse = { req_id: reqId, data:{} };
+      data.q = reqId;
+      const expectedResponse = { q: reqId, data:{} };
     }
     data.sender = SENDER_ID;
     this.network.publish(topic, data);
@@ -399,7 +399,7 @@ class Device {
   }
   start(protocol, callback) {
     const experimentId = this._issueExperimentId();
-    const obj = { experiment_id: experimentId, protocol: protocol };
+    const obj = { i: experimentId, p: protocol };
     console.log(obj);
     this.publish(this.device_command_topic("start"), obj, () => {
       this.experimentId = experimentId;

@@ -2,6 +2,10 @@ var path = require('path')
 module.exports = {
   publicPath: '',
   configureWebpack: {
+    output: {
+      filename: "[name].js",
+      chunkFilename: "[name]-chunk.js"
+    },
     
     resolve: {
       alias: {
@@ -15,5 +19,11 @@ module.exports = {
       },
       disableHostCheck: true
     }
+  },
+  css: {
+    extract: {
+      filename: '[name].css',
+      chunkFilename: '[name].css',
+    },
   }
 };

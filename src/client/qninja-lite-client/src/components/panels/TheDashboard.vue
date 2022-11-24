@@ -5,8 +5,8 @@
     <section class="section section--dashboard-protocols">
       <div>
         <select v-model="protocolIndex" :disabled="!protocols || protocols.length==0">
-            <option v-for="(protocol, index) in protocols" :key="index" :value="index">
-              {{ protocol.name }}
+            <option v-for="(item, index) in protocols" :key="index" :value="index">
+              {{ item.b }}
             </option>
         </select>
         <b-button variant="primary" class="ml-1 btn-sm" :disabled="!protocols || protocols.length==0"
@@ -96,7 +96,10 @@ export default {
     });
     device.deviceState.observe((state)=>{
       this.deviceState = state;
-      appState.loadProtocols((protocols)=>{
+      appState.loadProtocols((data)=>{
+        console.log("LOAD_PROTOCOLS")
+        let protocols = data.data.Items;
+        console.log(data)
         this.protocols = protocols;
       }, ()=>{
         // onError

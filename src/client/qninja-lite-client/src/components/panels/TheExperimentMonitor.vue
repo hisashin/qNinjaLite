@@ -100,7 +100,7 @@ export default {
         device.publish(device.device_command_topic("req-experiment"), {}, (res)=>{
           console.log("Received req-experiment response.");
           console.log(res);
-          this.protocol = res.data.protocol;
+          this.protocol = res.g.p;
         });
       }
     },

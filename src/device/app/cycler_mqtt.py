@@ -85,14 +85,14 @@ class MQTTCommunicator:
         return levels[-1]
     def _respond_to_command(self, topic, req_data, res_data=None, accepted=True, req_id_needed=False):
         res_topic = topic + "-res"
-        req_id = req_data.get("req_id", None)
+        req_id = req_data.get("q", None)
         print(["RESPONSE_TO_TOPIC", res_topic])
         if req_id == None and req_id_needed == False:
             print("no req id.")
             return # Reponse not needed
-        req_data = {"accepted":accepted, "req_id":req_id}
+        req_data = {"w":accepted, "q":req_id}
         if res_data:
-            req_data["data"] = res_data
+            req_data["g"] = res_data
         mqttclient.publish(res_topic, json.dumps(req_data), qos=0)
 
 
@@ -121,7 +121,7 @@ class MQTTCommunicator:
             print("Start!!!")
             # { experiment_id:this._issueExperimentId(), protocol: experiment }
             print(message["message"])
-            accepted = cycler.start(ExperimentProtocol(profile=obj["protocol"]), experiment_id=obj["experiment_id"])
+            accepted = cycler.start(ExperimentProtocol(profile=obj["p"]), experiment_id=obj["i"])
             self._respond_to_command(fullTopic, obj, accepted=accepted)
         elif topic == "cancel":
             accepted = cycler.cancel()
@@ -159,7 +159,7 @@ class MQTTCommunicator:
             print(["data", data])
             self._respond_to_command(fullTopic, obj, res_data=data)
         elif topic == "req-experiment":
-            data = { "protocol":cycler.protocol.raw, "experiment_id":cycler.experiment_id }
+            data = { "p":cycler.protocol.raw, "i":cycler.experiment_id }
             obj = json.loads(message["message"])
             self._respond_to_command(fullTopic, obj, res_data=data)
 
