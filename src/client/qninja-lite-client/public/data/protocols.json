@@ -1,52 +1,49 @@
-[
-    {
-        "name": "Int6s",
-        "steps": [
+{
+  "error": false,
+  "cdn": false,
+  "data": {
+    "Items": [
+      {
+        "b": "Medium temp test1",
+        "p": {
+          "final_hold_temp": 20,
+          "steps": [
             {
-                "temp": 95,
-                "duration": 900.0,
-                "data_collection": 0
-            },
-            {
-                "temp": 65,
-                "duration": 2100.0,
-                "data_collection": 1,
-                "data_collection_interval": 10
+              "duration": 180,
+              "data_collection": 0,
+              "temp": 72
             }
-        ],
-        "final_hold_temp": 20
-    },
-    {
-        "name": "Low temp test",
-        "steps": [
+          ]
+        }
+      },
+      {
+        "b": "Medium temp test2",
+        "p": {
+          "final_hold_temp": 20,
+          "steps": [
             {
-                "temp": 55,
-                "duration": 180.0,
-                "data_collection": 0
+              "duration": 180,
+              "data_collection": 0,
+              "temp": 72
             }
-        ],
-        "final_hold_temp": 20
-    },
-    {
-        "name": "Medium temp test",
-        "steps": [
+          ]
+        }
+      },
+      {
+        "b": "Medium temp test3",
+        "p": {
+          "final_hold_temp": 20,
+          "steps": [
             {
-                "temp": 72,
-                "duration": 180.0,
-                "data_collection": 0
+              "duration": 180,
+              "data_collection": 0,
+              "temp": 72
             }
-        ],
-        "final_hold_temp": 20
-    },
-    {
-        "name": "High temp test",
-        "steps": [
-            {
-                "temp": 90,
-                "duration": 180.0,
-                "data_collection": 0
-            }
-        ],
-        "final_hold_temp": 20
-    }
-]
+          ]
+        }
+      }
+    ],
+    "Count": 3,
+    "ScannedCount": 3
+  }
+}

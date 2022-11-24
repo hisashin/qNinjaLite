@@ -277,8 +277,9 @@ a {
   flex-grow: 1;
 }
 .header__device {
-  flex-grow: 1;
-  text-align: right;
+  margin-right:1em;
+}
+.header__user {
 }
 
 /* Protocol detail & editor view */
@@ -498,7 +499,7 @@ html
 }
 
 .panel-nav {
-  padding: 0 1em;
+  padding: 0em;
 }
 .panel-nav__back {
   display: inline-block;

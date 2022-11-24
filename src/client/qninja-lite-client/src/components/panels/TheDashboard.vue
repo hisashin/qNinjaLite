@@ -3,39 +3,46 @@
     <div class="panel__menu">
     </div>
     <section class="section section--dashboard-protocols">
-      <h2>Experiment</h2>
       <div>
         <select v-model="protocolIndex" :disabled="!protocols || protocols.length==0">
-            <option v-for="(protocol, index) in protocols" :key="index" :value="index">
-              {{ protocol.name }}
+            <option v-for="(item, index) in protocols" :key="index" :value="index">
+              {{ item.b }}
             </option>
         </select>
-        <b-button class="ml-1 btn-sm" :disabled="!protocols || protocols.length==0"
+        <b-button variant="primary" class="ml-1 btn-sm" :disabled="!protocols || protocols.length==0"
           @click.stop="selectProtocol">
-          Select Protocol
+          Use this protocol
         </b-button>
-        <b-button class="ml-1 btn-sm"
+      </div>
+      <div>
+        <b-button variant="primary" class="ml-1 btn-sm"
           @click.stop="newProtocol">
-          New Protocol
+          + New protocol
         </b-button>
 
       </div>
-      <h2>Config</h2>
+
       <div>
-        <textarea v-model="pid_config" cols="60" rows="4"></textarea>
-        <br/>
-        <!--
-          :disabled="!connectionStatus.device.connected"
-          -->
-        <b-button class="mr-1 btn-sm"
-          @click.stop="confPID">
-          Set PID Constants
-        </b-button>
-        <b-button class="mr-1 btn-sm"
-          @click.stop="validatePID">
-          validate
-        </b-button>
+        <b-button v-b-toggle.advanced_settings variant="link">Advanced settings</b-button>
+        <b-collapse id="advanced_settings" class="mt-2">
+          <h2>PID Tuning</h2>
+          <textarea v-model="pid_config" cols="60" rows="4"></textarea>
+          <br/>
+          <!--
+            :disabled="!connectionStatus.device.connected"
+            -->
+          <b-button class="mr-1 btn-sm"
+            @click.stop="confPID">
+            Set PID Constants
+          </b-button>
+          <b-button class="mr-1 btn-sm"
+            @click.stop="validatePID">
+            Validate
+          </b-button>
+          <h2>Calibration (ToDo)</h2>
+        </b-collapse>
       </div>
+
     </section>
   </div>
 </template>
@@ -76,7 +83,7 @@ export default {
   },
   data() {
     return {
-      connectionStatus: device.Connection.DISCONNECTED,
+      connectionStatus: device.Connection.INITIAL,
       pid_config:JSON.stringify(DEFAULT_PID_CONF),
       deviceState:{},
       protocols:[],
@@ -89,7 +96,10 @@ export default {
     });
     device.deviceState.observe((state)=>{
       this.deviceState = state;
-      appState.loadProtocols((protocols)=>{
+      appState.loadProtocols((data)=>{
+        console.log("LOAD_PROTOCOLS")
+        let protocols = data.data.Items;
+        console.log(data)
         this.protocols = protocols;
       }, ()=>{
         // onError
@@ -113,7 +123,7 @@ export default {
       if (errors.length > 0) {
         appState.toast(this, "PID Config Error", JSON.stringify(errors));
       } else {
-        appState.toast(this, "PID Config Error", "OK");
+        appState.toast(this, "PID Config", "OK");
       }
 
     },

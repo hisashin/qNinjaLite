@@ -86,8 +86,8 @@ export default {
       this.$refs.amplificationChart.clear();
       this.$refs.temperatureChart.clear();
       this.subscribe(device.experiment_data_topic_filter("progress"), (topic, progress)=>{
-        if (!(progress.step_label == 'final_hold')) {
-          this.$refs.temperatureChart.add(progress.elapsed, progress.plate);
+        if (!(progress.l == 'final_hold')) {
+          this.$refs.temperatureChart.add(progress.e, progress.p);
         } else {
           // TODO complete!
         }
@@ -100,7 +100,7 @@ export default {
         device.publish(device.device_command_topic("req-experiment"), {}, (res)=>{
           console.log("Received req-experiment response.");
           console.log(res);
-          this.protocol = res.data.protocol;
+          this.protocol = res.g.p;
         });
       }
     },

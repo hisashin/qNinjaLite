@@ -3,14 +3,21 @@
     <header class="header">
       <div class="header__content">
         <h1 class="header__title">
-          <a href="ninjaqpcr_splash.html">Ninja qPCR</a>
+          qNinja LITE
         </h1>
         <!-- Device monitor -->
           <div class="header__device">
-          <span>
-            Server:{{ connectionStatus.server.message }}
-            Device:{{ connectionStatus.device.message }}
-            <a v-if="!connectionStatus.server.connected" @click="openLogin()">Connect</a>
+          <span class="header__device">
+            <span v-if="connectionStatus.device.connected">🟢 Device is online</span>
+            <span v-if="!connectionStatus.device.connected">⚪Device is offline</span>
+          </span>
+          <span class="header__user">
+            <a href="javascript:void(0)" v-if="!connectionStatus.server.connected" @click="openLogin()">Login</a>
+            <span v-if="connectionStatus.server.connected">
+              👤{{ username }}
+              <a href="javascript:void(0)" @click="logout()">Logout</a>
+            </span>
+            
           </span>
           <!-- Network -->
         </div>
@@ -49,7 +56,7 @@
         </label>
         </div>
         <div>
-          <b-button variant="secondary" class="ml-1" @click="login()">
+          <b-button variant="primary" class="ml-1" @click="login()">
             Login
           </b-button>
         </div>
@@ -82,11 +89,6 @@ import device from "../lib/Device.js";
 import appState from "../lib/AppState.js";
 import login from "../lib/Login.js";
 
-const DEVICE_STATUS_IDLE = 1;
-const DEVICE_STATUS_RUNNING = 2;
-const DEVICE_STATUS_FINISHED = 3;
-const DEVICE_STATUS_AUTO_PAUSE = 4;
-
 export default {
   name: 'TheMain',
   components: {
@@ -98,32 +100,51 @@ export default {
   data() {
     return {
       isIdle:true,
-      status:DEVICE_STATUS_IDLE,
       panels:appState.PANELS,
       selectedPanel:appState.PANELS.DASHBOARD,
       backEnabled: false,
       panelTitle: "",
-      connectionStatus: device.Connection.DISCONNECTED,
+      connectionStatus: device.Connection.INITIAL,
       wellTemp: "-",
       initialState:null,
       username:"",
       password:"",
       thingId:"",
       autologin:false,
-      autologinDisabled:true
+      startedConnection: false,
+      autologinDisabled:false // For test
     }
   },
   created: function () {
     appState.setPanelContainer(this);
-    device.network.connectionStatus.observe((status)=>{
-      this.connectionStatus = status;
+    device.network.connectionStatus.observe((connStatus)=>{
+      if (connStatus == device.Connection.INITIAL) return;
+      console.log("CONN STATUS")
+      if (this.startedConnection) {
+        if (!connStatus.server.connected) {
+          appState.toast(this, "qNinja LITE", "Failed to connect to the server.");
+        } else {
+          // appState.toast(this, "qNinja LITE", "Connected to the server.");
+        }
+        this.startedConnection = false;
+      }
+      if (this.connectionStatus.server.connected && !connStatus.server.connected) {
+        appState.toast(this, "qNinja LITE", "Disconnected from the server.");
+      }
+      if (!this.connectionStatus.device.connected && connStatus.device.connected) {
+        appState.toast(this, "qNinja LITE", "The device is now online.");
+      }
+      if (this.connectionStatus.device.connected && !connStatus.device.connected) {
+        appState.toast(this, "qNinja LITE", "The device went offline.");
+      }
+      this.connectionStatus = connStatus;
     });
     device.deviceState.observe((data)=>{
       if (!data) return;
       if (!this.initialState) {
         this.initialState = data
-        console.log("Initialstate=%s", data.label)
-        if (data.has_experiment && window.confirm("The device has an ongoing experiment. Do you like to open the monitor?")) {
+        console.log("Initialstate=%s", data.b)
+        if (data.x && window.confirm("The device has an ongoing experiment. Do you like to open the monitor?")) {
           appState.pushPanel(appState.PANELS.EXPERIMENT_MONITOR, {continue:true});
         }
       }
@@ -132,23 +153,36 @@ export default {
     device.subscribe(device.device_data_topic_filter("state"), (topic, data)=>{
         if (!this.initialState) {
           this.initialState = data
-          console.log("Initialstate=%s", data.label)
-          if (data.has_experiment && window.confirm("The device has an ongoing experiment. Do you like to open the monitor?")) {
+          if (data.x && window.confirm("The device has an ongoing experiment. Do you like to open the monitor?")) {
             appState.pushPanel(appState.PANELS.EXPERIMENT_MONITOR, {continue:true});
           }
         }
     });
+
     device.subscribe(device.experiment_data_topic_filter("event"), (topic, data)=>{
-        console.log("Event received %s", topic)
-        console.log("Experiment started.");
-        this.status = DEVICE_STATUS_RUNNING;
-        // console.log("Experiment is complete!");
-        // this.status = DEVICE_STATUS_FINISHED;
+      if (data.b == "start") {
+        appState.toast(this, "qNinja LITE", "The experiment has started.");
+      }
+      if (data.b == "resume") {
+        appState.toast(this, "qNinja LITE", "The experiment has been resumed.");
+      }
+      if (data.b == "cancel") {
+        appState.toast(this, "qNinja LITE", "The experiment was cancelled.");
+      }
+      if (data.b == "finish") {
+        // Nothing to do 
+      }
+      if (data.b == "pause") {
+        appState.toast(this, "qNinja LITE", "The experiment has been paused.");
+      }
+      if (data.b == "complete") {
+        // Nothing to do
+      }
     });
     appState.setNavigationHandler((panelStack)=>{
       this.backEnabled = (panelStack.length > 1);
-    
     });
+
     // Connection check
     const loginInfo = login.getLoginInfo();
     this.username = loginInfo.username;
@@ -156,6 +190,8 @@ export default {
     this.password = loginInfo.password;
     this.thingId = loginInfo.thingId;
     if (login.isFilled() && loginInfo.autologin && !this.autologinDisabled) {
+      this.startedConnection = true;
+      device.network.connectionStatus.set(device.Connection.INITIAL);
       device.connect(loginInfo);
     } else {
       this.$nextTick(()=>{
@@ -165,7 +201,6 @@ export default {
   },
   mounted: function () {
     appState.setViews(this.$refs);
-  
   },
   methods: {
     presentPanel(panel, toPanel) {
@@ -174,7 +209,6 @@ export default {
     },
     showTemplate () {
       appState.pushPanel(appState.PANELS.TEMPLATE);
-      
     },
     home () {
       appState.home();
@@ -184,7 +218,6 @@ export default {
     },
     openLogin () {
         this.$bvModal.show('login-modal');
-
     },
     login () {
       console.log("login")
@@ -196,9 +229,15 @@ export default {
       };
       login.setLoginInfo(loginInfo);
       if (login.isFilled()) {
+        this.startedConnection = true;
+        device.network.connectionStatus.set(device.Connection.INITIAL);
         device.connect(loginInfo);
         this.$bvModal.hide('login-modal');
       }
+    },
+    logout () {
+      login.logout();
+      location.reload();
     }
   }
 }

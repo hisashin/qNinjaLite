@@ -19,7 +19,7 @@ const RULE_STEP = {
   _func: ()=>{}
 };
 const RULE_PROTOCOL = {
-  name: { type:"string", required:true, min_length:1, max_length:255 },
+  /*name: { type:"string", required:true, min_length:1, max_length:255 },*/
   final_hold_temp: { type:"number", required:false, min:PLATE_TEMP_MIN, max:PLATE_TEMP_MAX },
   steps: { type:"array",required:true,  min_length:1, max_length:8, rule:RULE_STEP },
   _func: ()=>{}

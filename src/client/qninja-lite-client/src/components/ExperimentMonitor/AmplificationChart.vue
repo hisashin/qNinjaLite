@@ -161,7 +161,7 @@ export default {
       data.forEach((measurement)=>{
         this.eachSeries((c, w, i)=>{
           // GraphSubChannelXY.addData
-          this.subChannelsData[i].addData({y:measurement.v[c][w].v, x:measurement.step_elapsed/1000});
+          this.subChannelsData[i].addData({y:measurement.v[c][w].v, x:measurement.d/1000});
         });
       });
       this.graph.update();
@@ -190,7 +190,7 @@ export default {
     add: function (data) {
       this.eachSeries((c, w, i)=>{
         try {
-          this.subChannelsPoints[i].addData({y:data.v[c][w], x:data.step_elapsed/1000});
+          this.subChannelsPoints[i].addData({y:data.v[c][w], x:data.d/1000});
         } catch (e) {
           console.log(e);
           console.log(this.subChannelsPoints)

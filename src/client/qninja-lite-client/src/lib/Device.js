@@ -38,6 +38,7 @@ class ObservableValue {
   }
 }
 const Connection = {
+  INITIAL: { server:{connected:false, message:"Disconnected"}, device:{connected:false, message:"-"} },
   DISCONNECTED: { server:{connected:false, message:"Disconnected"}, device:{connected:false, message:"-"} },
   SERVER_CONNECTED: { server:{connected:true, message:"Connected"}, device:{connected:false, message:"Offline"} },
   DEVICE_CONNECTED: {  server:{connected:true, message:"Connected"}, device:{connected:true, message:"Online"}  },
@@ -110,10 +111,10 @@ class NetworkAWSMQTT {
     setInterval(()=>{ this.keepDeviceConnection() }, 2000);
   }
   _dataTopic() {
-    return "dt/qninjalite/" + this.thingId;
+    return "dt/ninja/" + this.thingId;
   }
   _commandTopic() {
-    return "cmd/qninjalite/" + this.thingId;
+    return "cmd/ninja/" + this.thingId;
   }
   connect(connectionInfo) {
     console.log("### NetworkAWSMQTT.connect");
@@ -261,20 +262,20 @@ class Device {
       console.log('network.onopen');
       device.publish(device.device_command_topic("req-state"), {}, (res) => {
         console.log("Received req-state response.");
-        console.log(res.data)
-        this.deviceState.set(res.data);
+        console.log(res.g)
+        this.deviceState.set(res.g);
       });
     };
     this.network.onmessage = (topic, data) => {
       // Process response to cmd
-      if (data.req_id) {
-        if (this.reqIdMap[data.req_id]) {
+      if (data.q) {
+        if (this.reqIdMap[data.q]) {
           try {
-            this.reqIdMap[data.req_id](data);
+            this.reqIdMap[data.q](data);
           } catch (e) {
             console.error(e)
           } finally {
-            delete this.reqIdMap[data.req_id];
+            delete this.reqIdMap[data.q];
           }
         }
       }
@@ -303,28 +304,28 @@ class Device {
     return this.experimentId;
   }
   experiment_data_topic(category) {
-    return "dt/qninjalite/" + this._thing_id() + "/experiment/+/" + category
+    return "dt/ninja/" + this._thing_id() + "/experiment/+/" + category
   }
   experiment_data_topic_filter(category) {
-    return "dt/qninjalite/+/experiment/+/" + category
+    return "dt/ninja/+/experiment/+/" + category
   }
   device_data_topic(category) {
-    return "dt/qninjalite/" + this._thing_id() + "/" + category
+    return "dt/ninja/" + this._thing_id() + "/" + category
   }
   device_data_topic_filter(category) {
-    return "dt/qninjalite/+/" + category
+    return "dt/ninja/+/" + category
   }
   device_command_topic(command) {
-    return "cmd/qninjalite/" + this._thing_id() + "/" + command
+    return "cmd/ninja/" + this._thing_id() + "/" + command
   }
   device_command_topic_filter(command) {
-    return "cmd/qninjalite/+/" + command
+    return "cmd/ninja/+/" + command
   }
   experiment_command_topic(command) {
-    return "cmd/qninjalite/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command
+    return "cmd/ninja/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command
   }
   experiment_command_topic_filter(command) {
-    return "cmd/qninjalite/+/experiment/" + this._experiment_id() + "/" + command
+    return "cmd/ninja/+/experiment/" + this._experiment_id() + "/" + command
   }
 
   /* Event bus proxy functionalities */
@@ -356,8 +357,8 @@ class Device {
     if (responseHandler) {
       const reqId = this._issueReqId();
       this.reqIdMap[reqId] = responseHandler;
-      data.req_id = reqId;
-      const expectedResponse = { req_id: reqId, data:{} };
+      data.q = reqId;
+      const expectedResponse = { q: reqId, data:{} };
     }
     data.sender = SENDER_ID;
     this.network.publish(topic, data);
@@ -398,7 +399,7 @@ class Device {
   }
   start(protocol, callback) {
     const experimentId = this._issueExperimentId();
-    const obj = { experiment_id: experimentId, protocol: protocol };
+    const obj = { i: experimentId, p: protocol };
     console.log(obj);
     this.publish(this.device_command_topic("start"), obj, () => {
       this.experimentId = experimentId;

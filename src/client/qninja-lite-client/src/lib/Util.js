@@ -30,7 +30,7 @@ const Util = {
   },
   requestData (path, data, method, onSuccess, onError) {
     const xmlhttp = new XMLHttpRequest();
-    const url = Util.apiEndpoint() + path;
+    const url = path; // Util.apiEndpoint() + path;
     console.log("!AppState._requestData %s %s", method, url);
     xmlhttp.onreadystatechange = ()=>{
       if (xmlhttp.readyState == 4) {
