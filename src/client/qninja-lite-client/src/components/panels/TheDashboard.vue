@@ -25,28 +25,21 @@
       <div>
         <b-button v-b-toggle.advanced_settings variant="link">Advanced settings</b-button>
         <b-collapse id="advanced_settings" class="mt-2">
+          <h2>PID Tuning</h2>
+          <textarea v-model="pid_config" cols="60" rows="4"></textarea>
+          <br/>
           <!--
-          <b-card>
-            <p class="card-text">Collapse contents Here</p>
-            <b-button v-b-toggle.collapse-1-inner size="sm">Toggle Inner Collapse</b-button>
-            <b-collapse id="collapse-1-inner" class="mt-2">
-              <b-card>Hello!</b-card>
-            </b-collapse>
-          </b-card>
-          -->
-              <textarea v-model="pid_config" cols="60" rows="4"></textarea>
-              <br/>
-              <!--
-                :disabled="!connectionStatus.device.connected"
-                -->
-              <b-button class="mr-1 btn-sm"
-                @click.stop="confPID">
-                Set PID Constants
-              </b-button>
-              <b-button class="mr-1 btn-sm"
-                @click.stop="validatePID">
-                Validate
-              </b-button>
+            :disabled="!connectionStatus.device.connected"
+            -->
+          <b-button class="mr-1 btn-sm"
+            @click.stop="confPID">
+            Set PID Constants
+          </b-button>
+          <b-button class="mr-1 btn-sm"
+            @click.stop="validatePID">
+            Validate
+          </b-button>
+          <h2>Calibration (ToDo)</h2>
         </b-collapse>
       </div>
 
