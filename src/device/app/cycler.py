@@ -289,7 +289,7 @@ class ExperimentProtocol:
                 index = 0
                 for step in steps:
                     temp = step["temp"]
-                    duration = step["duration"]
+                    duration = step["d"]
                     self.add_step(StepRamp(target_temp=temp, index=index))
                     if step.get("c", 1):
                         self.add_step(StepHold(target_temp=temp, hold_sec=duration, index=index, min_measurement_interval=step.get("i", None)))

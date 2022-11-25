@@ -53,7 +53,7 @@
                   />℃ Duration
                   <span :class="'validation-label validation__steps__' + index + '__duration'" />
                   <input
-                    v-model.number="step.duration"
+                    v-model.number="step.d"
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
                     type="number"
@@ -112,7 +112,7 @@ import protocolValidator from "../../lib/protocol_validation.js";
 
 const DEFAULT_STEP = {
   temp: 50.0,
-  duration: 180.0,
+  d: 180.0,
   c: 1, // Data collection flag
   i: 10, // Data collection interval
 };

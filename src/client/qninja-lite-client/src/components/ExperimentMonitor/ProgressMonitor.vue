@@ -46,7 +46,7 @@
             v-bind:class="{ 'progress-meter__item--notyet': progress.s<index,'progress-meter__item--current': progress.s==index,'progress-meter__item--done': progress.s>index }">
             <span class="progress-meter__item progress-meter__label">{{ step.temp }}℃ 
               <span
-                v-if="progress.s==index && progress.l=='hold'">{{ stepElapsedSec }}</span>/{{ step.duration }}s
+                v-if="progress.s==index && progress.l=='hold'">{{ stepElapsedSec }}</span>/{{ step.d }}s
             </span>
             <div
               v-if="progress.s==index" class="progress-meter__item progress-meter__detail">{{ progress.l }}</div>
@@ -205,9 +205,9 @@ export default {
             // Ramp time
             time += this.getEstimatedTransitionTimeMs(progress.p, step.temp);
             // Hold time
-            time += step.duration * 1000;
+            time += step.d * 1000;
           } else if (progress.l == "hold") {
-            time += (step.duration * 1000 - progress.d)
+            time += (step.d * 1000 - progress.d)
           } else {
             throw "Unknown progress.l value: " + progress.l;
 
@@ -216,7 +216,7 @@ export default {
           // Ramp time
           time += this.getEstimatedTransitionTimeMs(protocol.steps[index-1].temp, step.temp);
           // Hold time
-          time += step.duration * 1000;
+          time += step.d * 1000;
         }
       });
       if (isNaN(time)) {
