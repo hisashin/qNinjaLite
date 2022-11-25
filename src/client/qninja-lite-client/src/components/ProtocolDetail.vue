@@ -6,7 +6,7 @@
           Final hold temp: {{ protocol.h }}C
         </div>
         <ul>
-            <template v-for="(step, index) in protocol.steps">
+            <template v-for="(step, index) in protocol.s">
                 <li :key="index">
                     <strong>Step {{ index }}</strong>
                     Temp={{step.t}}C, 

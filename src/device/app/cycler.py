@@ -285,7 +285,7 @@ class ExperimentProtocol:
         if str:
             try:
                 print(str)
-                steps = profile["steps"]
+                steps = profile["s"]
                 index = 0
                 for step in steps:
                     temp = step["t"]

@@ -67,8 +67,7 @@ const DEFAULT_PID_CONF = {
   
 const DEFAULT_PROTOCOL = 
 {
-  name:"Default Protocol",
-  "steps":[
+  "s":[
     { "t":72, "d":120.0, "c":1, "i":5 },
     { "t":84, "d":30.0, "c":1, "i":5 }
   ],

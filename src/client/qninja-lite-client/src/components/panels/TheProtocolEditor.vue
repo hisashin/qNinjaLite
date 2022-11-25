@@ -28,7 +28,7 @@
           </b-button>
           <span :class="'validation-label validation__steps'"/>
           <ul>
-            <template v-for="(step, index) in protocol.steps">
+            <template v-for="(step, index) in protocol.s">
               <li :key="index">
                 <div>
                   <div>
@@ -201,13 +201,13 @@ export default {
       this.addStep(-1);
     },
     addStep: function (after) {
-      this.protocol.steps.splice(after + 1, 0, DEFAULT_STEP);
+      this.protocol.s.splice(after + 1, 0, DEFAULT_STEP);
       this.onChangeStructure();
       console.log("TODO addStep(%d)", after + 1);
     },
     deleteStep: function (index) {
       if (window.confirm("Are you sure you want to delete this step?")) {
-        this.protocol.steps.splice(index, 1);
+        this.protocol.s.splice(index, 1);
         this.onChangeStructure();
       }
     },

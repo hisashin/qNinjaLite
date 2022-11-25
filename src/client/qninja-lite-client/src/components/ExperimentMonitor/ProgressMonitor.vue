@@ -42,7 +42,7 @@
           <!-- List of stages -->
           <li 
             class="progress-meter__item"
-            v-for="(step, index) in protocol.steps" :key="index" 
+            v-for="(step, index) in protocol.s" :key="index" 
             v-bind:class="{ 'progress-meter__item--notyet': progress.s<index,'progress-meter__item--current': progress.s==index,'progress-meter__item--done': progress.s>index }">
             <span class="progress-meter__item progress-meter__label">{{ step.t }}℃ 
               <span
@@ -188,7 +188,7 @@ export default {
       if (!protocol) {
         throw "Protocol is null."
       }
-      if (!protocol.steps) {
+      if (!protocol.s) {
         throw "Protocol has no steps."
       }
       if (!progress) {
@@ -198,7 +198,7 @@ export default {
         // Experiment is complete
         return 0;
       }
-      protocol.steps.forEach((step, index)=>{
+      protocol.s.forEach((step, index)=>{
         if (progress.s  == index) {
           // Current step
           if (progress.l == "ramp") {
@@ -214,7 +214,7 @@ export default {
           }
         } else if (progress.s  < index) {
           // Ramp time
-          time += this.getEstimatedTransitionTimeMs(protocol.steps[index-1].t, step.t);
+          time += this.getEstimatedTransitionTimeMs(protocol.s[index-1].t, step.t);
           // Hold time
           time += step.d * 1000;
         }
