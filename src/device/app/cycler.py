@@ -285,18 +285,18 @@ class ExperimentProtocol:
         if str:
             try:
                 print(str)
-                steps = profile["steps"]
+                steps = profile["s"]
                 index = 0
                 for step in steps:
-                    temp = step["temp"]
-                    duration = step["duration"]
+                    temp = step["t"]
+                    duration = step["d"]
                     self.add_step(StepRamp(target_temp=temp, index=index))
-                    if step.get("data_collection", 1):
-                        self.add_step(StepHold(target_temp=temp, hold_sec=duration, index=index, min_measurement_interval=step.get("data_collection_interval", None)))
+                    if step.get("c", 1):
+                        self.add_step(StepHold(target_temp=temp, hold_sec=duration, index=index, min_measurement_interval=step.get("i", None)))
                     else:
                         self.add_step(StepHold(target_temp=temp, hold_sec=duration, index=index))
                     index += 1
-                self.add_step(StepFinalHold(target_temp=profile["final_hold_temp"], index=index))
+                self.add_step(StepFinalHold(target_temp=profile["h"], index=index))
             except Exception as e:
                 print(e)
                 raise Exception("Malformed protocol string")

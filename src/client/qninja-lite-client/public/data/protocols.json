@@ -4,14 +4,33 @@
   "data": {
     "Items": [
       {
-        "b": "Medium temp test1",
+        "b": "202211test",
         "p": {
-          "final_hold_temp": 20,
-          "steps": [
+          "h": 20,
+          "s": [
             {
-              "duration": 180,
-              "data_collection": 0,
-              "temp": 72
+              "d": 900,
+              "c": 0,
+              "t": 95
+            },
+            {
+              "d": 2100,
+              "c": 1,
+              "i": 10,
+              "t": 65
+            }
+          ]
+        }
+      },
+      {
+        "b": "Low temp test1",
+        "p": {
+          "h": 20,
+          "s": [
+            {
+              "d": 180,
+              "c": 0,
+              "t": 54
             }
           ]
         }
@@ -19,25 +38,25 @@
       {
         "b": "Medium temp test2",
         "p": {
-          "final_hold_temp": 20,
-          "steps": [
+          "h": 20,
+          "s": [
             {
-              "duration": 180,
-              "data_collection": 0,
-              "temp": 72
+              "d": 180,
+              "c": 0,
+              "t": 72
             }
           ]
         }
       },
       {
-        "b": "Medium temp test3",
+        "b": "High temp test3",
         "p": {
-          "final_hold_temp": 20,
-          "steps": [
+          "h": 20,
+          "s": [
             {
-              "duration": 180,
-              "data_collection": 0,
-              "temp": 72
+              "d": 180,
+              "c": 0,
+              "t": 94
             }
           ]
         }

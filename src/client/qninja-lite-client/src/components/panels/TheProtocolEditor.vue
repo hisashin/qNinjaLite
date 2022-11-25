@@ -18,7 +18,7 @@
           <div>
             <span :class="'validation-label validation__final_hold_temp'"/>
             Final hold temp <input
-              v-model.number="protocol.final_hold_temp"
+              v-model.number="protocol.h"
               v-on:input="onChangeProtocol()"
               class="input-temp input-temp--2"
             />℃
@@ -28,7 +28,7 @@
           </b-button>
           <span :class="'validation-label validation__steps'"/>
           <ul>
-            <template v-for="(step, index) in protocol.steps">
+            <template v-for="(step, index) in protocol.s">
               <li :key="index">
                 <div>
                   <div>
@@ -45,7 +45,7 @@
                   Temp
                   <span :class="'validation-label validation__steps__' + index + '__temp'" />
                   <input
-                    v-model.number="step.temp"
+                    v-model.number="step.t"
                     v-on:input="onChangeProtocol()"
                     class="input-temp--2"
                     type="number"
@@ -53,7 +53,7 @@
                   />℃ Duration
                   <span :class="'validation-label validation__steps__' + index + '__duration'" />
                   <input
-                    v-model.number="step.duration"
+                    v-model.number="step.d"
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
                     type="number"
@@ -62,15 +62,15 @@
                   <label>
                   <input
                     type="checkbox"
-                    v-bind:id="'data_collection' + index"
-                    v-model="step.data_collection"
-                    v-bind:key="'data_collection' + index"
+                    v-bind:id="'c' + index"
+                    v-model="step.c"
+                    v-bind:key="'c' + index"
                     :true-value="trueValue"
                     :false-value="falseValue"
                   />Data collection</label>
                   (Interval
                   <span :class="'validation-label validation__steps__' + index + '__data_collection_interval'" /><input
-                    v-model.number="step.data_collection_interval"
+                    v-model.number="step.i"
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
                     type="number"
@@ -111,10 +111,10 @@ import device from "../../lib/Device.js";
 import protocolValidator from "../../lib/protocol_validation.js";
 
 const DEFAULT_STEP = {
-  temp: 50.0,
-  duration: 180.0,
-  data_collection: 1,
-  data_collection_interval: 10,
+  t: 50.0,
+  d: 180.0,
+  c: 1, // Data collection flag
+  i: 10, // Data collection interval
 };
 export default {
   name: "TheExperimentMonitor",
@@ -201,13 +201,13 @@ export default {
       this.addStep(-1);
     },
     addStep: function (after) {
-      this.protocol.steps.splice(after + 1, 0, DEFAULT_STEP);
+      this.protocol.s.splice(after + 1, 0, DEFAULT_STEP);
       this.onChangeStructure();
       console.log("TODO addStep(%d)", after + 1);
     },
     deleteStep: function (index) {
       if (window.confirm("Are you sure you want to delete this step?")) {
-        this.protocol.steps.splice(index, 1);
+        this.protocol.s.splice(index, 1);
         this.onChangeStructure();
       }
     },

@@ -42,7 +42,7 @@ if False:
 
 # Hardware
 # time.sleep(3.0) #?
-from hardware_batch3 import TempControl, Optics, init_hardware
+from device.old.hardware_batch3 import TempControl, Optics, init_hardware
 time.sleep(3.0) # Heating!
 temp_control = TempControl(scheduler, measure_interval_ms=100, pid_interval_ms=1000)
 optics = Optics(scheduler, measure_interval_ms=200)
@@ -56,12 +56,11 @@ communicator.start()
 print("Init Offine Experiment Demo.")
 debug_count = 0
 protocol_obj = {
-    "name":"Default Protocol",
-    "steps":[
-        {"temp":50,"duration":30.0,"data_collection":1,"data_collection_interval":5},
-        {"temp":66,"duration":30.0,"data_collection":1,"data_collection_interval":5}
+    "s":[
+        {"t":50,"d":30.0,"c":1,"i":5},
+        {"t":66,"d":30.0,"c":1,"i":5}
         ],
-    "final_hold_temp":20
+    "h":20
 }
 protocol = ExperimentProtocol(profile=protocol_obj)
 
