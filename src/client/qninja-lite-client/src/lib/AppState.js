@@ -167,14 +167,6 @@ class AppState {
     })
   }
 
-  loadProtocols (callback, onError) {
-    Util.requestData(
-      "https://api-ninja.hisa.dev/protocol?uid=uk&pretty=true",
-      // "data/protocols.json",
-       null, "GET", (data)=>{
-      callback(data)
-    }, onError);
-  }
   protocolTemplate () {
     return PROTOCOL_TEMPLATE;
   }

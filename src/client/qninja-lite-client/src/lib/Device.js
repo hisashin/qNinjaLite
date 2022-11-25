@@ -266,6 +266,15 @@ class Device {
         this.deviceState.set(res.g);
       });
     };
+    console.log("subscribing protocol/query-res")
+    this.subscribe(this.device_command_topic_filter("protocol/query-res"), (topic, data, id) => {
+      console.log("Received protocol/query-res")
+      console.log(data.response.Items)
+      if (this.loadProtocolsCallback) {
+        this.loadProtocolsCallback(data.response.Items)
+      }
+      this.loadProtocolsCallback = null;
+    });
     this.network.onmessage = (topic, data) => {
       // Process response to cmd
       if (data.q) {
@@ -414,6 +423,21 @@ class Device {
       callback()
     });
 
+  }
+  loadProtocols (callback, onError) {
+    console.log("LOAD_PROTOCOLS");
+    /*
+    Util.requestData(
+      "https://api-ninja.hisa.dev/protocol?uid=uk&pretty=true",
+      // "data/protocols.json",
+       null, "GET", (data)=>{
+      callback(data)
+    }, onError);
+    */
+    this.loadProtocolsCallback = callback;
+    this.publish(this.device_command_topic("protocol/query"), {}, (res) => {
+      console.log(res)
+    });
   }
 
 }

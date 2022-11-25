@@ -94,11 +94,9 @@ export default {
     });
     device.deviceState.observe((state)=>{
       this.deviceState = state;
-      appState.loadProtocols((data)=>{
+      device.loadProtocols((items)=>{
         console.log("LOAD_PROTOCOLS")
-        let protocols = data.data.Items;
-        console.log(data)
-        this.protocols = protocols;
+        this.protocols = items;
       }, ()=>{
         // onError
         appState.toast(this, "Error", "Failed to load protocols.");
