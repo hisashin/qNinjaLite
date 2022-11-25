@@ -58,8 +58,8 @@ debug_count = 0
 protocol_obj = {
     "name":"Default Protocol",
     "steps":[
-        {"temp":50,"duration":30.0,"data_collection":1,"i":5},
-        {"temp":66,"duration":30.0,"data_collection":1,"i":5}
+        {"temp":50,"duration":30.0,"c":1,"i":5},
+        {"temp":66,"duration":30.0,"c":1,"i":5}
         ],
     "h":20
 }

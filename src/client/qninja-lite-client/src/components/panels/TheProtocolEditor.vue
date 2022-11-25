@@ -62,9 +62,9 @@
                   <label>
                   <input
                     type="checkbox"
-                    v-bind:id="'data_collection' + index"
-                    v-model="step.data_collection"
-                    v-bind:key="'data_collection' + index"
+                    v-bind:id="'c' + index"
+                    v-model="step.c"
+                    v-bind:key="'c' + index"
                     :true-value="trueValue"
                     :false-value="falseValue"
                   />Data collection</label>
@@ -113,8 +113,8 @@ import protocolValidator from "../../lib/protocol_validation.js";
 const DEFAULT_STEP = {
   temp: 50.0,
   duration: 180.0,
-  data_collection: 1,
-  i: 10,
+  c: 1, // Data collection flag
+  i: 10, // Data collection interval
 };
 export default {
   name: "TheExperimentMonitor",

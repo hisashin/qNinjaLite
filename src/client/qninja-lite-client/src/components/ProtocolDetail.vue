@@ -3,13 +3,13 @@
     <div v-if="protocol">
         <h2>Protocol</h2>
         <div>
-          Final hold temp: {{ protocol.h }}
+          Final hold temp: {{ protocol.h }}C
         </div>
         <ul>
             <template v-for="(step, index) in protocol.steps">
                 <li :key="index">
-                    Step {{ index }}  temp={{step.temp}}, duration={{step.duration}}, 
-                    data_collection={{step.data_collection}}, data_colection_interval={{step.i}}
+                    Step {{ index }}  temp={{step.temp}}C, duration={{step.duration}}s, 
+                    Data collection flag={{step.c}}, Data collection interval={{step.i}}(s)
                 </li>
             </template>
         </ul>
