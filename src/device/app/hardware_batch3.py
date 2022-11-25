@@ -239,9 +239,9 @@ class TempControl:
     def set_pid_constants(self, ranges):
         pid_ranges = []
         for range in ranges:
-            print("set_pid_constants",range["kp"], range["ki"],range["kd"], range.get("min_value", None), range.get("max_value", None))
-            pid_ranges.append(PIDRange(kp=range["kp"], ki=range["ki"], kd=range["kd"], 
-                min_value=range.get("min_value", None), max_value=range.get("max_value", None)))
+            print("set_pid_constants",range["p"], range["i"],range["d"], range.get("n", None), range.get("x", None))
+            pid_ranges.append(PIDRange(kp=range["p"], ki=range["i"], kd=range["d"], 
+                min_value=range.get("n", None), max_value=range.get("x", None)))
         self.config_pid(pid_ranges)
         
     def get_temp(self):

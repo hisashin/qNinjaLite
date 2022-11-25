@@ -53,16 +53,16 @@ import device from "../../lib/Device.js";
 import pidValidator from "../../lib/pid_validation.js";
 /*
 const DEFAULT_PID_CONF = {
-  "consts":[
-    {"kp":0.3, "ki":0, "kd":0, "max_value":55},
-    {"kp":0.3, "ki":0, "kd":0, "min_value":55, "max_value":80},
-    {"kp":0.3, "ki":0, "kd":0, "min_value":80}
+  "c":[
+    {"p":0.3, "i":0, "d":0, "x":55},
+    {"p":0.3, "i":0, "d":0, "n":55, "x":80},
+    {"p":0.3, "i":0, "d":0, "n":80}
   ]
 }
   */
 
 const DEFAULT_PID_CONF = {
-  "consts":[{"kp":0.12,"ki":0.009,"kd":0.02}]
+  "c":[{"p":0.12,"i":0.009,"d":0.02}]
 }
   
 const DEFAULT_PROTOCOL = 
