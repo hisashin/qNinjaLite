@@ -12,9 +12,9 @@ const RULE_DATA_COLLECTION = {
   measurement_interval_temp: { type:"number", required:false, min:0.1, max: 10.0 }
 };
 const RULE_STEP = {
-  temp: { type:"number", required:true, min:PLATE_TEMP_MIN, max:PLATE_TEMP_MAX },
-  d: { type:"number", required:true, min:0, max: 24 * 60 * 60 * 1000 },
-  c: { type:"number", required:true, min:0, max:1 },
+  t: { type:"number", required:true, min:PLATE_TEMP_MIN, max:PLATE_TEMP_MAX }, // Temperature
+  d: { type:"number", required:true, min:0, max: 24 * 60 * 60 * 1000 }, // Duration
+  c: { type:"number", required:true, min:0, max:1 }, // Data collection flag
   i: { type:"number", required:false, min:1, max:60 * 3 }, // Data collection interval
   _func: ()=>{}
 };

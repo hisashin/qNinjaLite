@@ -288,7 +288,7 @@ class ExperimentProtocol:
                 steps = profile["steps"]
                 index = 0
                 for step in steps:
-                    temp = step["temp"]
+                    temp = step["t"]
                     duration = step["d"]
                     self.add_step(StepRamp(target_temp=temp, index=index))
                     if step.get("c", 1):

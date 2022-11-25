@@ -44,7 +44,7 @@
             class="progress-meter__item"
             v-for="(step, index) in protocol.steps" :key="index" 
             v-bind:class="{ 'progress-meter__item--notyet': progress.s<index,'progress-meter__item--current': progress.s==index,'progress-meter__item--done': progress.s>index }">
-            <span class="progress-meter__item progress-meter__label">{{ step.temp }}℃ 
+            <span class="progress-meter__item progress-meter__label">{{ step.t }}℃ 
               <span
                 v-if="progress.s==index && progress.l=='hold'">{{ stepElapsedSec }}</span>/{{ step.d }}s
             </span>
@@ -65,7 +65,7 @@
             Plate
             <div class="temperature-monitor__value">{{ plateTemp }} 
             <template 
-              v-if="step!=null && step.temp!=null">/{{step.temp}}℃</template>
+              v-if="step!=null && step.t!=null">/{{step.t}}℃</template>
             </div>
           </div>
           <div class="temperature-monitor__meter">
@@ -203,7 +203,7 @@ export default {
           // Current step
           if (progress.l == "ramp") {
             // Ramp time
-            time += this.getEstimatedTransitionTimeMs(progress.p, step.temp);
+            time += this.getEstimatedTransitionTimeMs(progress.p, step.t);
             // Hold time
             time += step.d * 1000;
           } else if (progress.l == "hold") {
@@ -214,7 +214,7 @@ export default {
           }
         } else if (progress.s  < index) {
           // Ramp time
-          time += this.getEstimatedTransitionTimeMs(protocol.steps[index-1].temp, step.temp);
+          time += this.getEstimatedTransitionTimeMs(protocol.steps[index-1].t, step.t);
           // Hold time
           time += step.d * 1000;
         }

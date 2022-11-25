@@ -45,7 +45,7 @@
                   Temp
                   <span :class="'validation-label validation__steps__' + index + '__temp'" />
                   <input
-                    v-model.number="step.temp"
+                    v-model.number="step.t"
                     v-on:input="onChangeProtocol()"
                     class="input-temp--2"
                     type="number"
@@ -111,7 +111,7 @@ import device from "../../lib/Device.js";
 import protocolValidator from "../../lib/protocol_validation.js";
 
 const DEFAULT_STEP = {
-  temp: 50.0,
+  t: 50.0,
   d: 180.0,
   c: 1, // Data collection flag
   i: 10, // Data collection interval

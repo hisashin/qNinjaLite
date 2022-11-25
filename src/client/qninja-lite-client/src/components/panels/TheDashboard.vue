@@ -69,8 +69,8 @@ const DEFAULT_PROTOCOL =
 {
   name:"Default Protocol",
   "steps":[
-    { "temp":72, "d":120.0, "c":1, "i":5 },
-    { "temp":84, "d":30.0, "c":1, "i":5 }
+    { "t":72, "d":120.0, "c":1, "i":5 },
+    { "t":84, "d":30.0, "c":1, "i":5 }
   ],
   "h":20
 };
