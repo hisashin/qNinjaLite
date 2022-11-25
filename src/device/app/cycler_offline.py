@@ -61,7 +61,7 @@ protocol_obj = {
         {"temp":50,"duration":30.0,"data_collection":1,"data_collection_interval":5},
         {"temp":66,"duration":30.0,"data_collection":1,"data_collection_interval":5}
         ],
-    "final_hold_temp":20
+    "h":20
 }
 protocol = ExperimentProtocol(profile=protocol_obj)
 

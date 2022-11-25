@@ -3,7 +3,7 @@
     <div v-if="protocol">
         <h2>Protocol</h2>
         <div>
-          Final hold temp: {{ protocol.final_hold_temp }}
+          Final hold temp: {{ protocol.h }}
         </div>
         <ul>
             <template v-for="(step, index) in protocol.steps">

@@ -18,7 +18,7 @@
           <div>
             <span :class="'validation-label validation__final_hold_temp'"/>
             Final hold temp <input
-              v-model.number="protocol.final_hold_temp"
+              v-model.number="protocol.h"
               v-on:input="onChangeProtocol()"
               class="input-temp input-temp--2"
             />℃

@@ -1,52 +1,16 @@
 "use strict";
 const device = require("../lib/Device.js");
 const Util = require("../lib/Util.js");
-// const hello = require("../lib_shared/hello.js");
-// import Vue from 'vue';
+
 const PROTOCOL_TEMPLATE =
 {
-  name:"New Protocol",
   "steps":[
     { "temp":72, "duration":120.0, "data_collection":1, "data_collection_interval":5 },
     { "temp":84, "duration":30.0, "data_collection":1, "data_collection_interval":5 }
   ],
-  "final_hold_temp":20
+  "h":20
 };
-const PROTOCOL_DEFAULT = 
-{
-  name:"Default Protocol",
-  "steps":[
-    { "temp":72, "duration":120.0, "data_collection":1, "data_collection_interval":5 },
-    { "temp":84, "duration":30.0, "data_collection":1, "data_collection_interval":5 }
-  ],
-  "final_hold_temp":20
-};
-const PROTOCOL_LOW = 
-{
-  name:"Low temp test",
-  "steps":[
-    { "temp":55, "duration":180.0, "data_collection":0 }
-  ],
-  "final_hold_temp":20
-};
-const PROTOCOL_MEDIUM = 
-{
-  name:"Medium temp test",
-  "steps":[
-    { "temp":72, "duration":180.0, "data_collection":0 }
-  ],
-  "final_hold_temp":20
-};
-const PROTOCOL_HIGH = 
-{
-  name:"High temp test",
-  "steps":[
-    { "temp":90, "duration":180.0, "data_collection":0 }
-  ],
-  "final_hold_temp":20
-};
-// For development
-const PROTOCOLS = [PROTOCOL_DEFAULT, PROTOCOL_LOW, PROTOCOL_MEDIUM, PROTOCOL_HIGH];
+
 class AppState {
   constructor () {
     this.protocols = [];

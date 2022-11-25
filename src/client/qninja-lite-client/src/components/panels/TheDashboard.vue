@@ -72,9 +72,8 @@ const DEFAULT_PROTOCOL =
     { "temp":72, "duration":120.0, "data_collection":1, "data_collection_interval":5 },
     { "temp":84, "duration":30.0, "data_collection":1, "data_collection_interval":5 }
   ],
-  "final_hold_temp":20
+  "h":20
 };
-// const DEFAULT_PROTOCOL = {name:"Default Protocol","steps":[{"temp":50,"duration":10.0,"data_collection":1,"data_collection_interval":5}],"final_hold_temp":20};
 export default {
   name: 'TheDashboard',
   components: {

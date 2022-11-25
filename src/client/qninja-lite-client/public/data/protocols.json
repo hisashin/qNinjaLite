@@ -6,7 +6,7 @@
       {
         "b": "Medium temp test1",
         "p": {
-          "final_hold_temp": 20,
+          "h": 20,
           "steps": [
             {
               "duration": 180,
@@ -19,7 +19,7 @@
       {
         "b": "Medium temp test2",
         "p": {
-          "final_hold_temp": 20,
+          "h": 20,
           "steps": [
             {
               "duration": 180,
@@ -32,7 +32,7 @@
       {
         "b": "Medium temp test3",
         "p": {
-          "final_hold_temp": 20,
+          "h": 20,
           "steps": [
             {
               "duration": 180,

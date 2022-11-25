@@ -296,7 +296,7 @@ class ExperimentProtocol:
                     else:
                         self.add_step(StepHold(target_temp=temp, hold_sec=duration, index=index))
                     index += 1
-                self.add_step(StepFinalHold(target_temp=profile["final_hold_temp"], index=index))
+                self.add_step(StepFinalHold(target_temp=profile["h"], index=index))
             except Exception as e:
                 print(e)
                 raise Exception("Malformed protocol string")
