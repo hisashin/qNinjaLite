@@ -9,7 +9,7 @@
             <template v-for="(step, index) in protocol.steps">
                 <li :key="index">
                     Step {{ index }}  temp={{step.temp}}, duration={{step.duration}}, 
-                    data_collection={{step.data_collection}}, data_colection_interval={{step.data_collection_interval}}
+                    data_collection={{step.data_collection}}, data_colection_interval={{step.i}}
                 </li>
             </template>
         </ul>

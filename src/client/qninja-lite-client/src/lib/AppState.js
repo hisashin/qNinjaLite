@@ -5,8 +5,8 @@ const Util = require("../lib/Util.js");
 const PROTOCOL_TEMPLATE =
 {
   "steps":[
-    { "temp":72, "duration":120.0, "data_collection":1, "data_collection_interval":5 },
-    { "temp":84, "duration":30.0, "data_collection":1, "data_collection_interval":5 }
+    { "temp":72, "duration":120.0, "data_collection":1, "i":5 },
+    { "temp":84, "duration":30.0, "data_collection":1, "i":5 }
   ],
   "h":20
 };

@@ -15,7 +15,7 @@ const RULE_STEP = {
   temp: { type:"number", required:true, min:PLATE_TEMP_MIN, max:PLATE_TEMP_MAX },
   duration: { type:"number", required:true, min:0, max: 24 * 60 * 60 * 1000 },
   data_collection: { type:"number", required:true, min:0, max:1 },
-  data_collection_interval: { type:"number", required:false, min:1, max:60 * 3 },
+  i: { type:"number", required:false, min:1, max:60 * 3 }, // Data collection interval
   _func: ()=>{}
 };
 const RULE_PROTOCOL = {

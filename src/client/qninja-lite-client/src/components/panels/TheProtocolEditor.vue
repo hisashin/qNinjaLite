@@ -70,7 +70,7 @@
                   />Data collection</label>
                   (Interval
                   <span :class="'validation-label validation__steps__' + index + '__data_collection_interval'" /><input
-                    v-model.number="step.data_collection_interval"
+                    v-model.number="step.i"
                     v-on:input="onChangeProtocol()"
                     class="input-temp"
                     type="number"
@@ -114,7 +114,7 @@ const DEFAULT_STEP = {
   temp: 50.0,
   duration: 180.0,
   data_collection: 1,
-  data_collection_interval: 10,
+  i: 10,
 };
 export default {
   name: "TheExperimentMonitor",
