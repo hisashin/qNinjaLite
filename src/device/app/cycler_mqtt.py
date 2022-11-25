@@ -17,6 +17,8 @@ port = 8883 #secure
 
 import ssl
 
+from hardware_batch4 import TempControl, Optics, init_hardware
+
 keyfile = "certs/thing_private.pem.key"
 certfile = "certs/thing_certificate.pem.crt"
 ca_certs = "certs/CA1.cer"
@@ -183,7 +185,6 @@ if False:
     optics = OpticsSimulator(scheduler)
 # Use hardware
 
-from hardware_batch4 import TempControl, Optics, init_hardware
 temp_control = TempControl(scheduler)
 optics = Optics(scheduler)
 
