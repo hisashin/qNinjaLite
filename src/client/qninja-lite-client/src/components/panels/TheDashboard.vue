@@ -91,16 +91,17 @@ export default {
   created: function () {
     device.network.connectionStatus.observe((status)=>{
       this.connectionStatus = status;
+      if (status.server.connected && this.protocols.length == 0) {
+        device.loadProtocols((items)=>{
+          this.protocols = items;
+        }, ()=>{
+          // onError
+          appState.toast(this, "Error", "Failed to load protocols.");
+        });
+      }
     });
     device.deviceState.observe((state)=>{
       this.deviceState = state;
-      device.loadProtocols((items)=>{
-        console.log("LOAD_PROTOCOLS")
-        this.protocols = items;
-      }, ()=>{
-        // onError
-        appState.toast(this, "Error", "Failed to load protocols.");
-      });
     });
   },
   methods: {
