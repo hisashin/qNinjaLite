@@ -116,6 +116,9 @@ class NetworkAWSMQTT {
   _commandTopic() {
     return "cmd/ninja/" + this.thingId;
   }
+  _awsTopic() {
+    return "aws/ninja/" + this.thingId;
+  }
   connect(connectionInfo) {
     console.log("### NetworkAWSMQTT.connect");
     console.log(JSON.stringify(connectionInfo))
@@ -137,15 +140,19 @@ class NetworkAWSMQTT {
       this.connectionStatus.set(Connection.SERVER_CONNECTED);
       const dataTopicFilter = this._dataTopic() + "/#";
       const commandTopicFilter = this._commandTopic() + "/#";
+      const awsTopicFilter = this._awsTopic() + "/#";
       console.log("NetworkAWSMQTT.client.connect subscribing...")
       this.client.subscribe(commandTopicFilter, (e) => {
         console.log("NetworkWebsocket.client.subscribe cmd OK %s", commandTopicFilter)
         console.log("NetworkAWSMQTT.client.on.connect subscribing dt...")
         this.client.subscribe(dataTopicFilter, (e) => {
           console.log("NetworkWebsocket.client.subscribe dt callback %s", dataTopicFilter)
-          // Ready to pub & sub ping 
-          const pingTopic = this._commandTopic() + "/ping-client";
-          this.publish(pingTopic, EMPTY_MSG);
+          this.client.subscribe(awsTopicFilter, (e) => {
+            console.log("NetworkWebsocket.client.subscribe aws callback %s", awsTopicFilter)
+            // Ready to pub & sub ping 
+            const pingTopic = this._commandTopic() + "/ping-client";
+            this.publish(pingTopic, EMPTY_MSG);
+          });
         });
       });
     });
@@ -266,8 +273,8 @@ class Device {
         this.deviceState.set(res.g);
       });
     };
-    console.log("subscribing protocol/query-res")
-    this.subscribe(this.device_command_topic_filter("protocol/query-res"), (topic, data, id) => {
+    console.log("protocol/req-query-res")
+    this.subscribe(this.aws_command_topic_filter("protocol/req-query-res"), (topic, data, id) => {
       console.log("Received protocol/query-res")
       console.log(data.response.Items)
       if (this.loadProtocolsCallback) {
@@ -329,6 +336,12 @@ class Device {
   }
   device_command_topic_filter(command) {
     return "cmd/ninja/+/" + command
+  }
+  aws_command_topic(command) {
+    return "aws/ninja/" + this._thing_id() + "/" + command
+  }
+  aws_command_topic_filter(command) {
+    return "aws/ninja/+/" + command
   }
   experiment_command_topic(command) {
     return "cmd/ninja/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command
@@ -435,7 +448,7 @@ class Device {
     }, onError);
     */
     this.loadProtocolsCallback = callback;
-    this.publish(this.device_command_topic("protocol/query"), {}, (res) => {
+    this.publish(this.aws_command_topic("protocol/req-query"), {}, (res) => {
       console.log(res)
     });
   }
