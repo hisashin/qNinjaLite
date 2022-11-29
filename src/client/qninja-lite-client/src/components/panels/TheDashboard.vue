@@ -23,7 +23,7 @@
       <div>
         <ul>
             <li v-for="(item, index) in experiments" :key="index" :value="index">
-              <a href="#" @click.stop="selectExperiment(item.eid)">
+              <a href="#" @click.stop="selectExperiment(item)">
                 teid={{ item.teid }}
               </a>
             </li>
@@ -109,11 +109,22 @@ export default {
           appState.toast(this, "Error", "Failed to load protocols.");
         });
       }
+      const params = new URLSearchParams(location.search);
+      const urlTid = params.get("tid")
+      const urlEid = params.get("eid")
       if (status.server.connected && this.experiments.length == 0) {
         device.loadExperiments((items)=>{
-          console.log("EXPERIMENTS")
-          console.log(items)
           this.experiments = items;
+
+          if (urlTid && urlEid) {
+            const experiment = this.experiments.find((e)=>{return e.eid==urlEid && e.tid==urlTid})
+            if (experiment) {
+              this.selectExperiment(experiment)
+            } else {
+              
+              appState.toast(this, "Not found", "Experiment not found");
+            }
+          }
         }, ()=>{
           // onError
           appState.toast(this, "Error", "Failed to load protocols.");
@@ -126,7 +137,6 @@ export default {
   },
   methods: {
     onAppear () {
-      console.log("TheDashboard.onAppear")
     },
     selectProtocol () {
       appState.pushPanel(appState.PANELS.PROTOCOL_EDITOR, {protocol:this.protocols[this.protocolIndex]});
@@ -144,8 +154,8 @@ export default {
       }
 
     },
-    selectExperiment(eid) {
-      console.log(eid)
+    selectExperiment(experiment) {
+      appState.pushPanel(appState.PANELS.EXPERIMENT_DETAIL, experiment);
     },
     confPID () {
       console.log(this.pid_config);

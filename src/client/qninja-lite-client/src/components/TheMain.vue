@@ -74,6 +74,7 @@
       <TheDashboard ref="panelDashboard" v-show="selectedPanel==panels.DASHBOARD" />
       <TheExperimentMonitor ref="panelExperimentMonitor" v-show="selectedPanel==panels.EXPERIMENT_MONITOR" />
       <TheProtocolEditor ref="panelProtocolEditor" v-show="selectedPanel==panels.PROTOCOL_EDITOR" />
+      <TheExperimentDetail ref="panelExperimentDetail" v-show="selectedPanel==panels.EXPERIMENT_DETAIL" />
     </main>
     <footer class="footer">
     </footer>
@@ -83,6 +84,7 @@
 
 import TheDashboard from './panels/TheDashboard.vue'
 import TheExperimentMonitor from './panels/TheExperimentMonitor.vue'
+import TheExperimentDetail from './panels/TheExperimentDetail.vue'
 import TheProtocolEditor from './panels/TheProtocolEditor.vue'
 import BackButton from './BackButton.vue';
 import device from "../lib/Device.js";
@@ -94,6 +96,7 @@ export default {
   components: {
     TheDashboard,
     TheExperimentMonitor,
+    TheExperimentDetail,
     TheProtocolEditor,
     BackButton
   },
@@ -119,7 +122,6 @@ export default {
     appState.setPanelContainer(this);
     device.network.connectionStatus.observe((connStatus)=>{
       if (connStatus == device.Connection.INITIAL) return;
-      console.log("CONN STATUS")
       if (this.startedConnection) {
         if (!connStatus.server.connected) {
           appState.toast(this, "qNinja LITE", "Failed to connect to the server.");

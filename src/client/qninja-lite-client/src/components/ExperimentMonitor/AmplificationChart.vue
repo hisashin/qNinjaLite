@@ -155,13 +155,17 @@ export default {
       });
       this.wellTable = wellTable;
     },
-    setData: function (data) {
-      console.log("AmplificationChart.setData");
+    set: function (data) {
+      console.log("AmplificationChart.set");
       this.graph.clearData();
       data.forEach((measurement)=>{
+        // 
+        // {s: 1, d: 1496, t: 1669445051354, e: 119151, v: Array(1)}
+        console.log(measurement)
         this.eachSeries((c, w, i)=>{
           // GraphSubChannelXY.addData
-          this.subChannelsData[i].addData({y:measurement.v[c][w].v, x:measurement.d/1000});
+          console.log(measurement.v[c][w])
+          this.subChannelsData[i].addData({y:measurement.v[c][w], x:measurement.d/1000});
         });
       });
       this.graph.update();

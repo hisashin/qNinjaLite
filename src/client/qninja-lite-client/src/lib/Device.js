@@ -273,6 +273,7 @@ class Device {
         this.deviceState.set(res.g);
       });
     };
+    /*
     this.subscribe(this.aws_command_topic_filter("protocol/req-query-res"), (topic, data, id) => {
       console.log(data.response.Items)
       if (this.loadProtocolsCallback) {
@@ -287,6 +288,7 @@ class Device {
       }
       this.loadExperimentsCallback = null;
     });
+    */
     this.network.onmessage = (topic, data) => {
       // Process response to cmd
       if (data.q) {
@@ -443,15 +445,27 @@ class Device {
 
   }
   loadProtocols (callback, onError) {
-    this.loadProtocolsCallback = callback;
     this.publish(this.aws_command_topic("protocol/req-query"), {}, (res) => {
-      console.log(res)
+      callback(res.response.Items)
     });
   }
   loadExperiments (callback, onError) {
-    this.loadExperimentsCallback = callback;
     this.publish(this.aws_command_topic("experiment/req-query"), {}, (res) => {
-      console.log(res)
+      callback(res.response.Items)
+    });
+  }
+  loadExperimentProgress (eid, callback, onError) {
+    this.loadExperimentProgressCallback = callback;
+    this.publish(this.aws_command_topic("experiment/" + eid + "/progress/req-query"), {}, (res) => {
+      // callback(res.response.data.Items)
+      callback(res.response.Items)
+    });
+  }
+  loadExperimentFluo (eid, callback, onError) {
+    this.loadExperimentFluoCallback = callback;
+    this.publish(this.aws_command_topic("experiment/" + eid + "/fluo/req-query"), {}, (res) => {
+      // callback(res.response.data.Items)
+      callback(res.response.Items)
     });
   }
 

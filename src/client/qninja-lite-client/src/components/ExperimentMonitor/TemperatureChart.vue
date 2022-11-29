@@ -109,15 +109,17 @@ export default {
       this.updateGraphRange();
       this.graph.update();
     },
-    set: function (timeSeries, plateSeries) {
+    set: function (data) {
+      
       this.minTime = 0;
       this.maxTime = 120;
       this.timeOffset = 0;
       this.graph.clearData();
-      for (let i=0; i<timeSeries.length; i++) {
-        const time = timeSeries[i];
+      for (let i=0; i<data.length; i++) {
+        const p = data[i]
+        const time = p.e; 
         const timeSec = time/1000;
-        const plate = plateSeries[i];
+        const plate = p.p;
         if (time == null || plate == null) {
           continue;
         }
