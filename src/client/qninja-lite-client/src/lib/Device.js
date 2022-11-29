@@ -273,14 +273,19 @@ class Device {
         this.deviceState.set(res.g);
       });
     };
-    console.log("protocol/req-query-res")
     this.subscribe(this.aws_command_topic_filter("protocol/req-query-res"), (topic, data, id) => {
-      console.log("Received protocol/query-res")
       console.log(data.response.Items)
       if (this.loadProtocolsCallback) {
         this.loadProtocolsCallback(data.response.Items)
       }
       this.loadProtocolsCallback = null;
+    });
+    this.subscribe(this.aws_command_topic_filter("experiment/req-query-res"), (topic, data, id) => {
+      console.log(data.response.Items)
+      if (this.loadExperimentsCallback) {
+        this.loadExperimentsCallback(data.response.Items)
+      }
+      this.loadExperimentsCallback = null;
     });
     this.network.onmessage = (topic, data) => {
       // Process response to cmd
@@ -438,17 +443,14 @@ class Device {
 
   }
   loadProtocols (callback, onError) {
-    console.log("LOAD_PROTOCOLS");
-    /*
-    Util.requestData(
-      "https://api-ninja.hisa.dev/protocol?uid=uk&pretty=true",
-      // "data/protocols.json",
-       null, "GET", (data)=>{
-      callback(data)
-    }, onError);
-    */
     this.loadProtocolsCallback = callback;
     this.publish(this.aws_command_topic("protocol/req-query"), {}, (res) => {
+      console.log(res)
+    });
+  }
+  loadExperiments (callback, onError) {
+    this.loadExperimentsCallback = callback;
+    this.publish(this.aws_command_topic("experiment/req-query"), {}, (res) => {
       console.log(res)
     });
   }

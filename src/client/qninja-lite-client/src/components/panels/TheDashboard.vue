@@ -19,7 +19,16 @@
           @click.stop="newProtocol">
           + New protocol
         </b-button>
-
+      </div>
+      <div>
+        <ul>
+            <li v-for="(item, index) in experiments" :key="index" :value="index">
+              <a href="#" @click.stop="selectExperiment(item.eid)">
+                teid={{ item.teid }}
+              </a>
+            </li>
+          
+        </ul>
       </div>
 
       <div>
@@ -85,7 +94,8 @@ export default {
       pid_config:JSON.stringify(DEFAULT_PID_CONF),
       deviceState:{},
       protocols:[],
-      protocolIndex:0
+      protocolIndex:0,
+      experiments:[],
     }
   },
   created: function () {
@@ -94,6 +104,16 @@ export default {
       if (status.server.connected && this.protocols.length == 0) {
         device.loadProtocols((items)=>{
           this.protocols = items;
+        }, ()=>{
+          // onError
+          appState.toast(this, "Error", "Failed to load protocols.");
+        });
+      }
+      if (status.server.connected && this.experiments.length == 0) {
+        device.loadExperiments((items)=>{
+          console.log("EXPERIMENTS")
+          console.log(items)
+          this.experiments = items;
         }, ()=>{
           // onError
           appState.toast(this, "Error", "Failed to load protocols.");
@@ -123,6 +143,9 @@ export default {
         appState.toast(this, "PID Config", "OK");
       }
 
+    },
+    selectExperiment(eid) {
+      console.log(eid)
     },
     confPID () {
       console.log(this.pid_config);
