@@ -4,17 +4,17 @@
     <section class="section" v-show="protocol">
       <div class="section__body">
         <div class="item">
-          <!--
           <div>
             <span :class="'validation-label validation__name'"/>
             Name
             <input
-              v-model="protocol.name"
+              v-model="item.b"
+              v-show="isNew"
               type="text"
               v-on:input="onChangeProtocol()"
             />
+            <span v-show="!isNew">{{ item.b }}</span>
           </div>
-          -->
           <div>
             <span :class="'validation-label validation__final_hold_temp'"/>
             Final hold temp <input
@@ -97,8 +97,14 @@
           <b-button :disabled="hasError || !(deviceState && deviceState.i)" variant="primary" class="ml-1" @click="saveAndRun()">
             Run
           </b-button>
+          <b-button variant="secondary" class="ml-1" @click="saveProtocol()">
+            Save
+          </b-button>
           <b-button variant="secondary" class="ml-1" @click="validate()">
             Debug
+          </b-button>
+          <b-button variant="secondary" class="ml-1" @click="deleteProtocol()" v-show="!isNew">
+            Delete
           </b-button>
         </div>
       </div>
@@ -128,7 +134,9 @@ export default {
       minTemp: 4,
       maxTemp:98,
       deviceState:{},
-      hasError: false
+      hasError: false,
+      item: {},
+      isNew: false,
     };
   },
   mounted: function () {},
@@ -145,24 +153,59 @@ export default {
     onAppear(message) {
       console.log(message)
       if (message && message.protocol /* Protocol item */) {
-        console.log("Edit protocol")
-        console.log(message.protocol)
-        this.protocol = message.protocol.p;
+        console.log("Edit protocol item=")
+        console.log(JSON.stringify(message.protocol))
+        console.log("Edit protocol message.protocol=")
+        console.log(JSON.stringify(message.protocol.p))
+        this.item = message.protocol;
+        this.item.uid = device.getUID();
+        this.isNew = false;
+      } else {
+        // New item
+        this.item = {"uid":device.getUID()};
+        this.item.p = appState.protocolTemplate();
+        this.isNew = true;
       }
     },
     back() {
       appState.backPanel();
     },
-    save: function () {
-      console.log(JSON.parse(JSON.stringify(this.protocol)));
+    saveProtocol: function () {
+      const errors = protocolValidator.validate(this.protocol)
+      this._processValidationResult(errors);
+      if (errors.length == 0) {
+        console.log(JSON.stringify(this.protocol));
+        console.log(JSON.stringify(this.item));
+        if (!this.item) {
+          this.item = {};
+        }
+        device.saveProtocol(this.item, ()=>{
+          appState.toast(this, "Saved", "Protocol saved.");
+        }, ()=>{
+          appState.toast(this, "Error", " Failed to save the protocol.");
+        });
+      }
     },
     saveAndRun: function () {
-      console.log("TheProtocolEditor.saveAndRun");
       device.start(this.protocol, ()=>{
-        console.log("TheProtocolEditor.saveAndRun cb");
         device.protocol.set(this.protocol);
         appState.pushPanel(appState.PANELS.EXPERIMENT_MONITOR);
       });
+    },
+    deleteProtocol: function () {
+      if (window.confirm("Are you sure you want to delete this protocol?")) {
+        device.deleteProtocol(this.item, ()=>{
+          appState.toast(this, "Deleted", "Protocol deleted.");
+          appState.backPanel();
+        }, ()=>{
+          appState.toast(this, "Error", " Failed to delete the protocol.");
+        });
+      }
+    },
+    validate: function () {
+      console.log("TheProtocolEditor.validate");
+      const errors = protocolValidator.validate(this.protocol)
+      this._processValidationResult(errors);
     },
     _setMessage: function (selector, message) {
       let elements = document.querySelectorAll(selector);
@@ -173,45 +216,37 @@ export default {
         console.warn("No element for selector %s", selector);
       }
     },
-    pathToClassName: function(path) {
+    _pathToClassName: function(path) {
       return ".validation__" + path.join("__");
     },
-    processValidationResult: function (result) {
+    _processValidationResult: function (result) {
       this._setMessage(".validation-label", "");
       console.log(result)
       for (let item of result) {
-        console.log("Path=" + this.pathToClassName(item.path));
-        this._setMessage(this.pathToClassName(item.path), '<div class="validation-label__content">'+item.message+'</div>')
+        console.log("Path=" + this._pathToClassName(item.path));
+        this._setMessage(this._pathToClassName(item.path), '<div class="validation-label__content">'+item.message+'</div>')
       }
       // this._setMessage(".validation-label", '<div class="validation-label__content">DEBUG</div>'); // For style debug
       this.hasError = (result.length > 0);
     },
-    validate: function () {
-      console.log("TheProtocolEditor.validate");
-      console.log(JSON.stringify(this.protocol))
-      const errors = protocolValidator.validate(this.protocol)
-      this.processValidationResult(errors);
-
-    },
+    /* Editing */
     onChangeProtocol: function () {
       this.validate();
     },
     addStepFirst: function () {
-      console.log("TODO addStepFirst");
       this.addStep(-1);
     },
     addStep: function (after) {
       this.protocol.s.splice(after + 1, 0, DEFAULT_STEP);
-      this.onChangeStructure();
-      console.log("TODO addStep(%d)", after + 1);
+      this._onChangeStructure();
     },
     deleteStep: function (index) {
       if (window.confirm("Are you sure you want to delete this step?")) {
         this.protocol.s.splice(index, 1);
-        this.onChangeStructure();
+        this._onChangeStructure();
       }
     },
-    onChangeStructure() {
+    _onChangeStructure: function() {
       this.protocol = JSON.parse(JSON.stringify(this.protocol));
     },
     title() {

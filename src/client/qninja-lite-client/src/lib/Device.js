@@ -137,7 +137,7 @@ class NetworkAWSMQTT {
     });
     this.client.on('connect', (e) => {
       this.retryInterval = 1;
-      this.connectionStatus.set(Connection.SERVER_CONNECTED);
+      // this.connectionStatus.set(Connection.SERVER_CONNECTED);
       const dataTopicFilter = this._dataTopic() + "/#";
       const commandTopicFilter = this._commandTopic() + "/#";
       const awsTopicFilter = this._awsTopic() + "/#";
@@ -150,6 +150,7 @@ class NetworkAWSMQTT {
           this.client.subscribe(awsTopicFilter, (e) => {
             console.log("NetworkWebsocket.client.subscribe aws callback %s", awsTopicFilter)
             // Ready to pub & sub ping 
+            this.connectionStatus.set(Connection.SERVER_CONNECTED);
             const pingTopic = this._commandTopic() + "/ping-client";
             this.publish(pingTopic, EMPTY_MSG);
           });
@@ -213,13 +214,11 @@ class NetworkAWSMQTT {
     // 30s from last message
     const pingTopic = this._commandTopic() + "/ping-client";
     if (this.client && (this.lastPing == null || now.getTime()- this.lastPing.getTime()  > 30 * 1000)) {
-      console.log("PING")
       this.publish(pingTopic, EMPTY_MSG);
       this.lastPing = now;
     }
     if (now.getTime() - this.lastMessage.getTime()  > 30 * 1000) {
       // No response for 30s
-        console.log("### NetworkAWSMQTT device went offline.");
         this.connectionStatus.set(Connection.CONNECTED_SERVER);
     }
   }
@@ -252,6 +251,7 @@ class Device {
     this.maxReqId = 0;
     this.experimentId = "0";
     this.thingId = "";
+    this.uid = "uk";
   }
   init(config) {
     this.config = config;
@@ -273,22 +273,6 @@ class Device {
         this.deviceState.set(res.g);
       });
     };
-    /*
-    this.subscribe(this.aws_command_topic_filter("protocol/req-query-res"), (topic, data, id) => {
-      console.log(data.response.Items)
-      if (this.loadProtocolsCallback) {
-        this.loadProtocolsCallback(data.response.Items)
-      }
-      this.loadProtocolsCallback = null;
-    });
-    this.subscribe(this.aws_command_topic_filter("experiment/req-query-res"), (topic, data, id) => {
-      console.log(data.response.Items)
-      if (this.loadExperimentsCallback) {
-        this.loadExperimentsCallback(data.response.Items)
-      }
-      this.loadExperimentsCallback = null;
-    });
-    */
     this.network.onmessage = (topic, data) => {
       // Process response to cmd
       if (data.q) {
@@ -320,40 +304,43 @@ class Device {
       // console.error(e);
     };
   }
-  _thing_id() {
+  getUID () {
+    return this.uid;
+  }
+  _thing_id () {
     return this.thingId;
   }
-  _experiment_id() {
+  _experiment_id () {
     return this.experimentId;
   }
-  experiment_data_topic(category) {
+  experiment_data_topic (category) {
     return "dt/ninja/" + this._thing_id() + "/experiment/+/" + category
   }
-  experiment_data_topic_filter(category) {
+  experiment_data_topic_filter (category) {
     return "dt/ninja/+/experiment/+/" + category
   }
-  device_data_topic(category) {
+  device_data_topic (category) {
     return "dt/ninja/" + this._thing_id() + "/" + category
   }
-  device_data_topic_filter(category) {
+  device_data_topic_filter (category) {
     return "dt/ninja/+/" + category
   }
-  device_command_topic(command) {
+  device_command_topic (command) {
     return "cmd/ninja/" + this._thing_id() + "/" + command
   }
-  device_command_topic_filter(command) {
+  device_command_topic_filter (command) {
     return "cmd/ninja/+/" + command
   }
-  aws_command_topic(command) {
+  aws_command_topic (command) {
     return "aws/ninja/" + this._thing_id() + "/" + command
   }
-  aws_command_topic_filter(command) {
+  aws_command_topic_filter (command) {
     return "aws/ninja/+/" + command
   }
-  experiment_command_topic(command) {
+  experiment_command_topic (command) {
     return "cmd/ninja/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command
   }
-  experiment_command_topic_filter(command) {
+  experiment_command_topic_filter (command) {
     return "cmd/ninja/+/experiment/" + this._experiment_id() + "/" + command
   }
 
@@ -442,7 +429,6 @@ class Device {
       console.log("PID const updated")
       callback()
     });
-
   }
   loadProtocols (callback, onError) {
     this.publish(this.aws_command_topic("protocol/req-query"), {}, (res) => {
@@ -455,20 +441,33 @@ class Device {
     });
   }
   loadExperimentProgress (eid, callback, onError) {
-    this.loadExperimentProgressCallback = callback;
     this.publish(this.aws_command_topic("experiment/" + eid + "/progress/req-query"), {}, (res) => {
-      // callback(res.response.data.Items)
       callback(res.response.Items)
     });
   }
   loadExperimentFluo (eid, callback, onError) {
-    this.loadExperimentFluoCallback = callback;
     this.publish(this.aws_command_topic("experiment/" + eid + "/fluo/req-query"), {}, (res) => {
-      // callback(res.response.data.Items)
       callback(res.response.Items)
     });
   }
-
+  saveProtocol (protocolItem, callback, onError) {
+    // aws/ninja/qninja_1667831590228/protocol/req-put
+    protocolItem.uid = device.getUID()
+    this.publish(this.aws_command_topic("protocol/req-put"),  protocolItem, (res) => {
+      callback(res)
+    });
+   console.log(JSON.stringify(protocolItem))
+  }
+  deleteProtocol (protocolItem, callback, onError) {
+    // Set d=true to delete
+    let item = JSON.parse(JSON.stringify(protocolItem));
+    item.d = true;
+    console.log("deleteProtocol")
+    console.log(item)
+    this.publish(this.aws_command_topic("protocol/req-put"),  item, (res) => {
+      callback(res)
+    });
+  }
 }
 const device = new Device();
 device.Connection = Connection;

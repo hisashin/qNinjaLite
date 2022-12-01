@@ -161,10 +161,8 @@ export default {
       data.forEach((measurement)=>{
         // 
         // {s: 1, d: 1496, t: 1669445051354, e: 119151, v: Array(1)}
-        console.log(measurement)
         this.eachSeries((c, w, i)=>{
           // GraphSubChannelXY.addData
-          console.log(measurement.v[c][w])
           this.subChannelsData[i].addData({y:measurement.v[c][w], x:measurement.d/1000});
         });
       });

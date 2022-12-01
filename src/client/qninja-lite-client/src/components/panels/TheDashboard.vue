@@ -24,10 +24,9 @@
         <ul>
             <li v-for="(item, index) in experiments" :key="index" :value="index">
               <a href="#" @click.stop="selectExperiment(item)">
-                teid={{ item.teid }}
+                {{ new Date(item.t)}} eid={{ item.eid }} 
               </a>
             </li>
-          
         </ul>
       </div>
 
@@ -73,15 +72,6 @@ const DEFAULT_PID_CONF = {
 const DEFAULT_PID_CONF = {
   "c":[{"p":0.12,"i":0.009,"d":0.02}]
 }
-  
-const DEFAULT_PROTOCOL = 
-{
-  "s":[
-    { "t":72, "d":120.0, "c":1, "i":5 },
-    { "t":84, "d":30.0, "c":1, "i":5 }
-  ],
-  "h":20
-};
 export default {
   name: 'TheDashboard',
   components: {
@@ -137,12 +127,20 @@ export default {
   },
   methods: {
     onAppear () {
+      if (this.connectionStatus.server.connected) {
+        device.loadProtocols((items)=>{
+          this.protocols = items;
+        }, ()=>{
+          // onError
+          appState.toast(this, "Error", "Failed to load protocols.");
+        });
+      }
     },
     selectProtocol () {
       appState.pushPanel(appState.PANELS.PROTOCOL_EDITOR, {protocol:this.protocols[this.protocolIndex]});
     },
     newProtocol () {
-      appState.pushPanel(appState.PANELS.PROTOCOL_EDITOR, {protocol:appState.protocolTemplate()});
+      appState.pushPanel(appState.PANELS.PROTOCOL_EDITOR, null);
     },
     validatePID(){
       const errors = pidValidator.validate(JSON.parse(this.pid_config))
@@ -155,6 +153,7 @@ export default {
 
     },
     selectExperiment(experiment) {
+      console.log(JSON.stringify(experiment))
       appState.pushPanel(appState.PANELS.EXPERIMENT_DETAIL, experiment);
     },
     confPID () {
