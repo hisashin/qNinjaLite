@@ -37,8 +37,8 @@
 
 <script>
 import Graph from "../../lib_shared/Graph.js";
-const TIME_RANGES = [10000, 1000, 500, 250, 120, 60];
-// const TIME_RANGES = [200, 100, 80, 60, 40, 20]; // Narrow ranges for debugging
+// const TIME_RANGES = [10000, 1000, 500, 250, 120, 60];
+const TIME_RANGES = [200, 100, 80, 60, 40, 20]; // Narrow ranges for debugging
 const PADDING = 10;
 let timeRangeSec = TIME_RANGES[3];
 
@@ -93,11 +93,27 @@ export default {
         // Auto-scroll is suppressed if the graph is showing intermediate range.
         const diff = timeRangeSec + PADDING + this.timeOffset - this.dataRangePrev.max;
         if (diff > 0) {
-          this.timeOffset = this.dataRange.max - (timeRangeSec + PADDING - diff);
+          this.timeOffset = Math.max(this.dataRange.max - (timeRangeSec + PADDING - diff));
         }
         chartTimeRange.min = this.timeOffset;
         chartTimeRange.max = this.timeOffset + timeRangeSec + PADDING;
       }
+      /*
+      if (chartTimeRange.min < 0) {
+        console.error("CHART ERROR");
+        console.log("this.dataRangePrev")
+        console.log(this.dataRangePrev)
+        console.log("chartTimeRange")
+        console.log(chartTimeRange)
+        console.log("this.dataRange")
+        console.log(this.dataRange)
+        console.log("this.timeOffset")
+        console.log(this.timeOffset)
+        console.log("timeRangeSec")
+        console.log(timeRangeSec)
+
+      }
+      */
       this.graph.setMinMaxX(chartTimeRange.min, chartTimeRange.max);
 
     },
