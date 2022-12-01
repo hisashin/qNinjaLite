@@ -410,17 +410,23 @@ class Device {
     this.publish(this.experiment_command_topic("finish"), {});
   }
 
-  _issueExperimentId() {
-    return "" + new Date().getTime();
-  }
-  start(protocol, callback) {
-    const experimentId = this._issueExperimentId();
-    const obj = { i: experimentId, p: protocol };
-    console.log(obj);
-    this.publish(this.device_command_topic("start"), obj, () => {
-      this.experimentId = experimentId;
-      console.log("Experiment start command was accepted! this.experimentId=" + this.experimentId)
-      callback()
+  start(protocol, callback, onError) {
+    this.publish(this.aws_command_topic("experiment/req-newid"), {}, (res) => {
+      console.log(res)
+      if (!res.response.error) {
+        const experimentId = res.response.eid;
+        const obj = { i: experimentId, p: protocol };
+        console.log(obj);
+        this.publish(this.device_command_topic("start"), obj, () => {
+          this.experimentId = experimentId;
+          console.log("Experiment start command was accepted! this.experimentId=" + this.experimentId)
+          callback()
+        });
+      } else {
+        if (!onError) {
+          onError();
+        }
+      }
     });
   }
   confPID (obj, callback) {

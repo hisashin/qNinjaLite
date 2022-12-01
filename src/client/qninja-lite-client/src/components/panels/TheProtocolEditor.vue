@@ -92,16 +92,17 @@
           <b-button :disabled="hasError || !(deviceState && deviceState.i)" variant="primary" class="ml-1" @click="saveAndRun()">
             Run
           </b-button>
+          <b-button variant="primary" class="ml-1" @click="saveAndRun()">
+            Run (Delete)
+          </b-button>
           <b-button variant="secondary" class="ml-1" @click="saveProtocol()">
             Save
           </b-button>
-          <!--
-          <b-button variant="secondary" class="ml-1" @click="validate()">
-            Debug
-          </b-button>
-          -->
           <b-button variant="secondary" class="ml-1" @click="deleteProtocol()" v-show="!isNew">
             Delete
+          </b-button>
+          <b-button variant="secondary" class="ml-1" @click="debug()" v-show="!isNew">
+            Debug (eid)
           </b-button>
         </div>
       </div>
