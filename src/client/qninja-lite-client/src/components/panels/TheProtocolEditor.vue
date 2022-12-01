@@ -89,20 +89,17 @@
               </li>
             </template>
           </ul>
-          <!--
-          <b-button variant="primary" class="ml-1" @click="save()">
-            Save
-          </b-button>
-          -->
           <b-button :disabled="hasError || !(deviceState && deviceState.i)" variant="primary" class="ml-1" @click="saveAndRun()">
             Run
           </b-button>
           <b-button variant="secondary" class="ml-1" @click="saveProtocol()">
             Save
           </b-button>
+          <!--
           <b-button variant="secondary" class="ml-1" @click="validate()">
             Debug
           </b-button>
+          -->
           <b-button variant="secondary" class="ml-1" @click="deleteProtocol()" v-show="!isNew">
             Delete
           </b-button>
