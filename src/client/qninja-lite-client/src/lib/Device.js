@@ -474,6 +474,25 @@ class Device {
       callback(res)
     });
   }
+  downloadExperimentLog (experiment, fileType) {
+    if (experiment.urlZipFriendlyCsv && fileType == "csv") {
+      window.open(experiment.urlZipFriendlyCsv)
+    }
+    else if (experiment.urlZipFriendlyJson && fileType == "json") {
+      window.open(experiment.urlZipFriendlyJson)
+    } else {
+      device.loadExperimentResult(experiment, (result)=>{
+        console.log(result)
+        experiment.urlZipFriendlyCsv = result.urlZipFriendlyCsv
+        experiment.urlZipFriendlyJson = result.urlZipFriendlyJson
+        let url = (fileType=="csv")? result.urlZipFriendlyCsv : result.urlZipFriendlyJson;
+        window.open(url);
+      }, ()=>{
+      }
+      );
+
+    }
+  }
 }
 const device = new Device();
 device.Connection = Connection;

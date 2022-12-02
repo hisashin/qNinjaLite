@@ -257,8 +257,7 @@ export default {
       appState.home();
     },
     result () {
-      this.closeModals(); 
-      appState.revealDetailLatestExperiment(this);
+      this.closeModals();
     },
     closeModals () {
       this.$bvModal.hide('finish-modal');

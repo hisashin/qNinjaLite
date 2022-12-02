@@ -24,8 +24,16 @@
         <ul>
             <li v-for="(item, index) in experiments" :key="index" :value="index">
               <a href="#" @click.stop="selectExperiment(item)">
-                {{ new Date(item.t)}} eid={{ item.eid }} 
+                {{ new Date(item.t)}} 
               </a>
+              (<a href="#" @click.stop="dl(item, 'csv')">
+                CSV
+              </a>
+              /
+              <a href="#" @click.stop="dl(item, 'json')">
+                JSON
+              </a>)
+
             </li>
         </ul>
       </div>
@@ -168,6 +176,9 @@ export default {
       device.confPID(pidObj, ()=>{
         appState.toast(this, "PID Config", "PID constants have changed.");
       })
+    },
+    dl (experiment, fileType) {
+      device.downloadExperimentLog(experiment, fileType);
     },
     title () { return "Dashboard" }
   }
