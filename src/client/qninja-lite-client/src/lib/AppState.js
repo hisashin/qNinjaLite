@@ -155,7 +155,7 @@ class AppState {
   newProtocol () {
     console.log("AppState.newProtocol");
   }
-  
+
   
   /* Event handler registration */
   setPanelContainer (container) {

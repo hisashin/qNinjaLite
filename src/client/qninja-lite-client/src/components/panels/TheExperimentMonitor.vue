@@ -93,7 +93,6 @@ export default {
         }
       });
       this.subscribe(device.experiment_data_topic_filter("fluo"), (topic, obj)=>{
-        console.log(obj)
         this.$refs.amplificationChart.add(obj);
       });
       if (message && message.continue) {

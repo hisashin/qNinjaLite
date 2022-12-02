@@ -85,20 +85,21 @@ export default {
         min:0,
         max:0
       };
+      let diff = 0;
       if (this.dataRange.max - this.dataRange.min < timeRangeSec) {
         // Data range is fully covered
         chartTimeRange.min = this.dataRange.min;
         chartTimeRange.max = this.dataRange.min + timeRangeSec + PADDING;
       } else {
         // Auto-scroll is suppressed if the graph is showing intermediate range.
-        const diff = timeRangeSec + PADDING + this.timeOffset - this.dataRangePrev.max;
+        diff = timeRangeSec + PADDING + this.timeOffset - this.dataRangePrev.max;
         if (diff > 0) {
-          this.timeOffset = Math.max(this.dataRange.max - (timeRangeSec + PADDING - diff));
+          this.timeOffset = this.dataRange.max - (timeRangeSec + PADDING - diff);
         }
+        this.timeOffset = Math.max(0, this.timeOffset);
         chartTimeRange.min = this.timeOffset;
         chartTimeRange.max = this.timeOffset + timeRangeSec + PADDING;
       }
-      /*
       if (chartTimeRange.min < 0) {
         console.error("CHART ERROR");
         console.log("this.dataRangePrev")
@@ -111,9 +112,10 @@ export default {
         console.log(this.timeOffset)
         console.log("timeRangeSec")
         console.log(timeRangeSec)
+        console.log("diff")
+        console.log(diff)
 
       }
-      */
       this.graph.setMinMaxX(chartTimeRange.min, chartTimeRange.max);
 
     },
