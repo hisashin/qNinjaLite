@@ -162,8 +162,12 @@ export default {
       this.protocol = protocol;
     });
     device.deviceState.observe((state)=>{
+      console.log("STATE " + JSON.stringify(state))
       this.closeModals(); 
-      if (this.deviceState && !this.deviceState.f && state.f) {
+      if (state && state.b == "online") {
+        console.log("STATE ???")
+      }
+      else if (this.deviceState && !this.deviceState.b!="complete" && state.b=="complete") {
         this.$bvModal.show('finish-modal');
       }
       if (this.deviceState && this.deviceState.x && !state.x) {

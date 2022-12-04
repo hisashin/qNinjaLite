@@ -261,7 +261,7 @@ class Device {
       }
     });
     this.subscribe(this.device_data_topic_filter("state"), (topic, data, id) => {
-      console.log("Device.js deviceState updated.")
+      console.log("STATE Device.js deviceState updated. topic=" + topic)
       console.log(data)
       this.deviceState.set(data);
     });
