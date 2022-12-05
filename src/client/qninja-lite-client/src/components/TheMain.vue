@@ -121,25 +121,32 @@ export default {
   created: function () {
     appState.setPanelContainer(this);
     device.network.connectionStatus.observe((connStatus)=>{
-      if (connStatus == device.Connection.INITIAL) return;
-      if (this.startedConnection) {
-        if (!connStatus.server.connected) {
-          appState.toast(this, "qNinja LITE", "Failed to connect to the server.");
-        } else {
-          // appState.toast(this, "qNinja LITE", "Connected to the server.");
+      try {
+        if (connStatus == device.Connection.INITIAL) return;
+        if (this.startedConnection) {
+          if (!connStatus.server.connected) {
+            appState.toast(this, "qNinja LITE", "Failed to connect to the server.");
+          } else {
+            // appState.toast(this, "qNinja LITE", "Connected to the server.");
+          }
+          this.startedConnection = false;
         }
-        this.startedConnection = false;
+        if (this.connectionStatus.server.connected && !connStatus.server.connected) {
+          appState.toast(this, "qNinja LITE", "Disconnected from the server.");
+        }
+        if (!this.connectionStatus.device.connected && connStatus.device.connected) {
+          appState.toast(this, "qNinja LITE", "The device is now online.");
+        }
+        if (this.connectionStatus.device.connected && !connStatus.device.connected) {
+          appState.toast(this, "qNinja LITE", "The device went offline.");
+        }
+        this.connectionStatus = connStatus;
+      } catch (e) {
+        console.error(e)
+        console.log(this.connectionStatus)
+        console.log(connStatus);
+        console.trace();
       }
-      if (this.connectionStatus.server.connected && !connStatus.server.connected) {
-        appState.toast(this, "qNinja LITE", "Disconnected from the server.");
-      }
-      if (!this.connectionStatus.device.connected && connStatus.device.connected) {
-        appState.toast(this, "qNinja LITE", "The device is now online.");
-      }
-      if (this.connectionStatus.device.connected && !connStatus.device.connected) {
-        appState.toast(this, "qNinja LITE", "The device went offline.");
-      }
-      this.connectionStatus = connStatus;
     });
     device.deviceState.observe((data)=>{
       if (!data) return;

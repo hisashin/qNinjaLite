@@ -100,7 +100,7 @@ class NetworkAWSMQTT {
     this.thingId = "";
     this.retryInterval = 10;
     this.lastMessage = null;
-    this.connectionStatus = new ObservableValue(Connection.DISCONNECTED);
+    this.connectionStatus = new ObservableValue(Connection.INITIAL);
     this.connectionStatus.observe((value)=>{
       console.log("NetworkAWSMQTT.connectionStatus changed.");
       console.log(JSON.stringify(value))
@@ -108,7 +108,7 @@ class NetworkAWSMQTT {
         this.onConnectedToDevice();
       }
     });
-    setInterval(()=>{ this.keepDeviceConnection() }, 2000);
+    // setInterval(()=>{ this.keepDeviceConnection() }, 2000);
   }
   _dataTopic() {
     return "dt/ninja/" + this.thingId;
@@ -137,7 +137,6 @@ class NetworkAWSMQTT {
     });
     this.client.on('connect', (e) => {
       this.retryInterval = 1;
-      // this.connectionStatus.set(Connection.SERVER_CONNECTED);
       const dataTopicFilter = this._dataTopic() + "/#";
       const commandTopicFilter = this._commandTopic() + "/#";
       const awsTopicFilter = this._awsTopic() + "/#";
@@ -151,7 +150,7 @@ class NetworkAWSMQTT {
             console.log("NetworkWebsocket.client.subscribe aws callback %s", awsTopicFilter)
             // Ready to pub & sub ping 
             this.connectionStatus.set(Connection.SERVER_CONNECTED);
-            const pingTopic = this._commandTopic() + "/ping-client";
+            const pingTopic = this._awsTopic() + "/req";
             this.publish(pingTopic, EMPTY_MSG);
           });
         });
@@ -185,19 +184,12 @@ class NetworkAWSMQTT {
           return;
         }
         this.lastMessage = new Date();
-        // console.log("### NetworkAWSMQTT.onMessage topic=%s, message=%s", topic, message);
-        if (topic == this._commandTopic() + "/ping-device") {
-          // Ping on device boot
-          console.log("Connection established!!! (client first)");
-          const pingResTopic = this._commandTopic() + "/ping-device-res";
-          this.publish(pingResTopic, EMPTY_MSG);
-          this.connectionStatus.set(Connection.DEVICE_CONNECTED);
+        if (topic == this._awsTopic() + "/req-res") {
+          const isOnline = obj.response.Item.o;
+          if (isOnline) {
+            this.connectionStatus.set(Connection.DEVICE_CONNECTED);
 
-        }
-        if (topic == this._commandTopic() + "/ping-client-res") {
-          // Respons to my ping on boot
-          console.log("Connection established!!! (device first)");
-          this.connectionStatus.set(Connection.DEVICE_CONNECTED);
+          }
         }
         this.onmessage(topic, obj);
       } catch (e) {
@@ -206,6 +198,7 @@ class NetworkAWSMQTT {
       }
     });
   }
+  /*
   keepDeviceConnection () {
     const now = new Date();
     if (this.lastMessage == null || now.getTime() - this.lastMessage.getTime()  < 10 * 1000) {
@@ -219,9 +212,10 @@ class NetworkAWSMQTT {
     }
     if (now.getTime() - this.lastMessage.getTime()  > 30 * 1000) {
       // No response for 30s
-        this.connectionStatus.set(Connection.CONNECTED_SERVER);
+        this.connectionStatus.set(Connection.SERVER_CONNECTED);
     }
   }
+  */
   onConnectedToDevice() {
     if (this.onopen) {
       setTimeout(() => {
@@ -264,6 +258,15 @@ class Device {
       console.log("STATE Device.js deviceState updated. topic=" + topic)
       console.log(data)
       this.deviceState.set(data);
+    });
+    this.subscribe(device.aws_command_topic_filter("presence"), (topic, presence)=>{
+      console.log("PRESENCE ", presence);
+      if (presence.o == false) {
+        this.network.connectionStatus.set(Connection.SERVER_CONNECTED)
+      }
+      if (presence.o == true) {
+        this.network.connectionStatus.set(Connection.DEVICE_CONNECTED)
+      }
     });
     this.network.onopen = () => {
       console.log('network.onopen');
@@ -333,6 +336,9 @@ class Device {
   }
   aws_command_topic (command) {
     return "aws/ninja/" + this._thing_id() + "/" + command
+  }
+  aws_experiment_command_topic (command) {
+    return "aws/ninja/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command;
   }
   aws_command_topic_filter (command) {
     return "aws/ninja/+/" + command
@@ -474,6 +480,24 @@ class Device {
       callback(res)
     });
   }
+  downloadCurrentExperimentLog (fileType) {
+    //aws_experiment_command_topic
+    console.log("download " + this.aws_experiment_command_topic("req"))
+    this.publish(this.aws_experiment_command_topic("req"), {}, 
+    (result) => {
+      console.log("download req " + JSON.stringify(result))
+      if (!result.response.Item.urlZipFriendlyCsv) {
+        this.publish(this.aws_experiment_command_topic("req-backup"), {}, (result)=>{
+          console.log("download req-backup " + JSON.stringify(result))
+          
+          // {"q":9,"tid":"qninja_1667831590228","eid":"dfG9WRBIYh6aA","teid":"qninja_1667831590228_dfG9WRBIYh6aA","urlZipFriendlyJson":"https://q.hisa.dev/backup/thing/qninja_1667831590228/experiment/qninja_1667831590228_dfG9WRBIYh6aA_json.gz","urlZipFriendlyCsv":"https://q.hisa.dev/backup/thing/qninja_1667831590228/experiment/qninja_1667831590228_dfG9WRBIYh6aA_csv.gz","gen":false}
+          const url = (fileType=="csv")?result.urlZipFriendlyCsv:result.urlZipFriendlyJson;
+          window.open(url);
+        });
+
+      }
+    });
+  }
   downloadExperimentLog (experiment, fileType) {
     if (experiment.urlZipFriendlyCsv && fileType == "csv") {
       window.open(experiment.urlZipFriendlyCsv)
@@ -481,7 +505,8 @@ class Device {
     else if (experiment.urlZipFriendlyJson && fileType == "json") {
       window.open(experiment.urlZipFriendlyJson)
     } else {
-      device.loadExperimentResult(experiment, (result)=>{
+      // aws/ninja/<thing-id>/experiment/<exp-id>/req-backup
+      this.publish(this.aws_command_topic("experiment/" + experiment.eid + "/req-backup"), {}, (result) => {
         console.log(result)
         experiment.urlZipFriendlyCsv = result.urlZipFriendlyCsv
         experiment.urlZipFriendlyJson = result.urlZipFriendlyJson

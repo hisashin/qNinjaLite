@@ -106,6 +106,8 @@
           <button class="time-monitor__button" v-if="deviceState.r" @click="resume">Resume</button>
           <button class="time-monitor__button" v-if="deviceState.c" @click="cancel">Cancel</button>
           <button class="time-monitor__button" v-if="deviceState.f" @click="finish">Finish</button>
+          <button class="time-monitor__button" @click="dl('json')">JSON</button>
+          <button class="time-monitor__button" @click="dl('csv')">CSV</button>
           </template>
           
         </div>
@@ -257,8 +259,9 @@ export default {
       device.finish();
     },
     home () { 
-      this.closeModals(); 
-      appState.home();
+      this.closeModals();
+      this.$emit('home');
+      // appState.home();
     },
     result () {
       this.closeModals();
@@ -266,6 +269,9 @@ export default {
     closeModals () {
       this.$bvModal.hide('finish-modal');
       this.$bvModal.hide('result-modal');
+    },
+    dl (format) {
+      device.downloadCurrentExperimentLog(format);
     }
     
   }
