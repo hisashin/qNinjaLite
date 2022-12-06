@@ -68,7 +68,8 @@ class NetworkWebsocket {
     };
     this.ws.onopen = () => {
       console.log("NetworkWebsocket.onopen");
-      this.onopen();
+      if (this.onopen)
+        this.onopen();
     };
     this.ws.onclose = (e) => {
       this.onclose(e);
@@ -101,6 +102,7 @@ class NetworkAWSMQTT {
     this.retryInterval = 10;
     this.lastMessage = null;
     this.connectionStatus = new ObservableValue(Connection.INITIAL);
+    /*
     this.connectionStatus.observe((value)=>{
       console.log("NetworkAWSMQTT.connectionStatus changed.");
       console.log(JSON.stringify(value))
@@ -108,6 +110,7 @@ class NetworkAWSMQTT {
         this.onConnectedToDevice();
       }
     });
+    */
     // setInterval(()=>{ this.keepDeviceConnection() }, 2000);
   }
   _dataTopic() {
@@ -158,8 +161,10 @@ class NetworkAWSMQTT {
     });
     this.client.on('reconnect', (e) => {
       console.log("### NetworkAWSMQTT.client.reconnect")
+      /*
       if (this.onopen)
         this.onopen();
+        */
     });
     this.client.on('close', (e) => {
       // Called in case of disconnection.
@@ -184,13 +189,14 @@ class NetworkAWSMQTT {
           return;
         }
         this.lastMessage = new Date();
+        /*
         if (topic == this._awsTopic() + "/req-res") {
           const isOnline = obj.response.Item.o;
           if (isOnline) {
             this.connectionStatus.set(Connection.DEVICE_CONNECTED);
-
           }
         }
+        */
         this.onmessage(topic, obj);
       } catch (e) {
         console.error("NetworkAWSMQTT.client.message Malformed message");
@@ -199,23 +205,6 @@ class NetworkAWSMQTT {
     });
   }
   /*
-  keepDeviceConnection () {
-    const now = new Date();
-    if (this.lastMessage == null || now.getTime() - this.lastMessage.getTime()  < 10 * 1000) {
-      return;
-    }
-    // 30s from last message
-    const pingTopic = this._commandTopic() + "/ping-client";
-    if (this.client && (this.lastPing == null || now.getTime()- this.lastPing.getTime()  > 30 * 1000)) {
-      this.publish(pingTopic, EMPTY_MSG);
-      this.lastPing = now;
-    }
-    if (now.getTime() - this.lastMessage.getTime()  > 30 * 1000) {
-      // No response for 30s
-        this.connectionStatus.set(Connection.SERVER_CONNECTED);
-    }
-  }
-  */
   onConnectedToDevice() {
     if (this.onopen) {
       setTimeout(() => {
@@ -224,6 +213,7 @@ class NetworkAWSMQTT {
       }, 5000)
     }
   }
+  */
   publish(topic, data) {
     console.log("### NetworkAWSMQTT.publish", topic)
     this.client.publish(topic, JSON.stringify(data));
@@ -254,12 +244,35 @@ class Device {
         this.protocol.set(experiment.protocol);
       }
     });
+    this.subscribe(this.aws_command_topic_filter("req-res"), (topic, data,id)=>{
+      const stateObj = data.response.Item;
+      const isOnline = stateObj.o;
+      console.log("STATE UPDATED " + JSON.stringify(stateObj))
+      if (isOnline) {
+        this.network.connectionStatus.set(Connection.DEVICE_CONNECTED);
+      } else {
+        this.network.connectionStatus.set(Connection.SERVER_CONNECTED);
+      }
+      this.deviceState.set(stateObj);
+    })
+    // TODO remove this block after v1 test
+    console.log("PING DEVICE topic=" + this.device_command_topic_filter("ping-device"))
+    this.subscribe(this.device_command_topic_filter("ping-device"), (topic, data, id) => {
+      this.network.connectionStatus.set(Connection.SERVER_CONNECTED)
+      console.log("PING_DEVICE RECEIVED")
+      setTimeout(()=>{
+        this.publish(this.device_command_topic("req-state"), {}, (data)=>{
+          console.log(data)
+          this.deviceState.set(data);
+        });
+      }, 1000);
+    });
     this.subscribe(this.device_data_topic_filter("state"), (topic, data, id) => {
       console.log("STATE Device.js deviceState updated. topic=" + topic)
       console.log(data)
       this.deviceState.set(data);
     });
-    this.subscribe(device.aws_command_topic_filter("presence"), (topic, presence)=>{
+    this.subscribe(this.aws_command_topic_filter("presence"), (topic, presence)=>{
       console.log("PRESENCE ", presence);
       if (presence.o == false) {
         this.network.connectionStatus.set(Connection.SERVER_CONNECTED)
@@ -268,6 +281,7 @@ class Device {
         this.network.connectionStatus.set(Connection.DEVICE_CONNECTED)
       }
     });
+    /*
     this.network.onopen = () => {
       console.log('network.onopen');
       device.publish(device.device_command_topic("req-state"), {}, (res) => {
@@ -276,6 +290,7 @@ class Device {
         this.deviceState.set(res.g);
       });
     };
+    */
     this.network.onmessage = (topic, data) => {
       // Process response to cmd
       if (data.q) {

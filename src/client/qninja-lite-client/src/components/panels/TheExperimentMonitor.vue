@@ -78,6 +78,12 @@ export default {
       }
       this.$refs.amplificationChart.clear();
       this.$refs.temperatureChart.clear();
+      this.subscribe(device.experiment_data_topic_filter("progress"), (topic, progress)=>{
+        if (!(progress.l == 'final_hold')) {
+          // Do not update the graph in final_hold state
+          this.$refs.temperatureChart.add(progress.e, progress.p);
+        }
+      });
       this.subscribe(device.experiment_data_topic_filter("fluo"), (topic, obj)=>{
         this.$refs.amplificationChart.add(obj);
       });
@@ -91,8 +97,6 @@ export default {
       }
     },
     home () {
-      console.log("Emitted home event");
-      console.log("Unsub all")
       this.subs.forEach((subId)=>{device.unsubscribe(subId)});
       appState.home();
     },
