@@ -100,6 +100,7 @@ export default {
     device.network.connectionStatus.observe((status)=>{
       this.connectionStatus = status;
       if (status.server.connected && this.protocols.length == 0) {
+        console.log("presence filter=" + device.aws_command_topic_filter("presence"));
         device.loadProtocols((items)=>{
           this.protocols = items;
         }, ()=>{

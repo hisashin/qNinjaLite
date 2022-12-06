@@ -2,7 +2,7 @@
   <div class="panel panel--dashboard">
     <div class="panel__menu">
     </div>
-    <ProgressMonitor ref="progressMonitor"/>
+    <ProgressMonitor ref="progressMonitor" @home="home"/>
     <b-button class="mr-1 btn-sm"
       @click.stop="back">
       Back
@@ -62,7 +62,6 @@ export default {
   mounted: function () {
   },
   created: function () {
-    console.log("TheExperimentMonitor.created")
     device.protocol.observe((protocol)=>{
       this.protocol = protocol
     });
@@ -72,36 +71,34 @@ export default {
       this.subs.push(device.subscribe(topic, handler));
     },
     onAppear (message) {
-      console.log("TheExperimentMonitor.onAppear message=");
-      console.log(message);
-      if (message) {
-        console.log("Continue", message.continue)
-      }
       if (!this.ampChartReady) {
         this.$refs.amplificationChart.setHardwareConf(hardwareConfig);
         this.$refs.amplificationChart.setAppearanceConf(this.getAppearanceConf());
         this.ampChartReady = true;
       }
-      console.log("TheExperimentMonitor CLEAR!!!");
       this.$refs.amplificationChart.clear();
       this.$refs.temperatureChart.clear();
       this.subscribe(device.experiment_data_topic_filter("progress"), (topic, progress)=>{
         if (!(progress.l == 'final_hold')) {
+          // Do not update the graph in final_hold state
           this.$refs.temperatureChart.add(progress.e, progress.p);
-        } else {
-          // TODO complete!
         }
       });
       this.subscribe(device.experiment_data_topic_filter("fluo"), (topic, obj)=>{
         this.$refs.amplificationChart.add(obj);
       });
       if (message && message.continue) {
+        console.log("Continue", message.continue)
         device.publish(device.device_command_topic("req-experiment"), {}, (res)=>{
           console.log("Received req-experiment response.");
           console.log(res);
           this.protocol = res.g.p;
         });
       }
+    },
+    home () {
+      this.subs.forEach((subId)=>{device.unsubscribe(subId)});
+      appState.home();
     },
     back () {
       console.log("Unsub all")

@@ -106,6 +106,8 @@
           <button class="time-monitor__button" v-if="deviceState.r" @click="resume">Resume</button>
           <button class="time-monitor__button" v-if="deviceState.c" @click="cancel">Cancel</button>
           <button class="time-monitor__button" v-if="deviceState.f" @click="finish">Finish</button>
+          <button class="time-monitor__button" @click="dl('json')">JSON</button>
+          <button class="time-monitor__button" @click="dl('csv')">CSV</button>
           </template>
           
         </div>
@@ -162,8 +164,12 @@ export default {
       this.protocol = protocol;
     });
     device.deviceState.observe((state)=>{
+      console.log("STATE " + JSON.stringify(state))
       this.closeModals(); 
-      if (this.deviceState && !this.deviceState.f && state.f) {
+      if (state && state.b == "online") {
+        console.log("STATE ???")
+      }
+      else if (this.deviceState && !this.deviceState.b!="complete" && state.b=="complete") {
         this.$bvModal.show('finish-modal');
       }
       if (this.deviceState && this.deviceState.x && !state.x) {
@@ -253,8 +259,9 @@ export default {
       device.finish();
     },
     home () { 
-      this.closeModals(); 
-      appState.home();
+      this.closeModals();
+      this.$emit('home');
+      // appState.home();
     },
     result () {
       this.closeModals();
@@ -262,6 +269,9 @@ export default {
     closeModals () {
       this.$bvModal.hide('finish-modal');
       this.$bvModal.hide('result-modal');
+    },
+    dl (format) {
+      device.downloadCurrentExperimentLog(format);
     }
     
   }

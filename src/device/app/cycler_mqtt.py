@@ -69,7 +69,8 @@ class MQTTCommunicator:
         print("Sub cmd")
         mqttclient.subscribe("cmd/ninja/#")
         time.sleep(0.5)
-        ping_topic =  "cmd/ninja/" + self._thing_id() + "/ping-device"
+        # TODO replace with state pub
+        ping_topic =  "cmd/ninja/" + self._thing_id() + "/ping-device" 
         mqttclient.publish(ping_topic,"{}", qos=0)
 
     def _thing_id (self):
