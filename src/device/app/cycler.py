@@ -18,7 +18,6 @@ class DeviceState:
         self.cancel_available = cancel_available
         self.finish_available = finish_available
     def data(self):
-        print("DeviceState.data()")
         return {
             "b":self.label, # label
             "x":self.has_experiment, # has_experiment
@@ -249,12 +248,13 @@ class Cycler:
             return
         if (self.current_step.is_done(temp, self.timestamp_ms)):
             self.next_stage()
+            if not self.current_step.is_finished():
+                self.communicator.on_event("transition", data={"protocol":self.protocol.protocol,"step":self.current_step.obj()})
         if self.current_step.min_measurement_interval != None:
             if self.last_measurement == None or (self.timestamp_ms - self.last_measurement) > self.current_step.min_measurement_interval * 1000:
                 if self.optics.measure_all(self.optics_on_measure):
                     # Optics.measure_all returns False if it has ongoing measurement
                     self.last_measurement = self.timestamp_ms
-        state = {"state":self.current_step.label}
         self.communicator.on_progress({
             "e":self.timestamp_ms, # elapsed
             "s": self.current_step.index, #step
