@@ -153,11 +153,11 @@ export default {
         console.log("Edit protocol message.protocol=")
         console.log(JSON.stringify(message.protocol.p))
         this.item = message.protocol;
-        this.item.uid = device.getUID();
+        this.item.tid = device.getThingID();
         this.isNew = false;
       } else {
         // New item
-        this.item = {"uid":device.getUID()};
+        this.item = {"tid":device.getThingID()};
         this.item.p = appState.protocolTemplate();
         this.isNew = true;
       }

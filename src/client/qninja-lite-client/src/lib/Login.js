@@ -3,6 +3,7 @@ class LoginManager {
     this.loginInfo = {
       username:"",
       password:"",
+      thingId:"",
       autologin:false
     };
     try {

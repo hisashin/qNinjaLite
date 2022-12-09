@@ -76,6 +76,8 @@ class NetworkWebsocket {
     };
     this.ws.onerror = (e) => {
       this.onerror(e);
+      console.error(e);
+      this.connectionStatus.set(this.Connection.ERROR);
     };
   }
   _apiEndpoint() {
@@ -85,7 +87,7 @@ class NetworkWebsocket {
 
   }
   publish(topic, data) {
-    this.ws.send(JSON.stringify(data));
+    this.ws.send(JSON.stringify({topic:topic,data:data}));
   }
 }
 class NetworkAWSMQTT {
@@ -102,16 +104,6 @@ class NetworkAWSMQTT {
     this.retryInterval = 10;
     this.lastMessage = null;
     this.connectionStatus = new ObservableValue(Connection.INITIAL);
-    /*
-    this.connectionStatus.observe((value)=>{
-      console.log("NetworkAWSMQTT.connectionStatus changed.");
-      console.log(JSON.stringify(value))
-      if (value == Connection.DEVICE_CONNECTED) {
-        this.onConnectedToDevice();
-      }
-    });
-    */
-    // setInterval(()=>{ this.keepDeviceConnection() }, 2000);
   }
   _dataTopic() {
     return "dt/ninja/" + this.thingId;
@@ -322,48 +314,6 @@ class Device {
       // console.error(e);
     };
   }
-  getUID () {
-    return this.uid;
-  }
-  _thing_id () {
-    return this.thingId;
-  }
-  _experiment_id () {
-    return this.experimentId;
-  }
-  experiment_data_topic (category) {
-    return "dt/ninja/" + this._thing_id() + "/experiment/+/" + category
-  }
-  experiment_data_topic_filter (category) {
-    return "dt/ninja/+/experiment/+/" + category
-  }
-  device_data_topic (category) {
-    return "dt/ninja/" + this._thing_id() + "/" + category
-  }
-  device_data_topic_filter (category) {
-    return "dt/ninja/+/" + category
-  }
-  device_command_topic (command) {
-    return "cmd/ninja/" + this._thing_id() + "/" + command
-  }
-  device_command_topic_filter (command) {
-    return "cmd/ninja/+/" + command
-  }
-  aws_command_topic (command) {
-    return "aws/ninja/" + this._thing_id() + "/" + command
-  }
-  aws_experiment_command_topic (command) {
-    return "aws/ninja/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command;
-  }
-  aws_command_topic_filter (command) {
-    return "aws/ninja/+/" + command
-  }
-  experiment_command_topic (command) {
-    return "cmd/ninja/" + this._thing_id() + "/experiment/" + this._experiment_id() + "/" + command
-  }
-  experiment_command_topic_filter (command) {
-    return "cmd/ninja/+/experiment/" + this._experiment_id() + "/" + command
-  }
 
   /* Event bus proxy functionalities */
   subscribe(topic, handler/* (topic, data)=>{} */) {
@@ -386,24 +336,15 @@ class Device {
     console.log("Device.UNsubscribe count=%d", this.topicManager.count);
   }
   publish(topic, data, responseHandler) {
-    let obj = {
-      "topic": topic,
-      "data": data
-    };
     console.log("### Device.publish topic=%s", topic)
     if (responseHandler) {
       const reqId = this._issueReqId();
       this.reqIdMap[reqId] = responseHandler;
       data.q = reqId;
-      const expectedResponse = { q: reqId, data:{} };
     }
+    console.log(data)
     data.sender = SENDER_ID;
     this.network.publish(topic, data);
-  }
-
-  _issueReqId() {
-    this.maxReqId++;
-    return this.maxReqId;
   }
 
   /* API */
@@ -413,6 +354,7 @@ class Device {
     try {
       this.network.connect(connectionInfo);
     } catch (ex) {
+      console.error(ex)
       return;
     }
   }
@@ -458,7 +400,7 @@ class Device {
     });
   }
   loadProtocols (callback, onError) {
-    this.publish(this.aws_command_topic("protocol/req-query"), {}, (res) => {
+    this.publish(this.aws_command_topic("protocol/req-query"), {tid:this.getThingID()}, (res) => {
       callback(res.response.Items)
     });
   }
@@ -479,7 +421,7 @@ class Device {
   }
   saveProtocol (protocolItem, callback, onError) {
     // aws/ninja/qninja_1667831590228/protocol/req-put
-    protocolItem.uid = device.getUID()
+    protocolItem.tid = device.getThingID();
     this.publish(this.aws_command_topic("protocol/req-put"),  protocolItem, (res) => {
       callback(res)
     });
@@ -532,6 +474,49 @@ class Device {
       );
 
     }
+  }
+  getThingID () {
+    return this.thingId;
+  }
+  _experiment_id () {
+    return this.experimentId;
+  }
+  experiment_data_topic (category) {
+    return "dt/ninja/" + this.getThingID() + "/experiment/+/" + category
+  }
+  experiment_data_topic_filter (category) {
+    return "dt/ninja/+/experiment/+/" + category
+  }
+  device_data_topic (category) {
+    return "dt/ninja/" + this.getThingID() + "/" + category
+  }
+  device_data_topic_filter (category) {
+    return "dt/ninja/+/" + category
+  }
+  device_command_topic (command) {
+    return "cmd/ninja/" + this.getThingID() + "/" + command
+  }
+  device_command_topic_filter (command) {
+    return "cmd/ninja/+/" + command
+  }
+  aws_command_topic (command) {
+    return "aws/ninja/" + this.getThingID() + "/" + command
+  }
+  aws_experiment_command_topic (command) {
+    return "aws/ninja/" + this.getThingID() + "/experiment/" + this._experiment_id() + "/" + command;
+  }
+  aws_command_topic_filter (command) {
+    return "aws/ninja/+/" + command
+  }
+  experiment_command_topic (command) {
+    return "cmd/ninja/" + this.getThingID() + "/experiment/" + this._experiment_id() + "/" + command
+  }
+  experiment_command_topic_filter (command) {
+    return "cmd/ninja/+/experiment/" + this._experiment_id() + "/" + command
+  }
+  _issueReqId() {
+    this.maxReqId++;
+    return this.maxReqId;
   }
 }
 const device = new Device();
