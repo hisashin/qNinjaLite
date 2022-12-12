@@ -44,6 +44,11 @@ const Connection = {
   DEVICE_CONNECTED: {  server:{connected:true, message:"Connected"}, device:{connected:true, message:"Online"}  },
   ERROR: { server:{connected:false, message:"Connection error"}, device:{connected:false, message:"-"}  }
 };
+const StepLabels = {
+  RAMP: 1,
+  HOLD: 2,
+  FINAL_HOLD: 3
+};
 
 const WS_API_PORT = "8888";
 const WS_API_HOST = "192.168.1.13"
@@ -521,4 +526,5 @@ class Device {
 }
 const device = new Device();
 device.Connection = Connection;
+device.StepLabels = StepLabels;
 module.exports = device;

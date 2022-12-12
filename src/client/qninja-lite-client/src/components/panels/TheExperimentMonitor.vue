@@ -79,7 +79,12 @@ export default {
       this.$refs.amplificationChart.clear();
       this.$refs.temperatureChart.clear();
       this.subscribe(device.experiment_data_topic_filter("progress"), (topic, progress)=>{
-        if (!(progress.l == 'final_hold')) {
+        // TODO string labels are deprecated.
+        if (progress.l == "ramp") { progress.l = 1 }
+        if (progress.l == "hold") { progress.l = 2 }
+        if (progress.l == "final_hold") { progress.l = 3 }
+
+        if (!(progress.l == device.StepLabels.FINAL_HOLD)) {
           // Do not update the graph in final_hold state
           this.$refs.temperatureChart.add(progress.e, progress.p);
         }

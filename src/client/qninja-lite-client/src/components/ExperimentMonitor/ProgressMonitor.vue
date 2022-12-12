@@ -46,14 +46,14 @@
             v-bind:class="{ 'progress-meter__item--notyet': progress.s<index,'progress-meter__item--current': progress.s==index,'progress-meter__item--done': progress.s>index }">
             <span class="progress-meter__item progress-meter__label">{{ step.t }}℃ 
               <span
-                v-if="progress.s==index && progress.l=='hold'">{{ stepElapsedSec }}</span>/{{ step.d }}s
+                v-if="progress.s==index && progress.label=='hold'">{{ stepElapsedSec }}</span>/{{ step.d }}s
             </span>
             <div
-              v-if="progress.s==index" class="progress-meter__item progress-meter__detail">{{ progress.l }}</div>
+              v-if="progress.s==index" class="progress-meter__item progress-meter__detail">{{ progress.label }}</div>
           </li>
           <li
             class="progress-meter__item"
-            v-bind:class="{ 'progress-meter__item--current': progress.l=='final_hold', 'progress-meter__item--notyet': progress.l!='final_hold' }">
+            v-bind:class="{ 'progress-meter__item--current': progress.label=='final_hold', 'progress-meter__item--notyet': progress.label!='final_hold' }">
             <span class="progress-meter__item progress-meter__label">Final hold</span>
           </li>
         </ul>
@@ -91,7 +91,7 @@
         Air {{ airTemp }}C
         
       </div>
-      <div class="progress-monitor__row" v-if="progress.l!='final_hold'">
+      <div class="progress-monitor__row" v-if="progress.label!='final_hold'">
         <div class="time-monitor">
           <div class="time-monitor__elapsed">{{ elapsedTimeLabel }} </div>
           <div class="time-monitor__estimated"> / {{ totalTimeLabel }}</div>
@@ -200,19 +200,19 @@ export default {
       if (!progress) {
         throw "Progress is null."
       }
-      if (progress.l == "final_hold") {
+      if (progress.l == device.StepLabels.FINAL_HOLD) {
         // Experiment is complete
         return 0;
       }
       protocol.s.forEach((step, index)=>{
         if (progress.s  == index) {
           // Current step
-          if (progress.l == "ramp") {
+          if (progress.l == device.StepLabels.RAMP) {
             // Ramp time
             time += this.getEstimatedTransitionTimeMs(progress.p, step.t);
             // Hold time
             time += step.d * 1000;
-          } else if (progress.l == "hold") {
+          } else if (progress.l == device.StepLabels.HOLD) {
             time += (step.d * 1000 - progress.d)
           } else {
             throw "Unknown progress.l value: " + progress.l;
@@ -232,6 +232,15 @@ export default {
 
     },
     applyProgress (progress) {
+      // TODO string labels are deprecated.
+      if (progress.l == "ramp") { progress.l = 1 }
+      else if (progress.l == "hold") { progress.l = 2 }
+      else if (progress.l == "final_hold") { progress.l = 3 }
+
+      if (progress.l == device.StepLabels.RAMP) { progress.label = "ramp"; }
+      else if (progress.l == device.StepLabels.HOLD) { progress.label = "hold"; }
+      else if (progress.l == device.StepLabels.FINAL_HOLD) { progress.label = "final_hold"; }
+
       this.progress = progress;
       if (!this.protocol) return;
       this.elapsedTime = Util.humanTime(this.progress.e/1000);
