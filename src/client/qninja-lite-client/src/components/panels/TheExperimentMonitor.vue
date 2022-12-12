@@ -89,6 +89,12 @@ export default {
           this.$refs.temperatureChart.add(progress.e, progress.p);
         }
       });
+      this.subscribe(device.experiment_data_topic_filter("progress-freq"), (topic, progress)=>{
+        if (!(progress.l == 'final_hold')) {
+          // Do not update the graph in final_hold state
+          this.$refs.temperatureChart.add(progress.e, progress.p);
+        }
+      });
       this.subscribe(device.experiment_data_topic_filter("fluo"), (topic, obj)=>{
         this.$refs.amplificationChart.add(obj);
       });
