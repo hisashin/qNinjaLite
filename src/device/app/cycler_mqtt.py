@@ -63,6 +63,7 @@ mqttclient.connect()
 # ESP32 works as WebSoekct Server
 class MQTTCommunicator:
     def __init__(self):
+        self.prev_progress = None
         pass
     def start(self):   
         time.sleep(0.5)
@@ -72,6 +73,7 @@ class MQTTCommunicator:
         mqttclient.publish(self._device_data_topic("state"),  json.dumps(STATE_IDLE.data()), qos=0)
         # ping_topic =  "cmd/ninja/" + self._thing_id() + "/ping-device" 
         # mqttclient.publish(ping_topic,"{}", qos=0)
+        self.prev_progress = None
 
     def _thing_id (self):
         return demo_thing_id
@@ -101,7 +103,20 @@ class MQTTCommunicator:
 
     def on_progress(self, data):
         # mqttclient.publish("update", json.dumps(data), qos=0)
-        mqttclient.publish(self._experiment_data_topic("progress"), json.dumps(data), qos=0)
+        is_important = (self.prev_progress == None or 
+            (data["s"] != self.prev_progress["s"]) or
+            (data["l"] != self.prev_progress["l"]))
+        if is_important == False:
+            temp_diff = abs(data["p"]-self.prev_progress["p"])
+            if data["l"] == "ramp":
+                is_important = temp_diff > 2
+            else:
+                is_important = temp_diff > 0.5
+        if is_important:
+            mqttclient.publish(self._experiment_data_topic("progress"), json.dumps(data), qos=0)
+            self.prev_progress = data
+        else: 
+            mqttclient.publish(self._experiment_data_topic("progress-freq"), json.dumps(data), qos=0)
     def on_measure(self, data):
         mqttclient.publish(self._experiment_data_topic("fluo"), json.dumps(data), qos=0)
     def on_event(self, label, data={}):
