@@ -109,8 +109,6 @@
           <button class="time-monitor__button" @click="dl('json')">JSON</button>
           <button class="time-monitor__button" @click="dl('csv')">CSV</button>
           </template>
-          progressCount={{progressCount}},
-          progressFreqCount={{progressFreqCount}}
           
         </div>
       </div>
