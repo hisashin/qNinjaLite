@@ -64,6 +64,8 @@ mqttclient.connect()
 class MQTTCommunicator:
     def __init__(self):
         self.prev_progress = None
+        self.progress_freq_timestamp = time.ticks_ms()
+        self.progress_timestamp = time.ticks_ms()
         pass
     def start(self):   
         time.sleep(0.5)
@@ -103,20 +105,39 @@ class MQTTCommunicator:
 
     def on_progress(self, data):
         # mqttclient.publish("update", json.dumps(data), qos=0)
-        is_important = (self.prev_progress == None or 
+
+        tick_from_progress_freq = time.ticks_ms() - self.progress_freq_timestamp
+        tick_from_progress = time.ticks_ms() - self.progress_timestamp
+        is_freq = False
+        phase_changed = (self.prev_progress == None or 
             (data["s"] != self.prev_progress["s"]) or
             (data["l"] != self.prev_progress["l"]))
+        is_important = phase_changed
         if is_important == False:
             temp_diff = abs(data["p"]-self.prev_progress["p"])
-            if data["l"] == "ramp":
+            if data["l"] == 1:
+                # Ramp
                 is_important = temp_diff > 2
-            else:
-                is_important = temp_diff > 0.5
+                is_freq = tick_from_progress_freq > 800
+            elif data["l"] == 2:
+                # Hold
+                is_important = tick_from_progress > 20 * 1000 # 30s
+                is_freq = tick_from_progress_freq > 1500
+            elif data["l"] == 3:
+                # Final Hold (Never send update)
+                is_freq = False
+        # print([is_important, is_freq, tick_from_progress, tick_from_progress_freq])
+
         if is_important:
             mqttclient.publish(self._experiment_data_topic("progress"), json.dumps(data), qos=0)
             self.prev_progress = data
-        else: 
+            self.progress_timestamp = time.ticks_ms()
+            # print("IMPORTANT")
+        elif is_freq: 
             mqttclient.publish(self._experiment_data_topic("progress-freq"), json.dumps(data), qos=0)
+            self.progress_freq_timestamp = time.ticks_ms()
+            # print("FREQ")
+
     def on_measure(self, data):
         mqttclient.publish(self._experiment_data_topic("fluo"), json.dumps(data), qos=0)
     def on_event(self, label, data={}):
