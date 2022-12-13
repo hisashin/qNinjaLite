@@ -15,7 +15,7 @@
           variant="primary"
           block @click="finish"
         >
-          Stop the device
+          Stop the heater
         </b-button>
       </b-modal>
       <!-- Modal dialog to show the experiment result -->
