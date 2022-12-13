@@ -91,7 +91,7 @@ class PID:
             self.i += (self.value - rampSetpoint) * self.interval
         self.d = (self.value - self.prevValue) / self.interval
 
-        print("V=%.2f p=%.2f(%.2f)\ti=%.2f(%.2f)\td=%.2f(%.2f) SP=%.1f" % (self.value, self.p, self.p*self.kp, self.i, self.i*self.ki, self.d, self.d*self.kd, rampSetpoint))
+        # print("V=%.2f p=%.2f(%.2f)\ti=%.2f(%.2f)\td=%.2f(%.2f) SP=%.1f" % (self.value, self.p, self.p*self.kp, self.i, self.i*self.ki, self.d, self.d*self.kd, rampSetpoint))
         self.prevValue = self.value
     def set_value_by_ramping_setpoint(self, value):
         if self.controlType == CONTROL_TYPE_OFF:
@@ -121,7 +121,7 @@ class PID:
         self.i += (self.value - rampSetpoint) * self.interval
         self.d = (self.value - self.prevValue) / self.interval
 
-        print("V=%.2f p=%.2f(%.2f)\ti=%.2f(%.2f)\td=%.2f(%.2f) SP=%.1f" % (self.value, self.p, self.p*self.kp, self.i, self.i*self.ki, self.d, self.d*self.kd, rampSetpoint))
+        # print("V=%.2f p=%.2f(%.2f)\ti=%.2f(%.2f)\td=%.2f(%.2f) SP=%.1f" % (self.value, self.p, self.p*self.kp, self.i, self.i*self.ki, self.d, self.d*self.kd, rampSetpoint))
         self.prevValue = self.value
 
     def select_range(self, value):

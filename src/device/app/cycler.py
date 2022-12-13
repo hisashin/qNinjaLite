@@ -18,7 +18,6 @@ class DeviceState:
         self.cancel_available = cancel_available
         self.finish_available = finish_available
     def data(self):
-        print("DeviceState.data()")
         return {
             "b":self.label, # label
             "x":self.has_experiment, # has_experiment
@@ -249,12 +248,13 @@ class Cycler:
             return
         if (self.current_step.is_done(temp, self.timestamp_ms)):
             self.next_stage()
+            if not self.current_step.is_finished():
+                self.communicator.on_event("transition", data={"protocol":self.protocol.protocol,"step":self.current_step.obj()})
         if self.current_step.min_measurement_interval != None:
             if self.last_measurement == None or (self.timestamp_ms - self.last_measurement) > self.current_step.min_measurement_interval * 1000:
                 if self.optics.measure_all(self.optics_on_measure):
                     # Optics.measure_all returns False if it has ongoing measurement
                     self.last_measurement = self.timestamp_ms
-        state = {"state":self.current_step.label}
         self.communicator.on_progress({
             "e":self.timestamp_ms, # elapsed
             "s": self.current_step.index, #step
@@ -275,7 +275,11 @@ class Cycler:
             self.communicator.response_protocol(self.protocol.raw)
 
 
-TEMP_TOLERANCE = 0.5        
+TEMP_TOLERANCE = 0.5
+
+STEP_LABEL_RAMP = 1
+STEP_LABEL_HOLD = 2
+STEP_LABEL_FINAL_HOLD = 3
 
 class ExperimentProtocol:
     def __init__(self, profile=None):
@@ -308,7 +312,7 @@ class StepRamp:
     def __init__(self, target_temp, index=0):
         self.target_temp = target_temp
         self.initial_temp = 0
-        self.label = "ramp"
+        self.label = STEP_LABEL_RAMP
         self.min_measurement_interval = None
         self.index = index
     def is_done(self, measured_temp, timestamp_ms):
@@ -320,17 +324,16 @@ class StepRamp:
             return measured_temp <= self.target_temp + TEMP_TOLERANCE
     def start(self, measured_temp, timestamp_ms):
         self.initial_temp = measured_temp
-        print(["StepRamp Start", self.initial_temp, self.target_temp])
     def is_finished(self):
         return False
     def obj (self):
-        return {"label":"ramp","index":self.index}
+        return {"label":self.label,"index":self.index}
 
 class StepHold:
     def __init__(self, target_temp, hold_sec, min_measurement_interval=None, index=0):
         self.target_temp = target_temp
         self.hold_sec = hold_sec
-        self.label = "hold"
+        self.label = STEP_LABEL_HOLD
         self.start_time = None
         self.min_measurement_interval = min_measurement_interval
         self.index = index
@@ -342,12 +345,12 @@ class StepHold:
     def is_finished(self):
         return False
     def obj (self):
-        return {"label":"hold","index":self.index}
+        return {"label":self.label,"index":self.index}
 
 class StepFinalHold:
     def __init__(self, target_temp=None, index=0):
         self.target_temp = target_temp
-        self.label = "final_hold"
+        self.label = STEP_LABEL_FINAL_HOLD
         self.min_measurement_interval = None
         self.index = index
     def is_done(self, measured_temp, timestamp_ms):
@@ -357,4 +360,4 @@ class StepFinalHold:
     def is_finished(self):
         return True
     def obj (self):
-        return {"label":"final_hold","index":self.index}
+        return {"label":self.label,"index":self.index}

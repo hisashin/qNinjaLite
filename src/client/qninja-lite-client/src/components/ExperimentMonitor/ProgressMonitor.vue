@@ -149,7 +149,10 @@ export default {
       totalTimeLabel: "-",
 
       plateTemp: "-",
-      airTemp: "-"
+      airTemp: "-",
+
+      progressCount:0,
+      progressFreqCount:0
     }
   },
   computed: {
@@ -157,6 +160,12 @@ export default {
   created: function () {
     device.subscribe(device.experiment_data_topic_filter("progress"), (topic, data, id)=>{
       this.applyProgress(data);
+      this.progressCount ++;
+
+    });
+    device.subscribe(device.experiment_data_topic_filter("progress-freq"), (topic, data, id)=>{
+      this.applyProgress(data);
+      this.progressFreqCount ++;
     });
     device.protocol.observe((protocol)=>{
       console.log("ProgressMonitor.protocol set.");

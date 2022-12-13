@@ -95,10 +95,10 @@ else:
             lcd_message("WLAN Mode",wlan.ifconfig()[0])
         else:
             print("Start MQTT")
-            try:
-                import cycler_mqtt
-            except :
-                print("Import error")
+            #try:
+            import cycler_mqtt
+            #except :
+                #print("Import error")
     else:
         print("Connection failed")
         ap_mode()
