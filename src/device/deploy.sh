@@ -1,6 +1,6 @@
 #!/bin/bash
 # Usage example
-# ./deploy.sh 192.168.1.31 hoge
+# ./deploy.sh 192.168.1.31 qninja
 ip=$1
 password=$2
 echo "Copying core files"
