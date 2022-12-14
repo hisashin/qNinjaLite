@@ -80,6 +80,7 @@ export default {
       this.$refs.temperatureChart.clear();
       this.subscribe(device.experiment_data_topic_filter("progress"), (topic, progress)=>{
         // TODO string labels are deprecated.
+        console.log("progress")
         if (progress.l == "ramp") { progress.l = 1 }
         if (progress.l == "hold") { progress.l = 2 }
         if (progress.l == "final_hold") { progress.l = 3 }
@@ -92,19 +93,25 @@ export default {
       this.subscribe(device.experiment_data_topic_filter("progress-freq"), (topic, progress)=>{
         if (!(progress.l == 'final_hold')) {
           // Do not update the graph in final_hold state
-          this.$refs.temperatureChart.add(progress.e, progress.p);
+          if (this.$refs.temperatureChart)
+            this.$refs.temperatureChart.add(progress.e, progress.p);
         }
       });
       this.subscribe(device.experiment_data_topic_filter("fluo"), (topic, obj)=>{
         this.$refs.amplificationChart.add(obj);
       });
       if (message && message.continue) {
-        console.log("Continue", message.continue)
-        device.publish(device.device_command_topic("req-experiment"), {}, (res)=>{
-          console.log("Received req-experiment response.");
-          console.log(res);
-          this.protocol = res.g.p;
-        });
+        console.log("Joining the ongoing experiment.");
+        device.joinExperiment((progressList, fluoList)=>{
+          console.log("JoinExperiment callback");
+          console.log(progressList)
+            this.$refs.temperatureChart.set(progressList);
+            this.$refs.amplificationChart.set(fluoList);
+        },
+        ()=>{
+          console.log("JoinExperiment onError");
+
+        })
       }
     },
     home () {
