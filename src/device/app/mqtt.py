@@ -4,7 +4,6 @@ mqtt = MQTTProtocol()
 
 class MQTTClient:
     def __init__ (self, network, keep_alive=60, client_id="", buff_size=4096):
-        self.last_ping = 0
         self.keep_alive = keep_alive
         self.on_message = None
         self.network = network
@@ -21,7 +20,6 @@ class MQTTClient:
         return self.network.read(length)
     def _write(self, packet):
         self.network.write(packet)
-        self.last_ping = self._time_ms()
 
     def connect(self):
         print("MQTT Connecting...")
@@ -49,16 +47,6 @@ class MQTTClient:
     def debug (self, message):
         if False:
             print(message)
-
-    def ping (self):
-        try:
-            packet = mqtt.pingreq()
-            self._write(packet)
-            resp = self._recv(self.buff_size)
-            res = mqtt.pingres_read(bytearray(resp))
-            self.debug(res)
-        except:
-            print("ping timeout")
 
     #  Returns True when expecting server response
     def _process_response(self, res_raw):
@@ -125,8 +113,6 @@ class MQTTClient:
                 print("Loop error")
                 print(e)
                 pass
-        if self._time_ms() - self.last_ping > (self.keep_alive - 10) * 1000:
-            self.ping()
 
     def publish (self, topic, message, qos=0):
         # TODO manages messages with qos > 0
