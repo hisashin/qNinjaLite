@@ -110,7 +110,7 @@ class OpticsSimulator:
 STATE_IDLE = DeviceState("idle", start_available=True)
 STATE_RUNNING = DeviceState("running", has_experiment=True, pause_available=True, cancel_available=True)
 STATE_PAUSED = DeviceState("paused", has_experiment=True, resume_available=True, cancel_available=True)
-STATE_COMPLETE = DeviceState("complete", has_experiment=True, cancel_available=True, finish_available=True)
+STATE_COMPLETE = DeviceState("complete", has_experiment=True, finish_available=True)
 
 class Cycler:
     def __init__(self, temp_control, optics, communicator, scheduler):

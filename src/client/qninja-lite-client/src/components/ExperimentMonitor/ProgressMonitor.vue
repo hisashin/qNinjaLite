@@ -100,16 +100,18 @@
             min="0"
             :max="remainingTime+elapsedTime"
             :value="progress.e"></meter>
-          
+        </div>
+      </div>
+      <div>
+        <div>
           <template v-if="deviceState != null">
-          <button class="time-monitor__button" v-if="deviceState.u" @click="pause">Pause</button>
-          <button class="time-monitor__button" v-if="deviceState.r" @click="resume">Resume</button>
-          <button class="time-monitor__button" v-if="deviceState.c" @click="cancel">Cancel</button>
-          <button class="time-monitor__button" v-if="deviceState.f" @click="finish">Finish</button>
-          <button class="time-monitor__button" @click="dl('json')">JSON</button>
-          <button class="time-monitor__button" @click="dl('csv')">CSV</button>
+            <button class="time-monitor__button" v-if="deviceState.u" @click="pause">Pause</button>
+            <button class="time-monitor__button" v-if="deviceState.r" @click="resume">Resume</button>
+            <button class="time-monitor__button" v-if="deviceState.c" @click="cancel">Cancel</button>
+            <button class="time-monitor__button" v-if="deviceState.f" @click="finish">Finish</button>
+            <button class="time-monitor__button" @click="dl('json')">JSON</button>
+            <button class="time-monitor__button" @click="dl('csv')">CSV</button>
           </template>
-          
         </div>
       </div>
     </div>
