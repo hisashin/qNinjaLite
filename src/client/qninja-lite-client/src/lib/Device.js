@@ -152,6 +152,9 @@ class NetworkAWSMQTT {
             this.connectionStatus.set(Connection.SERVER_CONNECTED);
             const pingTopic = this._awsTopic() + "/req";
             this.publish(pingTopic, EMPTY_MSG);
+            if (this.onopen) {
+              this.onopen();
+            }
           });
         });
       });
@@ -259,6 +262,7 @@ class Device {
       console.log("PING_DEVICE RECEIVED")
       setTimeout(()=>{
         this.publish(this.device_command_topic("req-state"), {}, (data)=>{
+          console.log("INITIAL_REQ_STATE");
           console.log(data)
           this.deviceState.set(data);
         });
@@ -278,16 +282,14 @@ class Device {
         this.network.connectionStatus.set(Connection.DEVICE_CONNECTED)
       }
     });
-    /*
     this.network.onopen = () => {
       console.log('network.onopen');
       device.publish(device.device_command_topic("req-state"), {}, (res) => {
-        console.log("Received req-state response.");
+        console.log("INITIAL_STATE");
         console.log(res.g)
         this.deviceState.set(res.g);
       });
     };
-    */
     this.network.onmessage = (topic, data) => {
       // Process response to cmd
       if (data.q) {

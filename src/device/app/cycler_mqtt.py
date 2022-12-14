@@ -181,7 +181,6 @@ class MQTTCommunicator:
         
         elif topic == "pid":
             obj = json.loads(message["message"])
-            
             temp_control.set_pid_constants(obj["c"])
             conf.set_pid(obj)
             conf.save()
