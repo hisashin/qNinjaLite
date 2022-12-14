@@ -155,19 +155,6 @@ export default {
       });
       this.wellTable = wellTable;
     },
-    set: function (data) {
-      console.log("AmplificationChart.set");
-      this.graph.clearData();
-      data.forEach((measurement)=>{
-        // 
-        // {s: 1, d: 1496, t: 1669445051354, e: 119151, v: Array(1)}
-        this.eachSeries((c, w, i)=>{
-          // GraphSubChannelXY.addData
-          this.subChannelsData[i].addData({y:measurement.v[c][w], x:measurement.d/1000});
-        });
-      });
-      this.graph.update();
-    },
     setAnalysis: function (analysis) {
       console.log("AplificationChart.setAnalysis");
       this.analysis = analysis;
@@ -190,6 +177,7 @@ export default {
       }
     },
     add: function (data) {
+      // Add a single measurement set (Ongoing experiment)
       this.eachSeries((c, w, i)=>{
         try {
           this.subChannelsPoints[i].addData({y:data.v[c][w], x:data.d/1000});
@@ -199,6 +187,19 @@ export default {
           console.log(data)
           console.log(c, w, i)
         }
+      });
+      this.graph.update();
+    },
+    set: function (data) {
+      // Add data series (Loading existing experiment data)
+      console.log("AmplificationChart.set");
+      this.graph.clearData();
+      data.forEach((measurement)=>{
+        this.eachSeries((c, w, i)=>{
+          // GraphSubChannelXY.addData
+          this.subChannelsPoints[i].addData({y:measurement.v[c][w], x:measurement.d/1000});
+          // this.subChannelsData[i].addData({y:measurement.v[c][w], x:measurement.d/1000});
+        });
       });
       this.graph.update();
     },

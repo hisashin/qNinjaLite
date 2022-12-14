@@ -189,14 +189,6 @@ class NetworkAWSMQTT {
           return;
         }
         this.lastMessage = new Date();
-        /*
-        if (topic == this._awsTopic() + "/req-res") {
-          const isOnline = obj.response.Item.o;
-          if (isOnline) {
-            this.connectionStatus.set(Connection.DEVICE_CONNECTED);
-          }
-        }
-        */
         this.onmessage(topic, obj);
       } catch (e) {
         console.error("NetworkAWSMQTT.client.message Malformed message");
@@ -236,60 +228,6 @@ class Device {
     this.experimentId = "0";
     this.thingId = "";
     this.uid = "uk";
-  }
-  init(config) {
-    this.config = config;
-    this.experiment.observe((experiment) => {
-      if (experiment) {
-        this.protocol.set(experiment.protocol);
-      }
-    });
-    this.subscribe(this.aws_command_topic_filter("req-res"), (topic, data,id)=>{
-      const stateObj = data.response.Item;
-      const isOnline = stateObj.o;
-      console.log("STATE UPDATED " + JSON.stringify(stateObj))
-      if (isOnline) {
-        this.network.connectionStatus.set(Connection.DEVICE_CONNECTED);
-      } else {
-        this.network.connectionStatus.set(Connection.SERVER_CONNECTED);
-      }
-      this.deviceState.set(stateObj);
-    })
-    // TODO remove this block after v1 test
-    console.log("PING DEVICE topic=" + this.device_command_topic_filter("ping-device"))
-    this.subscribe(this.device_command_topic_filter("ping-device"), (topic, data, id) => {
-      this.network.connectionStatus.set(Connection.SERVER_CONNECTED)
-      console.log("PING_DEVICE RECEIVED")
-      setTimeout(()=>{
-        this.publish(this.device_command_topic("req-state"), {}, (data)=>{
-          console.log("INITIAL_REQ_STATE");
-          console.log(data)
-          this.deviceState.set(data);
-        });
-      }, 1000);
-    });
-    this.subscribe(this.device_data_topic_filter("state"), (topic, data, id) => {
-      console.log("STATE Device.js deviceState updated. topic=" + topic)
-      console.log(data)
-      this.deviceState.set(data);
-    });
-    this.subscribe(this.aws_command_topic_filter("presence"), (topic, presence)=>{
-      console.log("PRESENCE ", presence);
-      if (presence.o == false) {
-        this.network.connectionStatus.set(Connection.SERVER_CONNECTED)
-      }
-      if (presence.o == true) {
-        this.network.connectionStatus.set(Connection.DEVICE_CONNECTED)
-      }
-    });
-    this.network.onopen = () => {
-      console.log('network.onopen');
-      device.publish(device.device_command_topic("req-state"), {}, (res) => {
-        console.log("INITIAL_STATE");
-        console.log(res.g)
-        this.deviceState.set(res.g);
-      });
-    };
     this.network.onmessage = (topic, data) => {
       // Process response to cmd
       if (data.q) {
@@ -312,6 +250,59 @@ class Device {
           console.log(e);
           console.trace();
         }
+      });
+    };
+  }
+  init(config) {
+    this.config = config;
+    this.experiment.observe((experiment) => {
+      if (experiment) {
+        this.protocol.set(experiment.protocol);
+      }
+    });
+    this.subscribe(this.aws_command_topic_filter("req-res"), (topic, data,id)=>{
+      const stateObj = data.response.Item;
+      const isOnline = stateObj.o;
+      if (isOnline) {
+        this.network.connectionStatus.set(Connection.DEVICE_CONNECTED);
+      } else {
+        this.network.connectionStatus.set(Connection.SERVER_CONNECTED);
+      }
+      this.deviceState.set(stateObj);
+    })
+    // TODO remove this block after v1 test
+    console.log("PING DEVICE topic=" + this.device_command_topic_filter("ping-device"))
+    this.subscribe(this.device_command_topic_filter("ping-device"), (topic, data, id) => {
+      this.network.connectionStatus.set(Connection.SERVER_CONNECTED)
+      console.log("PING_DEVICE RECEIVED")
+      setTimeout(()=>{
+        this.publish(this.device_command_topic("req-state"), {}, (data)=>{
+          console.log(data)
+          this.deviceState.set(data);
+        });
+      }, 1000);
+    });
+    this.subscribe(this.device_data_topic_filter("state"), (topic, data, id) => {
+      console.log(data)
+      this.deviceState.set(data);
+    });
+    this.subscribe(this.aws_command_topic_filter("presence"), (topic, presence)=>{
+      console.log("PRESENCE ", presence);
+      if (presence.o == false) {
+        this.network.connectionStatus.set(Connection.SERVER_CONNECTED)
+      }
+      if (presence.o == true) {
+        this.network.connectionStatus.set(Connection.DEVICE_CONNECTED)
+      }
+    });
+    this.deviceState.observe((state)=>{
+      if (!state) return;
+      console.log("ONLINE?" + state.o)
+    })
+    this.network.onopen = () => {
+      console.log('network.onopen');
+      device.publish(device.device_command_topic("req"), {}, (res) => {
+        this.deviceState.set(res.g);
       });
     };
     this.network.onclose = (e) => {
@@ -397,6 +388,28 @@ class Device {
           onError();
         }
       }
+    });
+  }
+  joinExperiment(callback, onerror) {
+    console.log("Device.joinExperiment start")
+    this.publish(this.device_command_topic("req-experiment"), {}, (res)=>{
+      console.log("Device.joinExperiment experiment")
+      this.experimentId = res.g.i;
+      this.protocol.set(res.g.p)
+      this.publish(this.aws_experiment_command_topic("progress/req-query-ts"), {}, 
+        (res)=>{
+          console.log("Device.joinExperiment progress");
+          const progressItems = res.response.Items;
+          console.log(progressItems)
+          this.publish(this.aws_experiment_command_topic("fluo/req-query-ts"), {}, 
+            (res)=>{
+              console.log("Device.joinExperiment fluo");
+              const fluoItems = res.response.Items;
+              callback(progressItems, fluoItems)
+            }
+          );
+        }
+      );
     });
   }
   confPID (obj, callback) {
