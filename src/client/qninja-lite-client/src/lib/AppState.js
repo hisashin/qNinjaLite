@@ -5,7 +5,7 @@ const Util = require("../lib/Util.js");
 const PROTOCOL_TEMPLATE =
 {
   "s":[
-    { "t":84, "d":30.0, "c":1, "i":5 }
+    { "t":80, "d":30.0, "c":1, "i":5 }
   ],
   "h":20
 };

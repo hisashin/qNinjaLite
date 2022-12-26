@@ -155,6 +155,7 @@ export default {
         this.item = message.protocol;
         this.item.tid = device.getThingID();
         this.isNew = false;
+        this.protocol = message.protocol.p;
       } else {
         // New item
         this.item = {"tid":device.getThingID()};
