@@ -9,12 +9,13 @@ FILE_DESCRIPTION(
 /* implementation_level */ '2;1');
 
 FILE_NAME(
-/* name */ '/Users/shingo/Desktop/tube_holder_220302_1x8 v10.step',
-/* time_stamp */ '2022-06-12T20:14:19+09:00',
+/* name */ 'tube_holder_220302_1x8 v13.step',
+/* time_stamp */ '2023-01-16T16:08:57+09:00',
 /* author */ (''),
 /* organization */ (''),
-/* preprocessor_version */ 'ST-DEVELOPER v19',
-/* originating_system */ 'Autodesk Translation Framework v11.7.0.108',
+/* preprocessor_version */ 'ST-DEVELOPER v19.2',
+/* originating_system */ 'Autodesk Translation Framework v11.17.0.187',
+
 /* authorisation */ '');
 
 FILE_SCHEMA (('AUTOMOTIVE_DESIGN { 1 0 10303 214 3 1 1 }'));
@@ -7456,16 +7457,16 @@ SOLID_ANGLE_UNIT()
 #6734=SHAPE_REPRESENTATION('',(#3316),#6727);
 #6735=PRODUCT_DEFINITION_CONTEXT('part definition',#6740,'design');
 #6736=PRODUCT_DEFINITION('tube_holder_220302_1x8',
-'tube_holder_220302_1x8 v10',#6737,#6735);
+'tube_holder_220302_1x8 v13',#6737,#6735);
 #6737=PRODUCT_DEFINITION_FORMATION('',$,#6742);
-#6738=PRODUCT_RELATED_PRODUCT_CATEGORY('tube_holder_220302_1x8 v10',
-'tube_holder_220302_1x8 v10',(#6742));
+#6738=PRODUCT_RELATED_PRODUCT_CATEGORY('tube_holder_220302_1x8 v13',
+'tube_holder_220302_1x8 v13',(#6742));
 #6739=APPLICATION_PROTOCOL_DEFINITION('international standard',
 'automotive_design',2009,#6740);
 #6740=APPLICATION_CONTEXT(
 'Core Data for Automotive Mechanical Design Process');
 #6741=PRODUCT_CONTEXT('part definition',#6740,'mechanical');
-#6742=PRODUCT('tube_holder_220302_1x8','tube_holder_220302_1x8 v10',$,(#6741));
+#6742=PRODUCT('tube_holder_220302_1x8','tube_holder_220302_1x8 v13',$,(#6741));
 #6743=PRESENTATION_STYLE_ASSIGNMENT((#6746));
 #6744=PRESENTATION_STYLE_ASSIGNMENT((#6747));
 #6745=PRESENTATION_STYLE_ASSIGNMENT((#6748));
