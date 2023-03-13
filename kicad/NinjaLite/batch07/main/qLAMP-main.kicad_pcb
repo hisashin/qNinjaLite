@@ -5742,7 +5742,7 @@
     (property "ki_keywords" "RF Radio BT ESP ESP32 Espressif onboard PCB antenna")
     (path "/c65b96dc-e181-4605-b273-626f0d3b629c")
     (attr smd)
-    (fp_text reference "U12" (at 0 -17.05) (layer "F.SilkS")
+    (fp_text reference "U12" (at 0 4.326) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp e1ee7f45-d93d-4230-b456-52d4c1cfa94d)
     )
